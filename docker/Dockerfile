@@ -5,20 +5,9 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install poetry==1.8.4
+RUN pip install uv
 
-ENV POETRY_VIRTUALENVS_CREATE=false
-
-WORKDIR /hygge
-
-ENV PYTHONPATH="/backend_cafe:."
-
-COPY backend_cafe/pyproject.toml backend_cafe/poetry.lock* /hygge/
-
-RUN poetry install --no-interaction --no-ansi
-
-COPY . /hygge
-
+WORKDIR /app
+COPY . /app
 EXPOSE 8000
-
-CMD ["poetry", "run", "python", "backend_cafe/app/run.py"]
+CMD ["uv", "run", "python", "run.py"]

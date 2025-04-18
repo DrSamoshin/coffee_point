@@ -25,16 +25,10 @@ jobs:
         echo "Current path: $(pwd)"
         ls -la
 
-    - name: Install Poetry
+    - name: Install UV
       run: |
-        pip install poetry
-
-    - name: Install dependencies
-      working-directory: backend_cafe/
-      run: |
-        poetry install
+        pip install uv
 
     - name: Run tests
-      working-directory: backend_cafe/
       run: |
-        poetry run pytest
+        uv run pytest -v

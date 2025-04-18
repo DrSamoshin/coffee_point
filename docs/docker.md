@@ -1,9 +1,9 @@
 # Docker
 ## Build
 hygge/
-`docker build -t backend-cafe:latest -f docker/Dockerfile .`
+`docker build -t vladislav:latest -f docker/Dockerfile .`
 ## Run
-`docker run -d -p 8000:8000 backend-cafe:latest`
+`docker run -d -p 8000:8000 vladislav:latest`
 ## Work with docker
 ### Remove images
 `docker rmi -f $(docker images -q)`
@@ -22,5 +22,5 @@ hygge/
 
 # Docker compose
 ## Build and run
-hygge/docker
+docker/
 docker-compose build && docker-compose up

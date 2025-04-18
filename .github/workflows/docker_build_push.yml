@@ -24,4 +24,4 @@ jobs:
           context: ./
           file: ./docker/Dockerfile
           push: true
-          tags: 85056710/backend_cafe:latest
+          tags: 85056710/vladislav:latest
