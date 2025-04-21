@@ -1,7 +1,7 @@
 from uuid import UUID
-
 from sqlalchemy.orm import Session
-from app.db import Employee
+
+from app.db.models import Employee
 from app.schemas.employee import EmployeeCreate, EmployeeUpdate
 
 def get_employee(db: Session, employee_id: UUID):
@@ -24,6 +24,11 @@ def update_employee(db: Session, db_employee: Employee, updates: EmployeeUpdate)
     db.refresh(db_employee)
     return db_employee
 
+def delete_employee(db: Session, db_employee: Employee):
+    db_employee.active = False
+    db.commit()
+    db.refresh(db_employee)
+
 def restore_employee(db: Session, employee_id: UUID):
     employee = db.query(Employee).filter(Employee.id == employee_id, Employee.active == False).first()
     if employee:
@@ -31,8 +36,3 @@ def restore_employee(db: Session, employee_id: UUID):
         db.commit()
         db.refresh(employee)
     return employee
-
-def delete_employee(db: Session, db_employee: Employee):
-    db_employee.active = False
-    db.commit()
-    db.refresh(db_employee)

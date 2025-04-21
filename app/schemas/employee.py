@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel
 from typing import Optional
 
 class EmployeeBase(BaseModel):
@@ -19,6 +19,8 @@ class EmployeeOut(EmployeeBase):
 
     id: UUID
     active: bool
+
+    model_config = {"from_attributes": True}
 
     def __str__(self):
         return (f"id: {self.id}\n"
