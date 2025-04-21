@@ -1,14 +1,19 @@
 import uuid
+import enum
 from sqlalchemy import Column, ForeignKey, String, Numeric, DateTime, Boolean
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from app.db.models.base_class import Base
-import enum
 from sqlalchemy import Enum as SQLAlchemyEnum
 
 class PaymentMethod(enum.Enum):
     cash = "cash"
     card = "card"
+
+class Type(enum.Enum):
+    dine_in = "dine_in"
+    delivery = "delivery"
+    takeout = "takeout"
 
 class Order(Base):
     __tablename__ = "orders"
@@ -18,7 +23,9 @@ class Order(Base):
     date = Column(DateTime, nullable=False)
     client_id = Column(UUID(as_uuid=True), ForeignKey("clients.id"), nullable=True)
     payment_method = Column(SQLAlchemyEnum(PaymentMethod), nullable=False)  # example: "cash", "card"
-    kind = Column(String, nullable=False)  # example: "dine-in", "takeaway"
+    type = Column(SQLAlchemyEnum(Type), nullable=False)  # example: "dine-in", "takeaway"
+    shift_id = Column(UUID(as_uuid=True), ForeignKey("shifts.id"), nullable=False)
     active = Column(Boolean, default=True)
 
     client = relationship("Client", backref="orders", lazy="joined")
+    shift = relationship("Shift", backref="orders", lazy="joined")

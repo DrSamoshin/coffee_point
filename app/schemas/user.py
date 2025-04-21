@@ -4,7 +4,6 @@ from uuid import UUID
 
 class UserBase(BaseModel):
     name: Optional[str] = None
-    active: bool
 
 class UserCreate(UserBase):
     pass
@@ -14,5 +13,6 @@ class UserUpdate(UserBase):
 
 class UserOut(UserBase):
     id: UUID
+    active: bool
 
     model_config = {"from_attributes": True}

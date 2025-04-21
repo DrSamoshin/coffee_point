@@ -1,6 +1,5 @@
 import uuid
 from sqlalchemy import Column, String, UUID, Boolean
-from sqlalchemy.orm import relationship
 from app.db.models.base_class import Base
 
 class Employee(Base):
