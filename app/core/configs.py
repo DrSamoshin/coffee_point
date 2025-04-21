@@ -22,6 +22,8 @@ class DataBase(BaseModel):
     DB_PASS: str = os.getenv("DB_PASSWORD", "mypassword")
     DB_NAME: str = os.getenv("DB_NAME", "mydb")
 
+    # "postgresql://myuser:mypassword@localhost:5432/mydb"
+
     @property
     def sqlalchemy_url(self) -> str:
         return f"postgresql://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
