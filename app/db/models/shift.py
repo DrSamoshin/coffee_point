@@ -1,5 +1,5 @@
 import uuid
-from sqlalchemy import Column, ForeignKey, DateTime, UUID
+from sqlalchemy import Column, ForeignKey, DateTime, UUID, Boolean
 from sqlalchemy.orm import relationship
 from app.db.models.base_class import Base
 
@@ -10,5 +10,6 @@ class Shift(Base):
     start_time = Column(DateTime, nullable=False)
     end_time = Column(DateTime, nullable=False)
     employee_id = Column(UUID(as_uuid=True), ForeignKey("employees.id"), nullable=False)
+    active = Column(Boolean, default=True)
 
-    employee = relationship("Employee", back_populates="shifts")
+    employee = relationship("Employee", backref="shifts", lazy="joined")

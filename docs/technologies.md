@@ -9,4 +9,4 @@
 * GitHub Actions // CI/CD
 * Google Cloud (Cloud Run) // развертывание
 * Google Secret Manager // безопасность
-* Stackdriver // логироавние
+* Logging // логироавние
