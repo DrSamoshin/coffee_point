@@ -23,4 +23,9 @@ hygge/
 # Docker compose
 ## Build and run
 docker/
-docker-compose build && docker-compose up
+`docker-compose build && docker-compose up`
+
+## Stop
+`docker compose down`
+or
+`docker compose -f docker/docker-compose.yml down`

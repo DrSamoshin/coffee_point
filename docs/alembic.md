@@ -1,5 +1,7 @@
 # Alembic
 ## Base command
-`poetry run alembic revision --autogenerate -m "Initial"`
+`alembic revision --autogenerate -m "Initial"`
 
-`poetry run alembic upgrade head`
+`alembic revision --autogenerate -m "added age column to User"`
+
+`alembic upgrade head`
