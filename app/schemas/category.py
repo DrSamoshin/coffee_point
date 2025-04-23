@@ -12,5 +12,6 @@ class CategoryUpdate(CategoryBase):
 
 class CategoryOut(CategoryBase):
     id: UUID
+    active: bool
 
     model_config = {"from_attributes": True}

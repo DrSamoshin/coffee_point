@@ -2,7 +2,6 @@ from uuid import UUID
 from pydantic import BaseModel
 
 class ProductOrderBase(BaseModel):
-    name: str
     product_id: UUID
     order_id: UUID
 

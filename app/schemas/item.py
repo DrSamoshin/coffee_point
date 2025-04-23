@@ -13,6 +13,7 @@ class ItemUpdate(ItemBase):
 
 class ItemOut(ItemBase):
     id: UUID
+    active: bool
 
     model_config = {"from_attributes": True}
 

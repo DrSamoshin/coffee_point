@@ -1,0 +1,42 @@
+from uuid import UUID
+from sqlalchemy.orm import Session
+
+from app.db.models import Supply
+from app.schemas.supply import SupplyCreate, SupplyUpdate
+
+def get_supply(db: Session, supply_id: UUID):
+    return db.query(Supply).filter(Supply.id == supply_id).first()
+
+def get_supplys(db: Session):
+    return db.query(Supply).filter(Supply.active == True).all()
+
+def get_deactivated_supplys(db: Session):
+    return db.query(Supply).filter(Supply.active == False).all()
+
+def create_supply(db: Session, supply: SupplyCreate):
+    db_supply = Supply(date=supply.date,
+                       supplier_id=supply.supplier_id)
+    db.add(db_supply)
+    db.commit()
+    db.refresh(db_supply)
+    return db_supply
+
+def update_supply(db: Session, db_supply: Supply, updates: SupplyUpdate):
+    for field, value in updates.model_dump(exclude_unset=True).items():
+        setattr(db_supply, field, value)
+    db.commit()
+    db.refresh(db_supply)
+    return db_supply
+
+def deactivate_supply(db: Session, db_supply: Supply):
+    db_supply.active = False
+    db.commit()
+    db.refresh(db_supply)
+
+def activate_supply(db: Session, supply_id: UUID):
+    db_supply = db.query(Supply).filter(Supply.id == supply_id, Supply.active == False).first()
+    if db_supply:
+        db_supply.active = True
+        db.commit()
+        db.refresh(db_supply)
+    return db_supply

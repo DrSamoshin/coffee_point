@@ -39,12 +39,12 @@ def delete_employee(employee_id: str, db: Session = Depends(get_db)):
     db_employee = crud_employee.get_employee(db, UUID(employee_id))
     if not db_employee:
         return response("employee not found", 404, 'error')
-    crud_employee.delete_employee(db, db_employee)
+    crud_employee.deactivate_employee(db, db_employee)
     return response("employee deleted", 200, 'success')
 
 @router.post("/{employee_id}/restore", response_model=EmployeeOut)
 def restore_employee(employee_id: str, db: Session = Depends(get_db)):
-    db_employee = crud_employee.restore_employee(db, UUID(employee_id))
+    db_employee = crud_employee.activate_employee(db, UUID(employee_id))
     if not db_employee:
         return response("employee not found or already active", 404, 'error')
     return db_employee

@@ -12,5 +12,6 @@ class ClientUpdate(ClientBase):
 
 class ClientOut(ClientBase):
     id: UUID
+    active: bool
 
     model_config = {"from_attributes": True}

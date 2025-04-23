@@ -13,6 +13,7 @@ class TagUpdate(TagBase):
 
 class TagOut(TagBase):
     id: UUID
+    active: bool
 
     model_config = {"from_attributes": True}
 

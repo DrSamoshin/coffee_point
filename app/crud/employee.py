@@ -5,10 +5,13 @@ from app.db.models import Employee
 from app.schemas.employee import EmployeeCreate, EmployeeUpdate
 
 def get_employee(db: Session, employee_id: UUID):
-    return db.query(Employee).filter(Employee.id == employee_id, Employee.active == True).first()
+    return db.query(Employee).filter(Employee.id == employee_id).first()
 
-def get_employees(db: Session, skip: int = 0, limit: int = 10):
-    return db.query(Employee).filter(Employee.active == True).offset(skip).limit(limit).all()
+def get_employees(db: Session):
+    return db.query(Employee).filter(Employee.active == True).all()
+
+def get_deactivated_employees(db: Session, skip: int = 0, limit: int = 10):
+    return db.query(Employee).filter(Employee.active == False).offset(skip).limit(limit).all()
 
 def create_employee(db: Session, employee: EmployeeCreate):
     db_employee = Employee(name=employee.name)
@@ -24,12 +27,12 @@ def update_employee(db: Session, db_employee: Employee, updates: EmployeeUpdate)
     db.refresh(db_employee)
     return db_employee
 
-def delete_employee(db: Session, db_employee: Employee):
+def deactivate_employee(db: Session, db_employee: Employee):
     db_employee.active = False
     db.commit()
     db.refresh(db_employee)
 
-def restore_employee(db: Session, employee_id: UUID):
+def activate_employee(db: Session, employee_id: UUID):
     employee = db.query(Employee).filter(Employee.id == employee_id, Employee.active == False).first()
     if employee:
         employee.active = True

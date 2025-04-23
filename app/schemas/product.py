@@ -16,6 +16,7 @@ class ProductUpdate(ProductBase):
 
 class ProductOut(ProductBase):
     id: UUID
+    active: bool
 
     model_config = {"from_attributes": True}
 

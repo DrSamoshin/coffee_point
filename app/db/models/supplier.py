@@ -1,6 +1,4 @@
 import uuid
-from enum import unique
-
 from sqlalchemy import Column, String, Boolean, UUID
 from app.db.models.base_class import Base
 
