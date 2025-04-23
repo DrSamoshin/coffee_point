@@ -1,8 +1,8 @@
-"""add all tables
+"""initial
 
-Revision ID: c7c0204ab275
-Revises: 2999eb04b247
-Create Date: 2025-04-21 18:44:21.160299
+Revision ID: 65d3749c29e9
+Revises: 
+Create Date: 2025-04-23 22:59:40.830246
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'c7c0204ab275'
-down_revision: Union[str, None] = '2999eb04b247'
+revision: str = '65d3749c29e9'
+down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -24,6 +24,7 @@ def upgrade() -> None:
     op.create_table('categories',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
+    sa.Column('active', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
@@ -31,20 +32,29 @@ def upgrade() -> None:
     op.create_table('clients',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
+    sa.Column('active', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_clients_id'), 'clients', ['id'], unique=False)
+    op.create_table('employees',
+    sa.Column('id', sa.UUID(), nullable=False),
+    sa.Column('name', sa.String(), nullable=False),
+    sa.Column('active', sa.Boolean(), nullable=True),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_employees_id'), 'employees', ['id'], unique=False)
     op.create_table('items',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
     sa.Column('measurement', sa.String(), nullable=False),
+    sa.Column('active', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
     op.create_index(op.f('ix_items_id'), 'items', ['id'], unique=False)
     op.create_table('suppliers',
     sa.Column('id', sa.UUID(), nullable=False),
-    sa.Column('name', sa.String(), nullable=True),
+    sa.Column('name', sa.String(), nullable=False),
     sa.Column('active', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
@@ -53,32 +63,39 @@ def upgrade() -> None:
     op.create_table('tags',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
+    sa.Column('active', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
     op.create_index(op.f('ix_tags_id'), 'tags', ['id'], unique=False)
-    op.create_table('orders',
+    op.create_table('users',
     sa.Column('id', sa.UUID(), nullable=False),
-    sa.Column('price', sa.Numeric(precision=10, scale=2), nullable=False),
-    sa.Column('date', sa.DateTime(), nullable=False),
-    sa.Column('client_id', sa.UUID(), nullable=True),
-    sa.Column('payment_method', sa.Enum('cash', 'card', name='paymentmethod'), nullable=False),
-    sa.Column('kind', sa.String(), nullable=False),
+    sa.Column('name', sa.String(), nullable=True),
     sa.Column('active', sa.Boolean(), nullable=True),
-    sa.ForeignKeyConstraint(['client_id'], ['clients.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_orders_id'), 'orders', ['id'], unique=False)
+    op.create_index(op.f('ix_users_id'), 'users', ['id'], unique=False)
     op.create_table('products',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
     sa.Column('category_id', sa.UUID(), nullable=False),
     sa.Column('price', sa.Numeric(precision=10, scale=2), nullable=False),
+    sa.Column('active', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['category_id'], ['categories.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
     op.create_index(op.f('ix_products_id'), 'products', ['id'], unique=False)
+    op.create_table('shifts',
+    sa.Column('id', sa.UUID(), nullable=False),
+    sa.Column('start_time', sa.DateTime(), nullable=False),
+    sa.Column('end_time', sa.DateTime(), nullable=False),
+    sa.Column('employee_id', sa.UUID(), nullable=False),
+    sa.Column('active', sa.Boolean(), nullable=True),
+    sa.ForeignKeyConstraint(['employee_id'], ['employees.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_shifts_id'), 'shifts', ['id'], unique=False)
     op.create_table('supplies',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('date', sa.DateTime(), nullable=False),
@@ -87,15 +104,29 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['supplier_id'], ['suppliers.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('product_orders',
+    op.create_table('orders',
     sa.Column('id', sa.UUID(), nullable=False),
-    sa.Column('product_id', sa.UUID(), nullable=False),
-    sa.Column('order_id', sa.UUID(), nullable=False),
-    sa.ForeignKeyConstraint(['order_id'], ['orders.id'], ),
-    sa.ForeignKeyConstraint(['product_id'], ['products.id'], ),
+    sa.Column('price', sa.Numeric(precision=10, scale=2), nullable=False),
+    sa.Column('date', sa.DateTime(), nullable=False),
+    sa.Column('client_id', sa.UUID(), nullable=True),
+    sa.Column('payment_method', sa.Enum('cash', 'card', name='paymentmethod'), nullable=False),
+    sa.Column('type', sa.Enum('dine_in', 'delivery', 'takeout', name='type'), nullable=False),
+    sa.Column('shift_id', sa.UUID(), nullable=False),
+    sa.Column('active', sa.Boolean(), nullable=True),
+    sa.ForeignKeyConstraint(['client_id'], ['clients.id'], ),
+    sa.ForeignKeyConstraint(['shift_id'], ['shifts.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_product_orders_id'), 'product_orders', ['id'], unique=False)
+    op.create_index(op.f('ix_orders_id'), 'orders', ['id'], unique=False)
+    op.create_table('product_tag',
+    sa.Column('id', sa.UUID(), nullable=False),
+    sa.Column('product_id', sa.UUID(), nullable=False),
+    sa.Column('tag_id', sa.UUID(), nullable=False),
+    sa.ForeignKeyConstraint(['product_id'], ['products.id'], ),
+    sa.ForeignKeyConstraint(['tag_id'], ['tags.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_product_tag_id'), 'product_tag', ['id'], unique=False)
     op.create_table('recipe_items',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('product_id', sa.UUID(), nullable=False),
@@ -110,44 +141,54 @@ def upgrade() -> None:
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('item_id', sa.UUID(), nullable=False),
     sa.Column('supply_id', sa.UUID(), nullable=False),
-    sa.Column('amount', sa.Integer(), nullable=False),
+    sa.Column('amount', sa.Numeric(precision=10, scale=2), nullable=False),
     sa.Column('price_per_item', sa.Numeric(precision=10, scale=2), nullable=False),
+    sa.Column('active', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['item_id'], ['items.id'], ),
     sa.ForeignKeyConstraint(['supply_id'], ['supplies.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_store_items_id'), 'store_items', ['id'], unique=False)
-    op.alter_column('employees', 'name',
-               existing_type=sa.VARCHAR(),
-               nullable=False)
-    op.add_column('shifts', sa.Column('active', sa.Boolean(), nullable=True))
+    op.create_table('product_orders',
+    sa.Column('id', sa.UUID(), nullable=False),
+    sa.Column('product_id', sa.UUID(), nullable=False),
+    sa.Column('order_id', sa.UUID(), nullable=False),
+    sa.ForeignKeyConstraint(['order_id'], ['orders.id'], ),
+    sa.ForeignKeyConstraint(['product_id'], ['products.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_product_orders_id'), 'product_orders', ['id'], unique=False)
     # ### end Alembic commands ###
 
 
 def downgrade() -> None:
     """Downgrade schema."""
     # ### commands auto generated by Alembic - please adjust! ###
-    op.drop_column('shifts', 'active')
-    op.alter_column('employees', 'name',
-               existing_type=sa.VARCHAR(),
-               nullable=True)
+    op.drop_index(op.f('ix_product_orders_id'), table_name='product_orders')
+    op.drop_table('product_orders')
     op.drop_index(op.f('ix_store_items_id'), table_name='store_items')
     op.drop_table('store_items')
     op.drop_index(op.f('ix_recipe_items_id'), table_name='recipe_items')
     op.drop_table('recipe_items')
-    op.drop_index(op.f('ix_product_orders_id'), table_name='product_orders')
-    op.drop_table('product_orders')
-    op.drop_table('supplies')
-    op.drop_index(op.f('ix_products_id'), table_name='products')
-    op.drop_table('products')
+    op.drop_index(op.f('ix_product_tag_id'), table_name='product_tag')
+    op.drop_table('product_tag')
     op.drop_index(op.f('ix_orders_id'), table_name='orders')
     op.drop_table('orders')
+    op.drop_table('supplies')
+    op.drop_index(op.f('ix_shifts_id'), table_name='shifts')
+    op.drop_table('shifts')
+    op.drop_index(op.f('ix_products_id'), table_name='products')
+    op.drop_table('products')
+    op.drop_index(op.f('ix_users_id'), table_name='users')
+    op.drop_table('users')
     op.drop_index(op.f('ix_tags_id'), table_name='tags')
     op.drop_table('tags')
     op.drop_index(op.f('ix_suppliers_id'), table_name='suppliers')
     op.drop_table('suppliers')
     op.drop_index(op.f('ix_items_id'), table_name='items')
     op.drop_table('items')
+    op.drop_index(op.f('ix_employees_id'), table_name='employees')
+    op.drop_table('employees')
     op.drop_index(op.f('ix_clients_id'), table_name='clients')
     op.drop_table('clients')
     op.drop_index(op.f('ix_categories_id'), table_name='categories')

@@ -1,24 +1,18 @@
-from enum import Enum
+
 from uuid import UUID
 from datetime import datetime
 from pydantic import BaseModel
 from typing import Optional
 from decimal import Decimal
 
-class PaymentMethod(str, Enum):
-    cash = "cash"
-    card = "card"
+from app.core.consts import Type, PaymentMethod
 
-class Type(str, Enum):
-    dine_in = "dine_in"
-    delivery = "delivery"
-    takeout = "takeout"
 
 class OrderBase(BaseModel):
     price: Decimal
     date: datetime
     payment_method: PaymentMethod
-    kind: Type
+    type: Type
     shift_id: UUID
     client_id: Optional[UUID] = None
 

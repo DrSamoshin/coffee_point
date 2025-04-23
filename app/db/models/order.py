@@ -1,19 +1,11 @@
 import uuid
-import enum
-from sqlalchemy import Column, ForeignKey, String, Numeric, DateTime, Boolean
+from sqlalchemy import Column, ForeignKey, Numeric, DateTime, Boolean
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from app.db.models.base_class import Base
 from sqlalchemy import Enum as SQLAlchemyEnum
+from app.core.consts import Type, PaymentMethod
 
-class PaymentMethod(enum.Enum):
-    cash = "cash"
-    card = "card"
-
-class Type(enum.Enum):
-    dine_in = "dine_in"
-    delivery = "delivery"
-    takeout = "takeout"
 
 class Order(Base):
     __tablename__ = "orders"
