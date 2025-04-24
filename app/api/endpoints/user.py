@@ -37,12 +37,12 @@ def delete_user(user_id: str, db: Session = Depends(get_db)):
     db_user = crud_user.get_user(db, UUID(user_id))
     if not db_user:
         return response("user not found", 404, "error")
-    crud_user.delete_user(db, db_user)
+    crud_user.deactivate_user(db, db_user)
     return response("user deleted", 200, 'success')
 
 @router.post("/{user_id}/restore", response_model=UserOut)
 def restore_user(user_id: str, db: Session = Depends(get_db)):
-    db_user = crud_user.restore_user(db, UUID(user_id))
+    db_user = crud_user.activate_user(db, UUID(user_id))
     if not db_user:
         return response("user not found or already active", 404, 'error')
     return db_user

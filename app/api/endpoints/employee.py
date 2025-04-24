@@ -22,8 +22,8 @@ def read_employee(employee_id: str, db: Session = Depends(get_db)):
     return db_employee
 
 @router.get("/", response_model=List[EmployeeOut])
-def read_employees(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    db_employees = crud_employee.get_employees(db, skip, limit)
+def read_employees(db: Session = Depends(get_db)):
+    db_employees = crud_employee.get_employees(db)
     return db_employees
 
 @router.put("/{employee_id}", response_model=EmployeeOut)

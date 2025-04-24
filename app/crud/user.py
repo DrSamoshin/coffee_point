@@ -24,12 +24,12 @@ def update_user(db: Session, db_user: User, updates: UserUpdate):
     db.refresh(db_user)
     return db_user
 
-def deactivate_client(db: Session, db_user: User):
+def deactivate_user(db: Session, db_user: User):
     db_user.active = False
     db.commit()
     db.refresh(db_user)
 
-def activate_client(db: Session, user_id: UUID):
+def activate_user(db: Session, user_id: UUID):
     db_user = db.query(User).filter(User.id == user_id, User.active == False).first()
     if db_user:
         db_user.active = True
