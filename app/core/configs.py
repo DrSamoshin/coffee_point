@@ -28,10 +28,15 @@ class DataBase(BaseModel):
     def sqlalchemy_url(self) -> str:
         return f"postgresql://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
 
+class JWTToken(BaseModel):
+    SECRET_KEY:str = "your-super-secret-key"
+    ALGORITHM:str = "HS256"
+
 
 class Settings(BaseSettings):
     run: Run = Run()
     logging: Logging = Logging()
     data_base: DataBase = DataBase()
+    jwt_token: JWTToken = JWTToken()
 
 settings = Settings()
