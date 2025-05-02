@@ -1,34 +1,32 @@
-name: Build and Push Docker Image
+name: Build and Push Docker Image to Artifact Registry
 
 on:
-#  push:
-#    branches: [main]
   workflow_dispatch:
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Docker auth to GCP
+      - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCLOUD_SA_KEY }}
 
-      - name: Configure Docker for Artifact Registry
-        run: gcloud auth configure-docker
+      - name: Configure Docker to use Artifact Registry
+        run: |
+          gcloud auth configure-docker us-central1-docker.pkg.dev
 
-      - name: Build and Push image
+      - name: Build and Push Docker image
         run: |
           docker build \
-            --build-arg \
-              DB_HOST=${{ secrets.DB_HOST }} \
-              DB_USER=${{ secrets.DB_USER }} \
-              DB_PASS=${{ secrets.DB_PASS }} \
-              DB_NAME=${{ secrets.DB_NAME }} \
-            -t gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/cafe-manager:latest \
+            --build-arg DB_HOST=${{ secrets.DB_HOST }} \
+            --build-arg DB_USER=${{ secrets.DB_USER }} \
+            --build-arg DB_PASS=${{ secrets.DB_PASS }} \
+            --build-arg DB_NAME=${{ secrets.DB_NAME }} \
+            -t us-central1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/cafe-registry/cafe-manager:latest \
             -f docker/Dockerfile .
 
-          docker push gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/cafe-manager:latest
+          docker push us-central1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/cafe-registry/cafe-manager:latest
