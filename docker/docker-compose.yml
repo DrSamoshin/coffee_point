@@ -7,7 +7,7 @@ services:
       dockerfile: docker/Dockerfile
     container_name: fastapi_app
     ports:
-      - "8000:8000"
+      - "8080:8080"
     environment:
       # Здесь можно пробросить переменные окружения для приложения
       DB_HOST: db
