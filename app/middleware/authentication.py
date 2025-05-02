@@ -6,7 +6,7 @@ from app.core.responses import response as response_error
 
 
 EXCLUDE_PATHS = [
-    "/docs", "/health", "/openapi.json"
+    "/docs", "/health", "/openapi.json", "/users"
 ]
 
 class AuthenticationMiddleware(BaseHTTPMiddleware):
