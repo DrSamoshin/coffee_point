@@ -23,7 +23,11 @@ jobs:
       - name: Build and Push image
         run: |
           docker build \
-            --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }} \
+            --build-arg \
+              DB_HOST=${{ secrets.DB_HOST }} \
+              DB_USER=${{ secrets.DB_USER }} \
+              DB_PASS=${{ secrets.DB_PASS }} \
+              DB_NAME=${{ secrets.DB_NAME }} \
             -t gcr.io/${{ secrets.GCLOUD_PROJECT_ID }}/cafe-manager:latest \
             -f docker/Dockerfile .
 
