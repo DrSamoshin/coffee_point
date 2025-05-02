@@ -8,7 +8,7 @@ from app.db.session import get_db
 from app.crud import employee as crud_employee
 from app.schemas.employee import EmployeeCreate, EmployeeOut, EmployeeUpdate
 
-router = APIRouter()
+router = APIRouter(prefix='/employees', tags=['employees'])
 
 @router.post("/", response_model=EmployeeOut)
 def create_employee(employee: EmployeeCreate, db: Session = Depends(get_db)):

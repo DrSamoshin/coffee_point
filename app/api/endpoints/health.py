@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from app.core.responses import response
 
-router = APIRouter()
+router = APIRouter(prefix='/health', tags=['health'])
 
 @router.get("/health")
 def get_health_check():

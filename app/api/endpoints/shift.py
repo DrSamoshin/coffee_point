@@ -7,7 +7,7 @@ from app.schemas.shift import ShiftCreate, ShiftOut, ShiftUpdate
 from app.crud import shift as crud_shift
 from app.core.responses import response
 
-router = APIRouter()
+router = APIRouter(prefix='/shifts', tags=['shifts'])
 
 @router.post("/", response_model=ShiftOut)
 def create_shift(shift: ShiftCreate, db: Session = Depends(get_db)):

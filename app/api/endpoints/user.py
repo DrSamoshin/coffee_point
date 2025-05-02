@@ -8,7 +8,7 @@ from app.crud import user as crud_user
 from app.schemas.user import UserCreate, UserOut, UserUpdate
 from app.core.responses import response
 
-router = APIRouter()
+router = APIRouter(prefix='/users', tags=['users'])
 
 @router.post("/", response_model=UserOut)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
