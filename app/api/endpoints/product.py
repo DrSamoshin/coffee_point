@@ -11,23 +11,23 @@ from app.middleware.authentication import get_user_id_from_token
 router = APIRouter(prefix='/products', tags=['products'])
 
 @router.get("/", response_model=list[ProductOut])
-def read_products(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+async def read_products(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     return crud_product.get_products(db)
 
-@router.get("/{product_id}", response_model=ProductOut)
-def read_product(product_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+@router.get("/{product_id}/", response_model=ProductOut)
+async def read_product(product_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_product = crud_product.get_product(db, product_id)
     if not db_product:
         return response("product not found", 404)
     return db_product
 
 @router.post("/", response_model=ProductOut)
-def create_product(product: ProductCreate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+async def create_product(product: ProductCreate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_product = crud_product.create_product(db, product)
     return db_product
 
-@router.put("/{product_id}", response_model=ProductOut)
-def update_product(product_id: UUID, product_update: ProductUpdate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+@router.put("/{product_id}/", response_model=ProductOut)
+async def update_product(product_id: UUID, product_update: ProductUpdate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_product = crud_product.get_product(db, product_id)
     if not db_product:
         return response("product not found", 404)

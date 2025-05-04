@@ -11,23 +11,23 @@ from app.middleware.authentication import get_user_id_from_token
 router = APIRouter(prefix='/orders', tags=['orders'])
 
 @router.get("/", response_model=list[OrderOut])
-def read_orders(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+async def read_orders(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     return crud_order.get_orders(db)
 
-@router.get("/{order_id}", response_model=OrderOut)
-def read_order(order_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+@router.get("/{order_id}/", response_model=OrderOut)
+async def read_order(order_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_order = crud_order.get_order(db, order_id)
     if not db_order:
         return response("order not found", 404)
     return db_order
 
 @router.post("/", response_model=OrderOut)
-def create_order(order: OrderCreate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+async def create_order(order: OrderCreate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_order = crud_order.create_order(db, order)
     return db_order
 
-@router.put("/{order_id}", response_model=OrderOut)
-def update_order(order_id: UUID, order_update: OrderUpdate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+@router.put("/{order_id}/", response_model=OrderOut)
+async def update_order(order_id: UUID, order_update: OrderUpdate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_order = crud_order.get_order(db, order_id)
     if not db_order:
         return response("order not found", 404)

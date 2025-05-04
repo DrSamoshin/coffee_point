@@ -11,23 +11,23 @@ from app.middleware.authentication import get_user_id_from_token
 router = APIRouter(prefix='/product_orders', tags=['product_orders'])
 
 @router.get("/", response_model=list[ProductOrderOut])
-def read_product_orders(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+async def read_product_orders(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     return crud_product_order.get_product_orders(db)
 
-@router.get("/{product_order_id}", response_model=ProductOrderOut)
-def read_product_order(product_order_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+@router.get("/{product_order_id}/", response_model=ProductOrderOut)
+async def read_product_order(product_order_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_product_order = crud_product_order.get_product_order(db, product_order_id)
     if not db_product_order:
         return response("product_order not found", 404)
     return db_product_order
 
 @router.post("/", response_model=ProductOrderOut)
-def create_product_order(product_order: ProductOrderCreate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+async def create_product_order(product_order: ProductOrderCreate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_product_order = crud_product_order.create_product_order(db, product_order)
     return db_product_order
 
-@router.put("/{product_order_id}", response_model=ProductOrderOut)
-def update_product_order(product_order_id: UUID, product_order_update: ProductOrderUpdate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+@router.put("/{product_order_id}/", response_model=ProductOrderOut)
+async def update_product_order(product_order_id: UUID, product_order_update: ProductOrderUpdate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_product_order = crud_product_order.get_product_order(db, product_order_id)
     if not db_product_order:
         return response("product_order not found", 404)

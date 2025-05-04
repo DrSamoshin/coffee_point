@@ -11,23 +11,23 @@ from app.middleware.authentication import get_user_id_from_token
 router = APIRouter(prefix='/tags', tags=['tags'])
 
 @router.get("/", response_model=list[TagOut])
-def read_tags(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+async def read_tags(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     return crud_tag.get_tags(db)
 
-@router.get("/{tag_id}", response_model=TagOut)
-def read_tag(tag_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+@router.get("/{tag_id}/", response_model=TagOut)
+async def read_tag(tag_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_tag = crud_tag.get_tag(db, tag_id)
     if not db_tag:
         return response("tag not found", 404)
     return db_tag
 
 @router.post("/", response_model=TagOut)
-def create_tag(tag: TagCreate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+async def create_tag(tag: TagCreate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_tag = crud_tag.create_tag(db, tag)
     return db_tag
 
-@router.put("/{tag_id}", response_model=TagOut)
-def update_tag(tag_id: UUID, tag_update: TagUpdate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+@router.put("/{tag_id}/", response_model=TagOut)
+async def update_tag(tag_id: UUID, tag_update: TagUpdate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_tag = crud_tag.get_tag(db, tag_id)
     if not db_tag:
         return response("tag not found", 404)

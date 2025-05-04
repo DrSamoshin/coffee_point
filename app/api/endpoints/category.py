@@ -11,23 +11,23 @@ from app.middleware.authentication import get_user_id_from_token
 router = APIRouter(prefix='/categories', tags=['categories'])
 
 @router.get("/", response_model=list[CategoryOut])
-def read_categories(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+async def read_categories(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     return crud_category.get_categories(db)
 
-@router.get("/{category_id}", response_model=CategoryOut)
-def read_category(category_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+@router.get("/{category_id}/", response_model=CategoryOut)
+async def read_category(category_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_category = crud_category.get_category(db, category_id)
     if not db_category:
         return response("category not found", 404)
     return db_category
 
 @router.post("/", response_model=CategoryOut)
-def create_category(category: CategoryCreate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+async def create_category(category: CategoryCreate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_category = crud_category.create_category(db, category)
     return db_category
 
-@router.put("/{category_id}", response_model=CategoryOut)
-def update_category(category_id: UUID, category_update: CategoryUpdate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+@router.put("/{category_id}/", response_model=CategoryOut)
+async def update_category(category_id: UUID, category_update: CategoryUpdate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_category = crud_category.get_category(db, category_id)
     if not db_category:
         return response("category not found", 404)
