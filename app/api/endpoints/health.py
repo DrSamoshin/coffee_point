@@ -1,7 +1,6 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from app.core.responses import response
-from app.middleware.authentication import AuthenticationMiddleware
-from fastapi import Request
+from app.middleware.authentication import get_user_id_from_token
 
 router = APIRouter(prefix='/health', tags=['health'])
 
@@ -10,6 +9,5 @@ async def get_health_check():
     return response("application is running", 200, "success")
 
 @router.get("/token")
-async def check_token(request: Request):
-    await AuthenticationMiddleware.check_token(request)
+async def check_token(user_id: str = Depends(get_user_id_from_token)):
     return response("token is valid", 200, "success")

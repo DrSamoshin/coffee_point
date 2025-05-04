@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from fastapi import FastAPI
-from app.middleware.authentication import AuthenticationMiddleware
 
 from app.api.endpoints import (category_router,
                                client_router,
@@ -23,8 +22,6 @@ from app.api.endpoints import (category_router,
 
 BASE_DIR = Path(__file__).resolve().parent
 main_app = FastAPI()
-
-main_app.add_middleware(AuthenticationMiddleware)
 
 # routers
 main_app.include_router(category_router)
