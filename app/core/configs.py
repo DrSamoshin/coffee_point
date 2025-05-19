@@ -25,7 +25,8 @@ class DataBase(BaseModel):
 
     @property
     def sqlalchemy_url(self) -> str:
-        url = f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+        # url = f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+        url = f"postgresql+psycopg2://postgres:J7I1)iuig0mTuq@/postgres?host=/cloudsql/cafemanager-458516:us-central1:cafe-manager-db"
         logging.info(f"DB url: {url}")
         return url
 

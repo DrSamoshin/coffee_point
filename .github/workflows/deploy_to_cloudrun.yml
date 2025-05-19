@@ -19,8 +19,8 @@ jobs:
           image: us-central1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/cafe-registry/cafe-manager:latest
           region: us-central1
           allow_unauthenticated: true
+          add_cloudsql_instances: cafemanager-458516:us-central1:cafe-manager-db
           env_vars: |
-            DB_HOST=${{ secrets.DB_HOST }}
             DB_USER=${{ secrets.DB_USER }}
             DB_PASS=${{ secrets.DB_PASS }}
             DB_NAME=${{ secrets.DB_NAME }}
