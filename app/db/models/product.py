@@ -11,5 +11,6 @@ class Product(Base):
     category_id = Column(UUID(as_uuid=True), ForeignKey("categories.id"), nullable=False)
     price = Column(Numeric(10, 2), nullable=False)
     active = Column(Boolean, default=True)
+    online_shop = Column(Boolean, default=False)
 
     category = relationship("Category", backref="products", lazy="joined")

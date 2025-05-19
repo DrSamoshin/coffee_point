@@ -14,6 +14,10 @@ router = APIRouter(prefix='/products', tags=['products'])
 async def read_products(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     return crud_product.get_products(db)
 
+@router.get("/online-shop/", response_model=list[ProductOut])
+async def read_web_products(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+    return crud_product.get_online_shop_products(db)
+
 @router.get("/{product_id}/", response_model=ProductOut)
 async def read_product(product_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_product = crud_product.get_product(db, product_id)

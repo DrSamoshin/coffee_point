@@ -7,6 +7,7 @@ class ProductBase(BaseModel):
     name: str
     category_id: UUID
     price: Decimal
+    online_shop: bool
 
 class ProductCreate(ProductBase):
     pass

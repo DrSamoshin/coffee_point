@@ -9,7 +9,7 @@ async def get_cafe_data():
         "address": {
             "street": "ул. Ирининская",
             "house": "25",
-            "apartment": "16",
+            "apartment": "17",
             "city": "Гомель",
             "postcode": "246050",
             "country": "Беларусь"

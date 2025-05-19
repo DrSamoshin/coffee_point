@@ -14,6 +14,10 @@ def get_products(db: Session):
     return db.query(Product).filter(Product.active == True).all()
 
 @db_safe
+def get_online_shop_products(db: Session):
+    return db.query(Product).filter(Product.active == True, Product.online_shop == True).all()
+
+@db_safe
 def get_deactivated_products(db: Session):
     return db.query(Product).filter(Product.active == False).all()
 
@@ -21,7 +25,8 @@ def get_deactivated_products(db: Session):
 def create_product(db: Session, product: ProductCreate):
     db_product = Product(name=product.name,
                          category_id=product.category_id,
-                         price=product.price)
+                         price=product.price,
+                         online_shop=product.online_shop)
     db.add(db_product)
     db.commit()
     db.refresh(db_product)
