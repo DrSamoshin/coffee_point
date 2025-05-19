@@ -12,5 +12,6 @@ class Product(Base):
     price = Column(Numeric(10, 2), nullable=False)
     active = Column(Boolean, default=True)
     online_shop = Column(Boolean, default=False)
+    image_url = Column(String, nullable=True)
 
     category = relationship("Category", backref="products", lazy="joined")

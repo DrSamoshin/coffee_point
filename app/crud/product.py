@@ -26,7 +26,8 @@ def create_product(db: Session, product: ProductCreate):
     db_product = Product(name=product.name,
                          category_id=product.category_id,
                          price=product.price,
-                         online_shop=product.online_shop)
+                         online_shop=product.online_shop,
+                         image_url=product.image_url)
     db.add(db_product)
     db.commit()
     db.refresh(db_product)
