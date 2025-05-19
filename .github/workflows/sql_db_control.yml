@@ -7,6 +7,10 @@ on:
         description: 'Enable or Disable DB? (on/off)'
         required: true
         default: 'off'
+        type: choice
+        options:
+          - on
+          - off
 
 jobs:
   manage-sql:
