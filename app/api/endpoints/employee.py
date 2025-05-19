@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.core.responses import response
 from app.db.session import get_db
 from app.crud import employee as crud_employee
-from app.middleware.authentication import get_user_id_from_token
+from app.services.authentication import get_user_id_from_token
 from app.schemas.employee import EmployeeCreate, EmployeeOut, EmployeeUpdate
 
 router = APIRouter(prefix='/employees', tags=['employees'])

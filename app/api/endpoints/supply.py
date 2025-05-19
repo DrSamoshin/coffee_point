@@ -6,7 +6,7 @@ from app.db.session import get_db
 from app.schemas.supply import SupplyCreate, SupplyOut, SupplyUpdate
 from app.crud import supply as crud_supply
 from app.core.responses import response
-from app.middleware.authentication import get_user_id_from_token
+from app.services.authentication import get_user_id_from_token
 
 router = APIRouter(prefix='/supplies', tags=['supplies'])
 

@@ -6,7 +6,7 @@ from app.db.session import get_db
 from app.schemas.shift import ShiftCreate, ShiftOut, ShiftUpdate
 from app.crud import shift as crud_shift
 from app.core.responses import response
-from app.middleware.authentication import get_user_id_from_token
+from app.services.authentication import get_user_id_from_token
 
 router = APIRouter(prefix='/shifts', tags=['shifts'])
 

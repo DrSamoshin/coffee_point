@@ -6,7 +6,7 @@ from app.db.session import get_db
 from app.schemas.category import CategoryCreate, CategoryOut, CategoryUpdate
 from app.crud import category as crud_category
 from app.core.responses import response
-from app.middleware.authentication import get_user_id_from_token
+from app.services.authentication import get_user_id_from_token
 
 router = APIRouter(prefix='/categories', tags=['categories'])
 

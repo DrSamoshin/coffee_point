@@ -6,7 +6,7 @@ from app.db.session import get_db
 from app.schemas.recipe_item import RecipeItemCreate, RecipeItemOut, RecipeItemUpdate
 from app.crud import recipe_item as crud_recipe_item
 from app.core.responses import response
-from app.middleware.authentication import get_user_id_from_token
+from app.services.authentication import get_user_id_from_token
 
 router = APIRouter(prefix='/recipe_items', tags=['recipe_items'])
 

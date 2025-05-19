@@ -6,7 +6,7 @@ from app.db.session import get_db
 from app.schemas.product_tag import ProductTagCreate, ProductTagOut, ProductTagUpdate
 from app.crud import product_tag as crud_product_tag
 from app.core.responses import response
-from app.middleware.authentication import get_user_id_from_token
+from app.services.authentication import get_user_id_from_token
 
 router = APIRouter(prefix='/product_tags', tags=['product_tags'])
 

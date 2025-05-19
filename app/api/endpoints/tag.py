@@ -6,7 +6,7 @@ from app.db.session import get_db
 from app.schemas.tag import TagCreate, TagOut, TagUpdate
 from app.crud import tag as crud_tag
 from app.core.responses import response
-from app.middleware.authentication import get_user_id_from_token
+from app.services.authentication import get_user_id_from_token
 
 router = APIRouter(prefix='/tags', tags=['tags'])
 

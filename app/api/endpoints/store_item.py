@@ -6,7 +6,7 @@ from app.db.session import get_db
 from app.schemas.store_item import StoreItemCreate, StoreItemOut, StoreItemUpdate
 from app.crud import store_item as crud_store_item
 from app.core.responses import response
-from app.middleware.authentication import get_user_id_from_token
+from app.services.authentication import get_user_id_from_token
 
 router = APIRouter(prefix='/store_items', tags=['store_items'])
 
