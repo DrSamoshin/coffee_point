@@ -24,6 +24,9 @@ jobs:
       - name: Install gcloud CLI
         uses: google-github-actions/setup-gcloud@v1
 
+      - name: Install Cloud SQL component
+        run: gcloud components install sql --quiet
+
       - name: Manage SQL Instance
         run: |
           INSTANCE="cafe-manager-db"
