@@ -1,9 +1,8 @@
 # Docker
 ## Build
-hygge/
-`docker build -t vladislav:latest -f docker/Dockerfile .`
+`docker build -t coffee_point:latest -f docker/Dockerfile .`
 ## Run
-`docker run -d -p 8000:8000 vladislav:latest`
+`docker run -d -p 8080:8080 coffee_point:latest`
 ## Work with docker
 ### Remove images
 `docker rmi -f $(docker images -q)`
