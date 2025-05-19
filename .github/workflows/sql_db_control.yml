@@ -35,8 +35,13 @@ jobs:
 
           if [ "${{ github.event.inputs.action }}" == "on" ]; then
             echo "Enable DB..."
-            gcloud sql instances start "$INSTANCE" --project="$PROJECT"
+            POLICY="ALWAYS"
           elif [ "${{ github.event.inputs.action }}" == "off" ]; then
             echo "Disable DB..."
-            gcloud sql instances stop "$INSTANCE" --project="$PROJECT"
+            POLICY="NEVER"
           fi
+          
+          gcloud sql instances patch "$INSTANCE" \
+            --activation-policy="$POLICY" \
+            --project="$PROJECT" \
+            --quiet
