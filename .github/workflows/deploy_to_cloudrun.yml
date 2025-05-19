@@ -15,7 +15,7 @@ jobs:
       - name: Deploy to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v1
         with:
-          service: vladislav-api
+          service: cafe-manager-api
           image: us-central1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/cafe-registry/cafe-manager:latest
           region: us-central1
           allow_unauthenticated: true
