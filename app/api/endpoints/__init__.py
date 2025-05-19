@@ -1,3 +1,4 @@
+from .cafe_data import router as cafe_data_router
 from .category import router as category_router
 from .client import router as client_router
 from .employee import router as employee_router

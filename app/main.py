@@ -2,7 +2,8 @@ from pathlib import Path
 
 from fastapi import FastAPI
 
-from app.api.endpoints import (category_router,
+from app.api.endpoints import (cafe_data_router,
+                               category_router,
                                client_router,
                                employee_router,
                                health_router,
@@ -24,6 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent
 main_app = FastAPI()
 
 # routers
+main_app.include_router(cafe_data_router)
 main_app.include_router(category_router)
 main_app.include_router(client_router)
 main_app.include_router(employee_router)
