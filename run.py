@@ -1,6 +1,3 @@
-import os
-from pathlib import Path
-import logging
 import uvicorn
 from app.core.configs import settings
 from alembic import command

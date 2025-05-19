@@ -1,11 +1,11 @@
-import logging
 import os
+import logging
 from pathlib import Path
 from fastapi import FastAPI
-
 from app.core.configs import settings
 from app.api.endpoints import (cafe_data_router,
                                category_router,
+                               check_list_router,
                                client_router,
                                employee_router,
                                health_router,
@@ -29,6 +29,7 @@ main_app = FastAPI()
 # routers
 main_app.include_router(cafe_data_router)
 main_app.include_router(category_router)
+main_app.include_router(check_list_router)
 main_app.include_router(client_router)
 main_app.include_router(employee_router)
 main_app.include_router(health_router)
@@ -46,7 +47,7 @@ main_app.include_router(tag_router)
 main_app.include_router(user_router)
 
 logging.info("Starting FastAPI")
-logging.info(f"DB url: {settings.data_base.sqlalchemy_url}")
+logging.info(f"DB url: %s", settings.data_base.sqlalchemy_url)
 logging.info(f"Folder contents %s: %s", BASE_DIR, contents)
 
 
