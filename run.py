@@ -17,11 +17,16 @@ def run_alembic_upgrade():
     logging.info("Checking current migration version...")
     command.current(alembic_cfg, verbose=True)
 
-if __name__ == "__main__":
+def run():
     try:
-        run_alembic_upgrade()
+        if settings.data_base.DB_AVAILABLE:
+            run_alembic_upgrade()
+            logging.info("Alembic upgrade applied")
         logging.info("Starting FastAPI")
         logging.info(f"Folder contents %s: %s", BASE_DIR, contents)
         uvicorn.run("app.main:main_app", host=settings.run.host, port=settings.run.port, reload=True)
     except Exception as error:
         print(error)
+
+if __name__ == "__main__":
+    run()
