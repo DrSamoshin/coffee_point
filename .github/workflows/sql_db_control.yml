@@ -6,11 +6,11 @@ on:
       action:
         description: 'Enable or Disable DB? (on/off)'
         required: true
-        default: 'off'
+        default: "off"
         type: choice
         options:
-          - on
-          - off
+          - "on"
+          - "off"
 
 jobs:
   manage-sql:
