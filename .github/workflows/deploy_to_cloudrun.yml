@@ -21,6 +21,7 @@ jobs:
           allow_unauthenticated: true
           add_cloudsql_instances: cafemanager-458516:us-central1:cafe-manager-db
           env_vars: |
-            DB_USER=${{ secrets.DB_USER }}
-            DB_PASS=${{ secrets.DB_PASS }}
-            DB_NAME=${{ secrets.DB_NAME }}
+#            DB_USER=${{ secrets.DB_USER }}
+#            DB_PASS=${{ secrets.DB_PASS }}
+#            DB_NAME=${{ secrets.DB_NAME }}
+
