@@ -5,6 +5,25 @@
     "version": "0.1.0"
   },
   "paths": {
+    "/cafe-data/": {
+      "get": {
+        "tags": [
+          "cafe_data"
+        ],
+        "summary": "Get Cafe Data",
+        "operationId": "get_cafe_data_cafe_data__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
     "/categories/": {
       "get": {
         "tags": [
@@ -181,6 +200,30 @@
             }
           }
         }
+      }
+    },
+    "/check-list/": {
+      "get": {
+        "tags": [
+          "check_list"
+        ],
+        "summary": "Get Check List",
+        "operationId": "get_check_list_check_list__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
       }
     },
     "/clients/": {
@@ -1088,6 +1131,36 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/products/online-shop/": {
+      "get": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Read Web Products",
+        "operationId": "read_web_products_products_online_shop__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ProductOut"
+                  },
+                  "type": "array",
+                  "title": "Response Read Web Products Products Online Shop  Get"
                 }
               }
             }
@@ -3390,13 +3463,30 @@
               }
             ],
             "title": "Price"
+          },
+          "online_shop": {
+            "type": "boolean",
+            "title": "Online Shop"
+          },
+          "image_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image Url"
           }
         },
         "type": "object",
         "required": [
           "name",
           "category_id",
-          "price"
+          "price",
+          "online_shop",
+          "image_url"
         ],
         "title": "ProductCreate"
       },
@@ -3481,6 +3571,21 @@
             "type": "string",
             "title": "Price"
           },
+          "online_shop": {
+            "type": "boolean",
+            "title": "Online Shop"
+          },
+          "image_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image Url"
+          },
           "id": {
             "type": "string",
             "format": "uuid",
@@ -3496,6 +3601,8 @@
           "name",
           "category_id",
           "price",
+          "online_shop",
+          "image_url",
           "id",
           "active"
         ],
@@ -3588,13 +3695,30 @@
               }
             ],
             "title": "Price"
+          },
+          "online_shop": {
+            "type": "boolean",
+            "title": "Online Shop"
+          },
+          "image_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image Url"
           }
         },
         "type": "object",
         "required": [
           "name",
           "category_id",
-          "price"
+          "price",
+          "online_shop",
+          "image_url"
         ],
         "title": "ProductUpdate"
       },
