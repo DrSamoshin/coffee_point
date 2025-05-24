@@ -10,4 +10,4 @@ async def get_health_check():
 
 @router.get("/token/")
 async def check_token(user_id: str = Depends(get_user_id_from_token)):
-    return response("token is valid", 200, "success")
+    return response("application is running", 200, "success")

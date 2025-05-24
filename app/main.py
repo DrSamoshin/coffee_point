@@ -3,7 +3,8 @@ import logging
 from pathlib import Path
 from fastapi import FastAPI
 from app.core.configs import settings
-from app.api.endpoints import (cafe_data_router,
+from app.api.endpoints import (admin_router,
+                               cafe_data_router,
                                category_router,
                                check_list_router,
                                client_router,
@@ -27,6 +28,7 @@ contents = os.listdir(BASE_DIR)
 main_app = FastAPI()
 
 # routers
+main_app.include_router(admin_router)
 main_app.include_router(cafe_data_router)
 main_app.include_router(category_router)
 main_app.include_router(check_list_router)

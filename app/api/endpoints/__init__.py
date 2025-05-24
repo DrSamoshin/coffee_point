@@ -1,3 +1,4 @@
+from .admin import router as admin_router
 from .cafe_data import router as cafe_data_router
 from .category import router as category_router
 from .check_list import router as check_list_router
