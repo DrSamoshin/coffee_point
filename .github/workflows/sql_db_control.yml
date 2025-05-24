@@ -29,9 +29,7 @@ jobs:
 
       - name: Manage SQL Instance
         run: |
-          INSTANCE="cafe-manager-db"
-          PROJECT="cafemanager-458516"
-          REGION="us-central1"
+          INSTANCE="coffee-point-db"
 
           if [ "${{ github.event.inputs.action }}" == "on" ]; then
             echo "Enable DB..."
@@ -43,5 +41,5 @@ jobs:
           
           gcloud sql instances patch "$INSTANCE" \
             --activation-policy="$POLICY" \
-            --project="$PROJECT" \
+            --project="${{ secrets.GCLOUD_PROJECT_ID }}" \
             --quiet
