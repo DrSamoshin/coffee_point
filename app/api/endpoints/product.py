@@ -15,7 +15,7 @@ async def read_products(db: Session = Depends(get_db), user_id: str = Depends(ge
     return crud_product.get_products(db)
 
 @router.get("/online-shop/", response_model=list[ProductOut])
-async def read_web_products(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+async def read_web_products(db: Session = Depends(get_db)):
     return crud_product.get_online_shop_products(db)
 
 @router.get("/{product_id}/", response_model=ProductOut)
