@@ -1,22 +1,23 @@
 services:
-#  web:
-#    build:
-#      # Переходим на уровень выше, чтобы Docker "видел" все файлы (pyproject.toml, poetry.lock)
-#      # Если у вас структура другая – корректируйте пути.
-#      context: ..
-#      dockerfile: docker/Dockerfile
-#    container_name: fastapi_app
-#    ports:
-#      - "8080:8080"
-#    environment:
-#      # Здесь можно пробросить переменные окружения для приложения
-#      DB_HOST: db
-#      DB_PORT: 5432
-#      DB_USER: myuser
-#      DB_PASS: mypassword
-#      DB_NAME: mydb
-#    depends_on:
-#      - db
+  web:
+    build:
+      # Переходим на уровень выше, чтобы Docker "видел" все файлы (pyproject.toml, poetry.lock)
+      # Если у вас структура другая – корректируйте пути.
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: fastapi_app
+    ports:
+      - "8080:8080"
+    environment:
+      # Здесь можно пробросить переменные окружения для приложения
+      USE_CLOUD_SQL_PROXY: false
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: myuser
+      DB_PASS: mypassword
+      DB_NAME: mydb
+    depends_on:
+      - db
 
   db:
     image: postgres:15
