@@ -17,11 +17,11 @@ def run():
     check_db_availability()
     logging.info("check DB")
     try:
-        if settings.data_base.DB_AVAILABLE:
-            run_alembic_upgrade()
         uvicorn.run("app.main:main_app", host=settings.run.host, port=settings.run.port, reload=True)
     except Exception as error:
         print(error)
+    if settings.data_base.DB_AVAILABLE:
+        run_alembic_upgrade()
 
 if __name__ == "__main__":
     run()
