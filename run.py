@@ -2,6 +2,7 @@ import uvicorn
 from app.core.configs import settings
 from alembic import command
 from alembic.config import Config
+from app.db.session import check_db_availability
 
 
 def run_alembic_upgrade():
@@ -11,6 +12,7 @@ def run_alembic_upgrade():
     command.current(alembic_cfg, verbose=True)
 
 def run():
+    check_db_availability()
     try:
         if settings.data_base.DB_AVAILABLE:
             run_alembic_upgrade()
