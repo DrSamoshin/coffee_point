@@ -1,5 +1,6 @@
 import logging
 import os
+from urllib.parse import quote_plus
 
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings
@@ -24,12 +25,13 @@ class DataBase(BaseModel):
     DB_PORT: str = os.getenv("DB_PORT", "5432")
     DB_USER: str = os.getenv("DB_USER", "myuser")
     DB_PASS: str = os.getenv("DB_PASS", "mypassword")
+    DB_URL_PASS: str = quote_plus(DB_PASS)
     DB_NAME: str = os.getenv("DB_NAME", "mydb")
 
     @property
     def sqlalchemy_url(self) -> str:
         if self.USE_CLOUD_SQL_PROXY:
-            return (f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASS}@/{self.DB_NAME}"
+            return (f"postgresql+psycopg2://{self.DB_USER}:{self.DB_URL_PASS}@/{self.DB_NAME}"
                    f"?host=/cloudsql/{self.INSTANCE_CONNECTION_NAME}")
         else:
             return f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"

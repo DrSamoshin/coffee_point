@@ -15,8 +15,9 @@ def check_db_availability():
     try:
         engine.connect()
         logging.info(f"DB is available")
-    except OperationalError:
+    except OperationalError as error:
         settings.data_base.DB_AVAILABLE = False
+        logging.info(error)
         logging.warning(f"DB is not available")
 
 def get_db():
