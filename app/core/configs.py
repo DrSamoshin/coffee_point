@@ -17,7 +17,9 @@ class Logging(BaseModel):
 
 class DataBase(BaseModel):
     DB_AVAILABLE: bool = True
+    USE_CLOUD_SQL_PROXY: bool = os.getenv("USE_CLOUD_SQL_PROXY", "false").lower() == "true"
 
+    INSTANCE_CONNECTION_NAME: str = os.getenv("INSTANCE_CONNECTION_NAME", "cafemanager-458516:us-central1:cafe-manager-db")
     DB_HOST: str = os.getenv("DB_HOST", "localhost")
     DB_PORT: str = os.getenv("DB_PORT", "5432")
     DB_USER: str = os.getenv("DB_USER", "myuser")
@@ -27,8 +29,13 @@ class DataBase(BaseModel):
     @property
     def sqlalchemy_url(self) -> str:
         # url = f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
-        url = f"postgresql+psycopg2://postgres:L,?G+/.IoQrvSL5?@34.9.92.218:5432/postgres"
-        return url
+        # url = f"postgresql+psycopg2://postgres:L,?G+/.IoQrvSL5?@34.9.92.218:5432/postgres"
+
+        if self.USE_CLOUD_SQL_PROXY:
+            return (f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASS}@/{self.DB_NAME}"
+                   f"?host=/cloudsql/{self.INSTANCE_CONNECTION_NAME}")
+        else:
+            return f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
 
 class JWTToken(BaseModel):
     SECRET_KEY:str = "your-super-secret-key"
