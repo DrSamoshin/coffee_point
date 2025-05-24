@@ -17,13 +17,15 @@ class Logging(BaseModel):
 
 class DataBase(BaseModel):
     DB_AVAILABLE: bool = True
+    # proxy db connection
     USE_CLOUD_SQL_PROXY: bool = os.getenv("USE_CLOUD_SQL_PROXY", "false").lower() == "true"
-
-    INSTANCE_CONNECTION_NAME: str = os.getenv("INSTANCE_CONNECTION_NAME", "cafemanager-458516:us-central1:cafe-manager-db")
+    INSTANCE_CONNECTION_NAME: str = os.getenv("INSTANCE_CONNECTION_NAME")
+    # IP connection
     DB_HOST: str = os.getenv("DB_HOST", "localhost")
     DB_PORT: str = os.getenv("DB_PORT", "5432")
+
     DB_USER: str = os.getenv("DB_USER", "myuser")
-    DB_PASS: str = os.getenv("DB_PASS", "mypassword")
+    DB_PASS: str = os.getenv("DB_PASS", "mypassword") # should be without special symbols
     DB_NAME: str = os.getenv("DB_NAME", "mydb")
 
     @property

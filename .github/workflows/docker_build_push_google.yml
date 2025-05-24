@@ -8,8 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-
+        uses: actions/checkout@v
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
         with:
@@ -26,9 +25,3 @@ jobs:
           file: docker/Dockerfile
           push: true
           tags: us-central1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/cafe-registry/cafe-manager:latest
-          build-args: |
-            USE_CLOUD_SQL_PROXY=true
-            INSTANCE_CONNECTION_NAME=${{ secrets.INSTANCE_CONNECTION_NAME }}
-            DB_USER=${{ secrets.DB_USER }}
-            DB_PASS=${{ secrets.DB_PASS }}
-            DB_NAME=${{ secrets.DB_NAME }}
