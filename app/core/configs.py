@@ -28,9 +28,6 @@ class DataBase(BaseModel):
 
     @property
     def sqlalchemy_url(self) -> str:
-        # url = f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
-        # url = f"postgresql+psycopg2://postgres:L,?G+/.IoQrvSL5?@34.9.92.218:5432/postgres"
-
         if self.USE_CLOUD_SQL_PROXY:
             return (f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASS}@/{self.DB_NAME}"
                    f"?host=/cloudsql/{self.INSTANCE_CONNECTION_NAME}")
