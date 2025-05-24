@@ -16,7 +16,7 @@ jobs:
         uses: google-github-actions/deploy-cloudrun@v1
         with:
           service: cafe-manager-api
-          image: us-central1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/cafe-registry/cafe-manager:latest
+          image: us-central1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/coffee-point-registry/coffee-point:latest
           region: us-central1
           allow_unauthenticated: true
           add_cloudsql_instances: ${{ secrets.INSTANCE_CONNECTION_NAME }}

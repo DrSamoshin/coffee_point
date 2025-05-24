@@ -25,4 +25,4 @@ jobs:
           context: .
           file: docker/Dockerfile
           push: true
-          tags: us-central1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/cafe-registry/cafe-manager:latest
+          tags: us-central1-docker.pkg.dev/${{ secrets.GCLOUD_PROJECT_ID }}/coffee-point-registry/coffee-point:latest
