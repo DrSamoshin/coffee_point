@@ -23,6 +23,7 @@ def run():
 
     if settings.data_base.DB_AVAILABLE:
         run_alembic_upgrade()
+        logging.info("alembic migration was applied")
 
 if __name__ == "__main__":
     run()
