@@ -8,10 +8,14 @@ from app.db.session import check_db_availability
 
 
 def run_alembic_upgrade():
-    alembic_cfg = Config("alembic.ini")
-    alembic_cfg.set_main_option("sqlalchemy.url", settings.data_base.sqlalchemy_url)
-    command.upgrade(alembic_cfg, "head")
-    command.current(alembic_cfg, verbose=True)
+    try:
+        alembic_cfg = Config("alembic.ini")
+        alembic_cfg.set_main_option("sqlalchemy.url", settings.data_base.sqlalchemy_url)
+        command.upgrade(alembic_cfg, "head")
+        command.current(alembic_cfg, verbose=True)
+    except Exception as error:
+        logging.warning(error)
+
 
 def run():
     check_db_availability()
@@ -21,7 +25,7 @@ def run():
             run_alembic_upgrade()
         uvicorn.run("app.main:main_app", host=settings.run.host, port=settings.run.port, reload=True)
     except Exception as error:
-        print(error)
+        logging.error(error)
 
 if __name__ == "__main__":
     run()
