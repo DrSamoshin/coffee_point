@@ -9,7 +9,7 @@ from app.db.session import check_db_availability
 
 def run_alembic_upgrade():
     alembic_cfg = Config("alembic.ini")
-    alembic_cfg.set_main_option("sqlalchemy.url", settings.data_base.sqlalchemy_url)
+    alembic_cfg.set_main_option("sqlalchemy.url", settings.data_base.sqlalchemy_url.replace('%', '%%'))
     command.upgrade(alembic_cfg, "head")
     command.current(alembic_cfg, verbose=True)
 
