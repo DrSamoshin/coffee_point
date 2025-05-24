@@ -1,3 +1,5 @@
+import logging
+
 import uvicorn
 from app.core.configs import settings
 from alembic import command
@@ -13,9 +15,10 @@ def run_alembic_upgrade():
 
 def run():
     check_db_availability()
+    logging.info("check DB")
     try:
-        if settings.data_base.DB_AVAILABLE:
-            run_alembic_upgrade()
+        # if settings.data_base.DB_AVAILABLE:
+            # run_alembic_upgrade()
         uvicorn.run("app.main:main_app", host=settings.run.host, port=settings.run.port, reload=True)
     except Exception as error:
         print(error)
