@@ -26,7 +26,7 @@ def create_shift(db: Session, shift: ShiftCreate):
     db.add(db_shift)
     db.commit()
     db.refresh(db_shift)
-    return ShiftOut.from_orm(db_shift)
+    return db_shift
 
 @db_safe
 def update_shift(db: Session, db_shift: Shift, updates: ShiftUpdate):

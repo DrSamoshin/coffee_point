@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Coffee point",
-    "description": "...",
+    "description": "This backend application is built on FastAPI and implements the full logic of cafe management.",
     "version": "1.0.0"
   },
   "paths": {
