@@ -1,10 +1,35 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "FastAPI",
-    "version": "0.1.0"
+    "title": "Coffee point",
+    "description": "...",
+    "version": "1.0.0"
   },
   "paths": {
+    "/admin/reset-db": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Reset Database",
+        "operationId": "reset_database_admin_reset_db_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "/cafe-data/": {
       "get": {
         "tags": [
@@ -1165,12 +1190,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ]
+        }
       }
     },
     "/products/{product_id}/": {
@@ -3135,15 +3155,11 @@
       "EmployeeCreate": {
         "properties": {
           "name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Name"
+            "title": "Name",
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "type": "object",
@@ -3152,15 +3168,11 @@
       "EmployeeOut": {
         "properties": {
           "name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Name"
+            "title": "Name",
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "id": {
             "type": "string",
@@ -3182,15 +3194,11 @@
       "EmployeeUpdate": {
         "properties": {
           "name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Name"
+            "title": "Name",
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "type": "object",
@@ -3304,16 +3312,11 @@
             "title": "Shift Id"
           },
           "client_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Client Id"
+            "title": "Client Id",
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "type": "object",
@@ -3349,16 +3352,11 @@
             "title": "Shift Id"
           },
           "client_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Client Id"
+            "title": "Client Id",
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "id": {
             "type": "string",
@@ -3412,16 +3410,11 @@
             "title": "Shift Id"
           },
           "client_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Client Id"
+            "title": "Client Id",
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "type": "object",
@@ -3469,15 +3462,11 @@
             "title": "Online Shop"
           },
           "image_url": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Image Url"
+            "title": "Image Url",
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "type": "object",
@@ -3576,15 +3565,11 @@
             "title": "Online Shop"
           },
           "image_url": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Image Url"
+            "title": "Image Url",
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "id": {
             "type": "string",
@@ -3701,15 +3686,11 @@
             "title": "Online Shop"
           },
           "image_url": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Image Url"
+            "title": "Image Url",
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "type": "object",
@@ -4213,15 +4194,11 @@
       "UserCreate": {
         "properties": {
           "name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Name"
+            "title": "Name",
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "type": "object",
@@ -4230,15 +4207,11 @@
       "UserOut": {
         "properties": {
           "name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Name"
+            "title": "Name",
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "id": {
             "type": "string",
@@ -4260,15 +4233,11 @@
       "UserUpdate": {
         "properties": {
           "name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Name"
+            "title": "Name",
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "type": "object",

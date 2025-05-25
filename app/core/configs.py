@@ -9,6 +9,13 @@ class Run(BaseModel):
     host: str = "0.0.0.0"
     port: int = 8080
 
+class AppData(BaseModel):
+    title: str = "Coffee point"
+    version: str = "1.0.0"
+    openapi_version: str = "3.1.0"
+    description: str = "This backend application is built on FastAPI and implements the full logic of cafe management."
+
+
 class Logging(BaseModel):
     logging.basicConfig(
         level= logging.INFO,
@@ -45,6 +52,7 @@ class JWTToken(BaseModel):
 class Settings(BaseSettings):
     logging: Logging = Logging()
     run: Run = Run()
+    app_data: AppData = AppData()
     data_base: DataBase = DataBase()
     jwt_token: JWTToken = JWTToken()
 

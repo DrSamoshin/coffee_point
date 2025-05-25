@@ -2,6 +2,7 @@ import os
 import logging
 from pathlib import Path
 from fastapi import FastAPI
+from fastapi.openapi.utils import get_openapi
 from app.core.configs import settings
 from app.api.endpoints import (admin_router,
                                cafe_data_router,
@@ -25,7 +26,45 @@ from app.api.endpoints import (admin_router,
 
 BASE_DIR = Path(__file__).resolve().parent
 contents = os.listdir(BASE_DIR)
-main_app = FastAPI()
+main_app = FastAPI(
+    openapi_version=settings.app_data.openapi_version,
+)
+
+def custom_openapi():
+    if main_app.openapi_schema:
+        return main_app.openapi_schema
+
+    openapi_schema = get_openapi(
+        title=settings.app_data.title,
+        version=settings.app_data.version,
+        description=settings.app_data.description,
+        routes=main_app.routes,
+    )
+
+    def transform_anyof(schema: dict):
+        if not isinstance(schema, dict):
+            return
+
+        keys = list(schema.keys())
+        for key in keys:
+            value = schema.get(key)
+            if isinstance(value, dict):
+                transform_anyof(value)
+            elif key == "anyOf":
+                types = [t.get("type") for t in value if isinstance(t, dict) and "type" in t]
+                if "null" in types:
+                    actual_types = [t for t in types if t != "null"]
+                    if len(actual_types) == 1:
+                        schema.pop("anyOf")
+                        schema["type"] = [actual_types[0], "null"]
+
+    for schema in openapi_schema.get("components", {}).get("schemas", {}).values():
+        transform_anyof(schema)
+
+    main_app.openapi_schema = openapi_schema
+    return main_app.openapi_schema
+
+main_app.openapi = custom_openapi
 
 # routers
 main_app.include_router(admin_router)

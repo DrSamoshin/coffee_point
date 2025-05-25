@@ -1,5 +1,3 @@
-from typing import Optional
-
 from pydantic import BaseModel
 from uuid import UUID
 from datetime import datetime
@@ -18,5 +16,15 @@ class ShiftUpdate(ShiftBase):
 class ShiftOut(ShiftBase):
     id: UUID
     active: bool
+
+    @classmethod
+    def from_orm(cls, obj):
+        return cls(
+            id=obj.id,
+            active=obj.active,
+            employee_id=obj.employee_id,
+            start_time=obj.start_time.strftime('%Y-%m-%dT%H:%M:%S'),
+            end_time=obj.end_time.strftime('%Y-%m-%dT%H:%M:%S')
+        )
 
     model_config = {"from_attributes": True}
