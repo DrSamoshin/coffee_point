@@ -23,8 +23,8 @@ class ShiftOut(ShiftBase):
             id=obj.id,
             active=obj.active,
             employee_id=obj.employee_id,
-            start_time=obj.start_time.strftime('%Y-%m-%dT%H:%M:%S'),
-            end_time=obj.end_time.strftime('%Y-%m-%dT%H:%M:%S')
+            start_time=obj.start_time.strftime('%Y-%m-%dT%H:%M:%SZ'),
+            end_time=obj.end_time.strftime('%Y-%m-%dT%H:%M:%SZ')
         )
 
     model_config = {"from_attributes": True}
