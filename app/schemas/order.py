@@ -6,6 +6,7 @@ from typing import Optional
 from decimal import Decimal
 
 from app.core.consts import Type, PaymentMethod
+from app.schemas.product import ProductOut
 
 
 class OrderBase(BaseModel):
@@ -25,6 +26,9 @@ class OrderUpdate(OrderBase):
 class OrderOut(OrderBase):
     id: UUID
     active: bool
+
+class OrderWithProductsOut(OrderOut):
+    products: list[ProductOut]
 
     model_config = {"from_attributes": True}
 

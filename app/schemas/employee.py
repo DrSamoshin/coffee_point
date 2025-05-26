@@ -1,10 +1,11 @@
 from uuid import UUID
-
 from pydantic import BaseModel
-from typing import Optional
+from app.core.consts import EmployeePosition
+
 
 class EmployeeBase(BaseModel):
-    name: Optional[str] = None
+    name: str
+    position: EmployeePosition
 
 class EmployeeCreate(EmployeeBase):
     pass
@@ -18,3 +19,8 @@ class EmployeeOut(EmployeeBase):
 
     model_config = {"from_attributes": True}
 
+class BaristaOut(BaseModel):
+    id: UUID
+    name: str
+
+    model_config = {"from_attributes": True}

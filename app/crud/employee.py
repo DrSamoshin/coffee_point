@@ -1,9 +1,11 @@
+import logging
 from uuid import UUID
 from sqlalchemy.orm import Session
-
 from app.db.models import Employee
 from app.db.session import db_safe
 from app.schemas.employee import EmployeeCreate, EmployeeUpdate
+from app.core.consts import EmployeePosition
+
 
 @db_safe
 def get_employee(db: Session, employee_id: UUID):
@@ -14,15 +16,22 @@ def get_employees(db: Session):
     return db.query(Employee).filter(Employee.active == True).all()
 
 @db_safe
-def get_deactivated_employees(db: Session, skip: int = 0, limit: int = 10):
+def get_baristas(db: Session):
+    return db.query(Employee).filter(Employee.active == True,
+                                     Employee.position == EmployeePosition.barista).all()
+
+@db_safe
+def get_deactivated_employees(db: Session):
     return db.query(Employee).filter(Employee.active == False).offset(skip).limit(limit).all()
 
 @db_safe
 def create_employee(db: Session, employee: EmployeeCreate):
-    db_employee = Employee(name=employee.name)
+    db_employee = Employee(name=employee.name,
+                           position=employee.position)
     db.add(db_employee)
     db.commit()
     db.refresh(db_employee)
+    logging.info(f"Employee is created: {db_employee}")
     return db_employee
 
 @db_safe

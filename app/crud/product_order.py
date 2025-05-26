@@ -1,5 +1,6 @@
 from uuid import UUID
 from sqlalchemy.orm import Session
+from sqlalchemy.orm import joinedload
 
 from app.db.models import ProductOrder
 from app.db.session import db_safe
@@ -12,6 +13,15 @@ def get_product_order(db: Session, product_order_id: UUID):
 @db_safe
 def get_product_orders(db: Session):
     return db.query(ProductOrder).all()
+
+
+@db_safe
+def get_product_with_orders(db: Session):
+    return db.query(ProductOrder).options(
+        joinedload(ProductOrder.product),
+        joinedload(ProductOrder.order)
+    ).all()
+
 
 @db_safe
 def create_product_order(db: Session, product_order: ProductOrderCreate):

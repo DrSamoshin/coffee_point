@@ -8,3 +8,7 @@ class Type(str, Enum):
     dine_in = "dine_in"
     delivery = "delivery"
     takeout = "takeout"
+
+class EmployeePosition(str, Enum):
+    barista = "barista"
+    manager = "manager"

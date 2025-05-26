@@ -7,7 +7,6 @@ from app.core.configs import settings
 
 async def get_user_id_from_token(credential: HTTPAuthorizationCredentials = Depends(HTTPBearer())) -> str:
     token = credential.credentials
-    logging.info(f"token: {token}")
     try:
         payload = jwt.decode(token, settings.jwt_token.SECRET_KEY, algorithms=[settings.jwt_token.ALGORITHM])
         user_id = payload.get("sub")
