@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from uuid import UUID
 
 from app.db.session import get_db
-from app.schemas.product import ProductCreate, ProductOut, ProductUpdate
+from app.schemas.product import ProductCreate, ProductOut, ProductUpdate, ProductOnlineShopOut
 from app.crud import product as crud_product
 from app.core.responses import response
 from app.services.authentication import get_user_id_from_token
@@ -14,8 +14,8 @@ router = APIRouter(prefix='/products', tags=['products'])
 async def read_products(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     return crud_product.get_products(db)
 
-@router.get("/online-shop/", response_model=list[ProductOut])
-async def read_web_products(db: Session = Depends(get_db)):
+@router.get("/online-shop/", response_model=list[ProductOnlineShopOut])
+async def read_online_shop_products(db: Session = Depends(get_db)):
     return crud_product.get_online_shop_products(db)
 
 @router.get("/{product_id}/", response_model=ProductOut)

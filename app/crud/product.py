@@ -1,21 +1,27 @@
 from uuid import UUID
 from sqlalchemy.orm import Session
-
+from sqlalchemy.orm import joinedload
 from app.db.models import Product
 from app.db.session import db_safe
 from app.schemas.product import ProductCreate, ProductUpdate
 
 @db_safe
 def get_product(db: Session, product_id: UUID):
-    return db.query(Product).filter(Product.id == product_id).first()
+    return db.query(Product).filter(Product.id == product_id).options(
+        joinedload(Product.category)
+    ).first()
 
 @db_safe
 def get_products(db: Session):
-    return db.query(Product).filter(Product.active == True).all()
+    return db.query(Product).filter(Product.active == True).options(
+        joinedload(Product.category)
+    ).all()
 
 @db_safe
 def get_online_shop_products(db: Session):
-    return db.query(Product).filter(Product.active == True, Product.online_shop == True).all()
+    return db.query(Product).filter(Product.active == True, Product.online_shop == True).options(
+        joinedload(Product.category)
+    ).all()
 
 @db_safe
 def get_deactivated_products(db: Session):
