@@ -15,8 +15,13 @@ async def create_shift(shift: ShiftCreate, db: Session = Depends(get_db), user_i
     return crud_shift.create_shift(db, shift)
 
 @router.get("/", response_model=list[ShiftOut])
-async def read_shifts(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
-    shifts = crud_shift.get_shifts(db, skip, limit)
+async def read_shifts(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+    shifts = crud_shift.get_shifts(db)
+    return shifts
+
+@router.get("/active-shifts/", response_model=list[ShiftOut])
+async def read_active_shifts(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+    shifts = crud_shift.get_active_shifts(db)
     return shifts
 
 @router.get("/{shift_id}/", response_model=ShiftOut)
