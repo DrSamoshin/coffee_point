@@ -71,10 +71,10 @@ def get_orders(db: Session):
     return db.query(Order).filter(Order.active == True).all()
 
 @db_safe
-def get_shift_orders(db: Session, shift_id: UUID):
+def get_shift_orders(db: Session, shift_id: UUID, skip: int = 0, limit: int = 10):
     orders = db.query(Order).filter(Order.active == True, Order.shift_id == shift_id).options(
         joinedload(Order.product_orders).joinedload(ProductOrder.product)
-    ).all()
+    ).offset(skip).limit(limit).all()
     logging.info(orders)
     result = []
 

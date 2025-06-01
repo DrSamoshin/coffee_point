@@ -24,8 +24,8 @@ async def create_order_with_products(order: OrderCreate, db: Session = Depends(g
 
 # barista
 @router.get("/shift-orders/{shift_id}/", response_model=list[ShiftOrderOut])
-async def get_shift_orders(shift_id: UUID, db: Session = Depends(get_db)):
-    return crud_order.get_shift_orders(db, shift_id)
+async def get_shift_orders(shift_id: UUID, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    return crud_order.get_shift_orders(db, shift_id, skip, limit)
 
 # barista
 @router.get("/{order_id}/", response_model=ShiftOrderOut)
