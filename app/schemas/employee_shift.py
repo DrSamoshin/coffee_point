@@ -4,21 +4,20 @@ from pydantic import BaseModel, ConfigDict
 from uuid import UUID
 from datetime import datetime
 
-class ShiftBase(BaseModel):
-    pass
-
-class ShiftCreate(ShiftBase):
-    pass
-
-class ShiftStartUpdate(BaseModel):
+class EmployeeShiftBase(BaseModel):
     start_time: datetime
+    employee_id: UUID
+    shift_id: Optional[UUID]
 
-class ShiftEndUpdate(BaseModel):
+class EmployeeShiftCreate(EmployeeShiftBase):
+    pass
+
+class EmployeeShiftUpdate(BaseModel):
+    last_employee_shift: bool = False
     end_time: datetime
 
-class ShiftOut(ShiftBase):
+class EmployeeShiftOut(EmployeeShiftBase):
     id: UUID
-    start_time: Optional[datetime]
     end_time: Optional[datetime]
     active: bool
 

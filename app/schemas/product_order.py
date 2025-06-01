@@ -1,19 +1,21 @@
+from typing import Optional
 from uuid import UUID
 from pydantic import BaseModel
-
-from app.schemas.order import OrderOut
-from app.schemas.product import ProductOut
 
 
 class ProductOrderBase(BaseModel):
     product_id: UUID
     order_id: UUID
+    count: int
 
-class ProductOrderCreate(ProductOrderBase):
-    pass
+class ProductOrderCreate(BaseModel):
+    product_id: UUID
+    count: int
 
-class ProductOrderUpdate(ProductOrderBase):
-    pass
+class ProductOrderUpdate(BaseModel):
+    product_id: UUID
+    count: int
+    product_order_id: Optional[UUID]
 
 class ProductOrderOut(ProductOrderBase):
     id: UUID

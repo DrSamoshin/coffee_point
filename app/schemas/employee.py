@@ -15,7 +15,6 @@ class EmployeeUpdate(EmployeeBase):
 
 class EmployeeOut(EmployeeBase):
     id: UUID
-    active: bool
 
     model_config = {"from_attributes": True}
 

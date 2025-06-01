@@ -1,6 +1,7 @@
 from .category import Category
 from .client import Client
 from .employee import Employee
+from .employee_shift import EmployeeShift
 from .item import Item
 from .order import Order
 from .product import Product

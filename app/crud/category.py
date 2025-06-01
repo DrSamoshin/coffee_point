@@ -9,6 +9,7 @@ from app.schemas.category import CategoryCreate, CategoryUpdate
 def get_category(db: Session, category_id: UUID):
     return db.query(Category).filter(Category.id == category_id).first()
 
+# +
 @db_safe
 def get_categories(db: Session):
     return db.query(Category).filter(Category.active == True).all()
@@ -17,6 +18,7 @@ def get_categories(db: Session):
 def get_deactivated_categories(db: Session):
     return db.query(Category).filter(Category.active == False).all()
 
+# +
 @db_safe
 def create_category(db: Session, category: CategoryCreate):
     db_category = Category(name=category.name)
@@ -25,10 +27,10 @@ def create_category(db: Session, category: CategoryCreate):
     db.refresh(db_category)
     return db_category
 
+# +
 @db_safe
 def update_category(db: Session, db_category: Category, updates: CategoryUpdate):
-    for field, value in updates.model_dump(exclude_unset=True).items():
-        setattr(db_category, field, value)
+    db_category.name = updates.name
     db.commit()
     db.refresh(db_category)
     return db_category

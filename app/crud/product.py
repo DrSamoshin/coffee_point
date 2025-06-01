@@ -11,12 +11,14 @@ def get_product(db: Session, product_id: UUID):
         joinedload(Product.category)
     ).first()
 
+# +
 @db_safe
 def get_products(db: Session):
     return db.query(Product).filter(Product.active == True).options(
         joinedload(Product.category)
     ).all()
 
+# +
 @db_safe
 def get_online_shop_products(db: Session):
     return db.query(Product).filter(Product.active == True, Product.online_shop == True).options(
@@ -27,6 +29,7 @@ def get_online_shop_products(db: Session):
 def get_deactivated_products(db: Session):
     return db.query(Product).filter(Product.active == False).all()
 
+# +
 @db_safe
 def create_product(db: Session, product: ProductCreate):
     db_product = Product(name=product.name,
@@ -39,6 +42,7 @@ def create_product(db: Session, product: ProductCreate):
     db.refresh(db_product)
     return db_product
 
+# +
 @db_safe
 def update_product(db: Session, db_product: Product, updates: ProductUpdate):
     for field, value in updates.model_dump(exclude_unset=True).items():

@@ -26,7 +26,8 @@ def get_product_with_orders(db: Session):
 @db_safe
 def create_product_order(db: Session, product_order: ProductOrderCreate):
     db_product_order = ProductOrder(product_id=product_order.product_id,
-                                    order_id=product_order.order_id)
+                                    order_id=product_order.order_id,
+                                    count=product_order.count)
     db.add(db_product_order)
     db.commit()
     db.refresh(db_product_order)

@@ -16,22 +16,37 @@ class ProductBase(BaseModel):
 class ProductCreate(ProductBase):
     pass
 
-class ProductUpdate(ProductBase):
-    pass
+class ProductUpdate(BaseModel):
+    name: Optional[str] = None
+    category_id: Optional[UUID] = None
+    price: Optional[Decimal] = None
+    online_shop: Optional[bool] = None
+    image_url: Optional[str] = None
 
-class ProductOut(ProductBase):
+
+class ProductFullInfoOut(ProductBase):
     id: UUID
     active: bool
     category: CategoryOut
 
     model_config = {"from_attributes": True}
 
-class ProductOnlineShopOut(BaseModel):
+class ProductOut(BaseModel):
     id: UUID
     name: str
     price: Decimal
     image_url: Optional[str]
+    online_shop: bool
     category: CategoryOut
+
+    model_config = {"from_attributes": True}
+
+class ProductOrderOut(BaseModel):
+    id: UUID
+    name: str
+    price: Decimal
+    product_order_id: UUID
+    count: int
 
     model_config = {"from_attributes": True}
 

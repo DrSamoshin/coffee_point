@@ -4,6 +4,7 @@ from .category import router as category_router
 from .check_list import router as check_list_router
 from .client import router as client_router
 from .employee import router as employee_router
+from .employee_shift import router as employee_shift_router
 from .health import router as health_router
 from .item import router as item_router
 from .order import router as order_router

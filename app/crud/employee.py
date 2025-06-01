@@ -11,19 +11,21 @@ from app.core.consts import EmployeePosition
 def get_employee(db: Session, employee_id: UUID):
     return db.query(Employee).filter(Employee.id == employee_id).first()
 
+# +
 @db_safe
 def get_employees(db: Session):
-    return db.query(Employee).filter(Employee.active == True).all()
+    return db.query(Employee).filter(Employee.deactivated == False).all()
 
 @db_safe
 def get_baristas(db: Session):
-    return db.query(Employee).filter(Employee.active == True,
+    return db.query(Employee).filter(Employee.deactivated == False,
                                      Employee.position == EmployeePosition.barista).all()
 
 @db_safe
 def get_deactivated_employees(db: Session):
-    return db.query(Employee).filter(Employee.active == False).offset(skip).limit(limit).all()
+    return db.query(Employee).filter(Employee.deactivated == True).offset(skip).limit(limit).all()
 
+# +
 @db_safe
 def create_employee(db: Session, employee: EmployeeCreate):
     db_employee = Employee(name=employee.name,
@@ -44,13 +46,13 @@ def update_employee(db: Session, db_employee: Employee, updates: EmployeeUpdate)
 
 @db_safe
 def deactivate_employee(db: Session, db_employee: Employee):
-    db_employee.active = False
+    db_employee.deactivated = True
     db.commit()
     db.refresh(db_employee)
 
 @db_safe
 def activate_employee(db: Session, employee_id: UUID):
-    employee = db.query(Employee).filter(Employee.id == employee_id, Employee.active == False).first()
+    employee = db.query(Employee).filter(Employee.id == employee_id, Employee.deactivated == True).first()
     if employee:
         employee.active = True
         db.commit()
