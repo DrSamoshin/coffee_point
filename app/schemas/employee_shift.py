@@ -3,6 +3,8 @@ from typing import Optional
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict
 
+from app.schemas.employee import EmployeeOut
+
 
 class EmployeeShiftBase(BaseModel):
     employee_id: UUID
@@ -28,3 +30,8 @@ class EmployeeShiftOut(EmployeeShiftBase):
         },
         from_attributes=True
     )
+
+class EmployeeShiftWithEmployeeOut(BaseModel):
+    id: UUID
+    employee: EmployeeOut
+

@@ -22,7 +22,8 @@ def get_employee_shifts(db: Session):
 # +
 @db_safe
 def get_active_employee_shifts(db: Session):
-    return db.query(EmployeeShift).filter(EmployeeShift.active == True).all()
+    return db.query(EmployeeShift).filter(EmployeeShift.active == True).options(
+        joinedload(EmployeeShift.employee)).all()
 
 # @db_safe
 # def get_deactivated_employee_shifts(db: Session):

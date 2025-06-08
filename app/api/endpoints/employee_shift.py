@@ -3,7 +3,8 @@ from sqlalchemy.orm import Session
 from uuid import UUID
 
 from app.db.session import get_db
-from app.schemas.employee_shift import EmployeeShiftCreate, EmployeeShiftOut, EmployeeShiftUpdate
+from app.schemas.employee_shift import EmployeeShiftCreate, EmployeeShiftOut, EmployeeShiftUpdate, \
+    EmployeeShiftWithEmployeeOut
 from app.crud import employee_shift as crud_employee_shift
 from app.core.responses import response
 from app.services.authentication import get_user_id_from_token
@@ -22,7 +23,7 @@ async def get_employee_shifts(db: Session = Depends(get_db), user_id: str = Depe
     return shifts
 
 # barista_app
-@router.get("/active-employee-shifts/", response_model=list[EmployeeShiftOut])
+@router.get("/active-employee-shifts/", response_model=list[EmployeeShiftWithEmployeeOut])
 async def get_active_employee_shifts(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     shifts = crud_employee_shift.get_active_employee_shifts(db)
     return shifts
