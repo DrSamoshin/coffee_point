@@ -21,9 +21,9 @@ async def get_shifts(db: Session = Depends(get_db), user_id: str = Depends(get_u
     return shifts
 
 # barista_app
-@router.get("/active-shifts/", response_model=list[ShiftOut])
-async def get_active_shifts(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
-    shifts = crud_shift.get_active_shifts(db)
+@router.get("/active-shift/", response_model=ShiftOut)
+async def get_active_shift(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+    shifts = crud_shift.get_active_shift(db)
     return shifts
 
 # @router.get("/{shift_id}/", response_model=ShiftOut)
