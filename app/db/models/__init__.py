@@ -1,4 +1,5 @@
 from .category import Category
+from .check_list import CheckList
 from .client import Client
 from .employee import Employee
 from .employee_shift import EmployeeShift

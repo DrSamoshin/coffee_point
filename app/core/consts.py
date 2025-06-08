@@ -18,3 +18,7 @@ class OrderStatus(str, Enum):
 class EmployeePosition(str, Enum):
     barista = "barista"
     manager = "manager"
+
+class CheckListTimePoint(str, Enum):
+    start_shift = "start_shift"
+    end_shift = "end_shift"

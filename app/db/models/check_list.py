@@ -1,0 +1,12 @@
+import uuid
+from sqlalchemy import Column, String, UUID
+from sqlalchemy import Enum as SQLAlchemyEnum
+from app.db.models.base_class import Base
+from app.core.consts import CheckListTimePoint
+
+class CheckList(Base):
+    __tablename__ = "check_lists"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
+    time_point = Column(SQLAlchemyEnum(CheckListTimePoint), nullable=False, unique=True)  # example: "start_shift", "end_shift"
+    check_list = Column(String, nullable=True)

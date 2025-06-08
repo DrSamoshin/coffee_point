@@ -1,11 +1,10 @@
-from typing import Optional
-
-from pydantic import BaseModel, ConfigDict
 from uuid import UUID
+from typing import Optional
 from datetime import datetime
+from pydantic import BaseModel, ConfigDict
+
 
 class EmployeeShiftBase(BaseModel):
-    # start_time: datetime
     employee_id: UUID
     shift_id: Optional[UUID] = None
 
@@ -14,7 +13,6 @@ class EmployeeShiftCreate(EmployeeShiftBase):
 
 class EmployeeShiftUpdate(BaseModel):
     last_employee_shift: bool = False
-    # end_time: datetime
 
 class EmployeeShiftOut(EmployeeShiftBase):
     id: UUID

@@ -1,8 +1,8 @@
-from typing import Optional
-
-from pydantic import BaseModel, ConfigDict
 from uuid import UUID
+from typing import Optional
 from datetime import datetime
+from pydantic import BaseModel, ConfigDict
+
 
 class ShiftBase(BaseModel):
     pass
@@ -11,12 +11,10 @@ class ShiftCreate(ShiftBase):
     pass
 
 class ShiftStartUpdate(BaseModel):
-    # start_time: datetime
-    ...
+    pass
 
 class ShiftEndUpdate(BaseModel):
-    # end_time: datetime
-    ...
+    pass
 
 class ShiftOut(ShiftBase):
     id: UUID
