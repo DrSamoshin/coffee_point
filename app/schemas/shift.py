@@ -11,10 +11,12 @@ class ShiftCreate(ShiftBase):
     pass
 
 class ShiftStartUpdate(BaseModel):
-    start_time: datetime
+    # start_time: datetime
+    ...
 
 class ShiftEndUpdate(BaseModel):
-    end_time: datetime
+    # end_time: datetime
+    ...
 
 class ShiftOut(ShiftBase):
     id: UUID

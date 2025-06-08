@@ -1,6 +1,6 @@
 import logging
 from uuid import UUID
-
+from datetime import datetime
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 from app.db.models import Shift
@@ -33,8 +33,7 @@ def get_active_employee_shifts(db: Session):
 def create_employee_shift(db: Session, employee_shift: EmployeeShiftCreate):
     logging.info(employee_shift.shift_id)
     if shift_id:=employee_shift.shift_id:
-        print("1")
-        db_employee_shift = EmployeeShift(start_time=employee_shift.start_time,
+        db_employee_shift = EmployeeShift(start_time=datetime.now(),
                                           employee_id=employee_shift.employee_id,
                                           shift_id=shift_id)
         db.add(db_employee_shift)
@@ -49,7 +48,7 @@ def create_employee_shift(db: Session, employee_shift: EmployeeShiftCreate):
                 db.add(db_shift)
                 db.flush()
 
-                db_employee_shift = EmployeeShift(start_time=employee_shift.start_time,
+                db_employee_shift = EmployeeShift(start_time=datetime.now(),
                                                   employee_id=employee_shift.employee_id,
                                                   shift_id=db_shift.id)
                 db.add(db_employee_shift)
@@ -64,15 +63,15 @@ def update_employee_shift_end(db: Session, shift_id: str, updates: EmployeeShift
     db_employee_shift = db.query(EmployeeShift).filter(EmployeeShift.id == shift_id).options(
         joinedload(EmployeeShift.shift)).first()
     if updates.last_employee_shift:
-        db_employee_shift.end_time = updates.end_time
+        db_employee_shift.end_time = datetime.now()
         db_employee_shift.active = False
-        db_employee_shift.shift.end_time = updates.end_time
+        db_employee_shift.shift.end_time = datetime.now()
         db_employee_shift.shift.active = False
         db.commit()
         db.refresh(db_employee_shift)
         logging.info(f"Last employee shift and shift is closed: {db_employee_shift}")
     else:
-        db_employee_shift.end_time = updates.end_time
+        db_employee_shift.end_time = datetime.now()
         db_employee_shift.active = False
         db.commit()
         db.refresh(db_employee_shift)

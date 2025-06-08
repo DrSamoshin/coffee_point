@@ -5,7 +5,7 @@ from uuid import UUID
 from datetime import datetime
 
 class EmployeeShiftBase(BaseModel):
-    start_time: datetime
+    # start_time: datetime
     employee_id: UUID
     shift_id: Optional[UUID] = None
 
@@ -14,11 +14,12 @@ class EmployeeShiftCreate(EmployeeShiftBase):
 
 class EmployeeShiftUpdate(BaseModel):
     last_employee_shift: bool = False
-    end_time: datetime
+    # end_time: datetime
 
 class EmployeeShiftOut(EmployeeShiftBase):
     id: UUID
     active: bool
+    start_time: datetime
     end_time: Optional[datetime] = None
 
     model_config = ConfigDict(

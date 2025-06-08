@@ -35,11 +35,11 @@ async def get_active_shift(db: Session = Depends(get_db), user_id: str = Depends
 
 # barista_app
 @router.put("/shift-start-update/{shift_id}/", response_model=ShiftOut)
-async def update_shift_start(shift_id: str, shift_update: ShiftStartUpdate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+async def update_shift_start(shift_id: str, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     shift = crud_shift.get_shift(db, UUID(shift_id))
     if not shift:
         return response("shift not found", 404, "error")
-    shift = crud_shift.update_start_shift(db, shift, shift_update)
+    shift = crud_shift.update_start_shift(db, shift)
     return shift
 
 # @router.put("/shift-end-update/{shift_id}/", response_model=ShiftOut)

@@ -37,7 +37,7 @@ async def get_active_employee_shifts(db: Session = Depends(get_db), user_id: str
 # barista_app
 @router.put("/shift-end-update/{shift_id}/", response_model=EmployeeShiftOut)
 async def update_employee_shift_end(shift_id: str, shift_update: EmployeeShiftUpdate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
-    shift = crud_employee_shift.get_employee_shift(db, UUID(shift_id))
+    # shift = crud_employee_shift.get_employee_shift(db, UUID(shift_id))
     # if not shift:
     #     return response("shift not found", 404, "error")
     shift = crud_employee_shift.update_employee_shift_end(db, shift_id, shift_update)

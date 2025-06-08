@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 from uuid import UUID
 
 from sqlalchemy.orm import Session
@@ -37,8 +38,9 @@ def create_shift(db: Session):
 
 # +
 @db_safe
-def update_start_shift(db: Session, db_shift: Shift, updates: ShiftStartUpdate):
-    db_shift.start_time = updates.start_time
+def update_start_shift(db: Session, db_shift: Shift):
+    db_shift.start_time = datetime.now()
+    logging.info(datetime.now())
     db.commit()
     db.refresh(db_shift)
     logging.info(f"Shift is started: {db_shift}")
@@ -46,8 +48,8 @@ def update_start_shift(db: Session, db_shift: Shift, updates: ShiftStartUpdate):
 
 # +
 @db_safe
-def update_end_shift(db: Session, db_shift: Shift, updates: ShiftEndUpdate):
-    db_shift.end_time = updates.end_time
+def update_end_shift(db: Session, db_shift: Shift):
+    db_shift.end_time = datetime.now()
     db_shift.active = False
     db.commit()
     db.refresh(db_shift)
