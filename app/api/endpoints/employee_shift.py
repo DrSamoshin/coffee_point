@@ -1,12 +1,10 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from uuid import UUID
 
 from app.db.session import get_db
 from app.schemas.employee_shift import EmployeeShiftCreate, EmployeeShiftOut, EmployeeShiftUpdate, \
     EmployeeShiftWithEmployeeOut
 from app.crud import employee_shift as crud_employee_shift
-from app.core.responses import response
 from app.services.authentication import get_user_id_from_token
 
 router = APIRouter(prefix='/employee_shifts', tags=['employee_shifts'])
@@ -28,18 +26,7 @@ async def get_active_employee_shifts(db: Session = Depends(get_db), user_id: str
     shifts = crud_employee_shift.get_active_employee_shifts(db)
     return shifts
 
-# @router.get("/{shift_id}/", response_model=EmployeeShiftOut)
-# async def read_shift(shift_id: str, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
-#     shift = crud_employee_shift.get_employee_shift(db, UUID(shift_id))
-#     if not shift:
-#         return response("shift not found", 404, "error")
-#     return shift
-
 # barista_app
 @router.put("/shift-end-update/{shift_id}/", response_model=EmployeeShiftOut)
 async def update_employee_shift_end(shift_id: str, shift_update: EmployeeShiftUpdate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
-    # shift = crud_employee_shift.get_employee_shift(db, UUID(shift_id))
-    # if not shift:
-    #     return response("shift not found", 404, "error")
-    shift = crud_employee_shift.update_employee_shift_end(db, shift_id, shift_update)
-    return shift
+    return crud_employee_shift.update_employee_shift_end(db, shift_id, shift_update)

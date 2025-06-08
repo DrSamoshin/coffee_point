@@ -1921,28 +1921,24 @@
         ]
       }
     },
-    "/shifts/active-shift/": {
+    "/shifts/active-shifts/": {
       "get": {
         "tags": [
           "shifts"
         ],
-        "summary": "Get Active Shift",
-        "operationId": "get_active_shift_shifts_active_shift__get",
+        "summary": "Get Active Shifts",
+        "operationId": "get_active_shifts_shifts_active_shifts__get",
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {
-                  "anyOf": [
-                    {
-                      "$ref": "#/components/schemas/ShiftOut"
-                    },
-                    {
-                      "type": "null"
-                    }
-                  ],
-                  "title": "Response Get Active Shift Shifts Active Shift  Get"
+                  "items": {
+                    "$ref": "#/components/schemas/ShiftOut"
+                  },
+                  "type": "array",
+                  "title": "Response Get Active Shifts Shifts Active Shifts  Get"
                 }
               }
             }
@@ -1974,6 +1970,7 @@
             "required": true,
             "schema": {
               "type": "string",
+              "format": "uuid",
               "title": "Shift Id"
             }
           }

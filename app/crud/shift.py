@@ -39,15 +39,19 @@ def create_shift(db: Session):
 
 # +
 @db_safe
-def update_start_shift(db: Session, db_shift: Shift):
-    db_shift.start_time = datetime.now()
-    logging.info(datetime.now())
-    db.commit()
-    db.refresh(db_shift)
-    logging.info(f"Shift is started: {db_shift}")
-    return db_shift
+def update_start_shift(db: Session, shift_id: UUID):
+    try:
+        db_shift = db.query(Shift).filter(Shift.id == shift_id).first()
+        db_shift.start_time = datetime.now()
+        logging.info(datetime.now())
+        db.commit()
+        db.refresh(db_shift)
+        logging.info(f"Shift is started: {db_shift}")
+        return db_shift
+    except Exception as error:
+        logging.warning(error)
 
-# +
+
 @db_safe
 def update_end_shift(db: Session, db_shift: Shift):
     db_shift.end_time = datetime.now()
