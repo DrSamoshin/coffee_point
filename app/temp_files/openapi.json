@@ -1934,7 +1934,15 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ShiftOut"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ShiftOut"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Response Get Active Shift Shifts Active Shift  Get"
                 }
               }
             }
