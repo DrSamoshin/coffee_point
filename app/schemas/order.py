@@ -1,7 +1,7 @@
 
 from uuid import UUID
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 from decimal import Decimal
 
@@ -48,5 +48,11 @@ class ShiftOrderOut(BaseModel):
     client_id: Optional[UUID] = None
     products: list[ProductOrderOut]
 
-    model_config = {"from_attributes": True}
-
+    model_config = ConfigDict(
+        ser_json_timedelta="iso8601",
+        ser_json_bytes="utf8",
+        json_encoders={
+            datetime: lambda dt: dt.strftime('%Y-%m-%dT%H:%M:%S.{:03d}Z'.format(int(dt.microsecond / 1000)))
+        },
+        from_attributes=True
+    )
