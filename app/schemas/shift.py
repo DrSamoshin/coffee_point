@@ -18,9 +18,9 @@ class ShiftEndUpdate(BaseModel):
 
 class ShiftOut(ShiftBase):
     id: UUID
-    start_time: Optional[datetime]
-    end_time: Optional[datetime]
     active: bool
+    start_time: Optional[datetime] = None
+    end_time: Optional[datetime] = None
 
     model_config = ConfigDict(
         ser_json_timedelta="iso8601",

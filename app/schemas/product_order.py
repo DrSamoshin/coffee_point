@@ -15,7 +15,7 @@ class ProductOrderCreate(BaseModel):
 class ProductOrderUpdate(BaseModel):
     product_id: UUID
     count: int
-    product_order_id: Optional[UUID]
+    product_order_id: Optional[UUID] = None
 
 class ProductOrderOut(ProductOrderBase):
     id: UUID

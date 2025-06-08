@@ -7,7 +7,7 @@ from datetime import datetime
 class EmployeeShiftBase(BaseModel):
     start_time: datetime
     employee_id: UUID
-    shift_id: Optional[UUID]
+    shift_id: Optional[UUID] = None
 
 class EmployeeShiftCreate(EmployeeShiftBase):
     pass
@@ -18,8 +18,8 @@ class EmployeeShiftUpdate(BaseModel):
 
 class EmployeeShiftOut(EmployeeShiftBase):
     id: UUID
-    end_time: Optional[datetime]
     active: bool
+    end_time: Optional[datetime] = None
 
     model_config = ConfigDict(
         ser_json_timedelta="iso8601",

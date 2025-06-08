@@ -11,7 +11,7 @@ class ProductBase(BaseModel):
     category_id: UUID
     price: Decimal
     online_shop: bool
-    image_url: Optional[str]
+    image_url: Optional[str] = None
 
 class ProductCreate(ProductBase):
     pass
@@ -35,9 +35,9 @@ class ProductOut(BaseModel):
     id: UUID
     name: str
     price: Decimal
-    image_url: Optional[str]
     online_shop: bool
     category: CategoryOut
+    image_url: Optional[str] = None
 
     model_config = {"from_attributes": True}
 
