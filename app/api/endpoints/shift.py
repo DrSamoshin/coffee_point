@@ -1,3 +1,5 @@
+from typing import Optional, Union
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from uuid import UUID
@@ -21,10 +23,9 @@ async def get_shifts(db: Session = Depends(get_db), user_id: str = Depends(get_u
     return shifts
 
 # barista_app
-@router.get("/active-shift/", response_model=ShiftOut)
+@router.get("/active-shift/", response_model=Union[ShiftOut, None])
 async def get_active_shift(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
-    shifts = crud_shift.get_active_shift(db)
-    return shifts
+    return crud_shift.get_active_shift(db)
 
 # @router.get("/{shift_id}/", response_model=ShiftOut)
 # async def get_shift(shift_id: str, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):

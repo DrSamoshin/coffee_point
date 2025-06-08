@@ -181,19 +181,21 @@
         }
       }
     },
-    "/check-list/": {
+    "/check-list/start": {
       "get": {
         "tags": [
           "check_list"
         ],
-        "summary": "Get Check List",
-        "operationId": "get_check_list_check_list__get",
+        "summary": "Get Start Check List",
+        "operationId": "get_start_check_list_check_list_start_get",
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/CheckListOut"
+                }
               }
             }
           }
@@ -203,6 +205,90 @@
             "HTTPBearer": []
           }
         ]
+      }
+    },
+    "/check-list/end": {
+      "get": {
+        "tags": [
+          "check_list"
+        ],
+        "summary": "Get End Check List",
+        "operationId": "get_end_check_list_check_list_end_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckListOut"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/check-list/{check_list_id}": {
+      "put": {
+        "tags": [
+          "check_list"
+        ],
+        "summary": "Update Start Check List",
+        "operationId": "update_start_check_list_check_list__check_list_id__put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "check_list_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Check List Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckListUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckListOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/clients/": {
@@ -545,7 +631,7 @@
               "application/json": {
                 "schema": {
                   "items": {
-                    "$ref": "#/components/schemas/EmployeeShiftOut"
+                    "$ref": "#/components/schemas/EmployeeShiftWithEmployeeOut"
                   },
                   "type": "array",
                   "title": "Response Get Active Employee Shifts Employee Shifts Active Employee Shifts  Get"
@@ -2971,6 +3057,44 @@
         ],
         "title": "CategoryUpdate"
       },
+      "CheckListOut": {
+        "properties": {
+          "check_list": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Check List"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "check_list",
+          "id"
+        ],
+        "title": "CheckListOut"
+      },
+      "CheckListUpdate": {
+        "properties": {
+          "check_list": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Check List"
+          }
+        },
+        "type": "object",
+        "required": [
+          "check_list"
+        ],
+        "title": "CheckListUpdate"
+      },
       "ClientCreate": {
         "properties": {
           "name": {
@@ -3145,6 +3269,24 @@
         },
         "type": "object",
         "title": "EmployeeShiftUpdate"
+      },
+      "EmployeeShiftWithEmployeeOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "employee": {
+            "$ref": "#/components/schemas/EmployeeOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "employee"
+        ],
+        "title": "EmployeeShiftWithEmployeeOut"
       },
       "HTTPValidationError": {
         "properties": {

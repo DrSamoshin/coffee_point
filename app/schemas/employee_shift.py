@@ -1,5 +1,5 @@
 from uuid import UUID
-from typing import Optional
+from typing import Union
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict
 
@@ -8,7 +8,7 @@ from app.schemas.employee import EmployeeOut
 
 class EmployeeShiftBase(BaseModel):
     employee_id: UUID
-    shift_id: Optional[UUID] = None
+    shift_id: Union[UUID, None] = None
 
 class EmployeeShiftCreate(EmployeeShiftBase):
     pass
@@ -20,7 +20,7 @@ class EmployeeShiftOut(EmployeeShiftBase):
     id: UUID
     active: bool
     start_time: datetime
-    end_time: Optional[datetime] = None
+    end_time: Union[datetime, None] = None
 
     model_config = ConfigDict(
         ser_json_timedelta="iso8601",

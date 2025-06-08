@@ -10,3 +10,6 @@ class CheckList(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
     time_point = Column(SQLAlchemyEnum(CheckListTimePoint), nullable=False, unique=True)  # example: "start_shift", "end_shift"
     check_list = Column(String, nullable=True)
+
+    def __repr__(self):
+        return f"id={self.id} time_point={self.time_point} check_list={self.check_list}"

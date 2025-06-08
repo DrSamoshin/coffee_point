@@ -23,6 +23,7 @@ def get_shifts(db: Session):
 def get_active_shift(db: Session):
     return db.query(Shift).filter(Shift.active == True).first()
 
+
 @db_safe
 def get_finished_shifts(db: Session):
     return db.query(Shift).filter(Shift.active == False).all()

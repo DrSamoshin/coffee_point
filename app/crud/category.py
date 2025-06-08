@@ -1,3 +1,4 @@
+import logging
 from uuid import UUID
 from sqlalchemy.orm import Session
 
@@ -25,15 +26,22 @@ def create_category(db: Session, category: CategoryCreate):
     db.add(db_category)
     db.commit()
     db.refresh(db_category)
+    logging.info(f"Category is created: {db_category}")
     return db_category
 
 # +
 @db_safe
-def update_category(db: Session, db_category: Category, updates: CategoryUpdate):
-    db_category.name = updates.name
-    db.commit()
-    db.refresh(db_category)
-    return db_category
+def update_category(db: Session, category_id: UUID, updates: CategoryUpdate):
+    try:
+        db_category = db.query(Category).filter(Category.id == category_id).first()
+        db_category.name = updates.name
+        db.commit()
+        db.refresh(db_category)
+        logging.info(f"Category is updated: {db_category}")
+        return db_category
+    except Exception as error:
+        logging.warning(error)
+
 
 @db_safe
 def deactivate_category(db: Session, db_category: Category):
