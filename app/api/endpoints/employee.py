@@ -22,6 +22,12 @@ async def get_employees(db: Session = Depends(get_db), user_id: str = Depends(ge
     employees = crud_employee.get_employees(db)
     return employees
 
+# barista_app
+@router.get("/available/", response_model=List[EmployeeOut])
+async def get_available_employees(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+    employees = crud_employee.get_available_employees(db)
+    return employees
+
 # @router.get("/baristas/", response_model=List[BaristaOut])
 # async def get_baristas(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
 #     baristas = crud_employee.get_baristas(db)

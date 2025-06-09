@@ -1,7 +1,7 @@
 import logging
 from uuid import UUID
-from sqlalchemy.orm import Session
-from app.db.models import Employee
+from sqlalchemy.orm import Session, joinedload
+from app.db.models import Employee, EmployeeShift
 from app.db.session import db_safe
 from app.schemas.employee import EmployeeCreate, EmployeeUpdate
 from app.core.consts import EmployeePosition
@@ -11,10 +11,19 @@ from app.core.consts import EmployeePosition
 def get_employee(db: Session, employee_id: UUID):
     return db.query(Employee).filter(Employee.id == employee_id).first()
 
-# +
+
 @db_safe
 def get_employees(db: Session):
     return db.query(Employee).filter(Employee.deactivated == False).all()
+
+@db_safe
+def get_available_employees(db: Session):
+    db_active_shifts = db.query(EmployeeShift).filter(EmployeeShift.active == True).all()
+    active_employee_ids = [shift.employee_id for shift in db_active_shifts]
+    db_employees = db.query(Employee).filter(Employee.deactivated == False).all()
+    active_employees = [employee for employee in db_employees if employee.id not in active_employee_ids]
+    return active_employees
+
 
 @db_safe
 def get_baristas(db: Session):
