@@ -1,3 +1,4 @@
+from typing import Union
 from uuid import UUID
 from pydantic import BaseModel
 from app.core.consts import EmployeePosition
@@ -10,8 +11,9 @@ class EmployeeBase(BaseModel):
 class EmployeeCreate(EmployeeBase):
     pass
 
-class EmployeeUpdate(EmployeeBase):
-    pass
+class EmployeeUpdate(BaseModel):
+    name: Union[str, None] = None
+    position: Union[EmployeePosition, None] = None
 
 class EmployeeOut(EmployeeBase):
     id: UUID

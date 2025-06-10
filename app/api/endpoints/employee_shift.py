@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
-from app.schemas.employee_shift import EmployeeShiftCreate, EmployeeShiftOut, EmployeeShiftUpdate, \
-    EmployeeShiftWithEmployeeOut
+from app.schemas.employee_shift import (EmployeeShiftCreate, EmployeeShiftOut, EmployeeShiftUpdate,
+                                        EmployeeShiftWithEmployeeOut)
 from app.crud import employee_shift as crud_employee_shift
 from app.services.authentication import get_user_id_from_token
 

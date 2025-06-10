@@ -1,8 +1,8 @@
 from .admin import router as admin_router
-from .cafe_data import router as cafe_data_router
 from .category import router as category_router
 from .check_list import router as check_list_router
 from .client import router as client_router
+from .coffee_shop import router as coffee_shop_router
 from .employee import router as employee_router
 from .employee_shift import router as employee_shift_router
 from .health import router as health_router
@@ -10,11 +10,9 @@ from .item import router as item_router
 from .order import router as order_router
 from .product import router as product_router
 from .product_order import router as product_order_router
-from .product_tag import router as product_tag_router
 from .recipe_item import router as recipe_item_router
 from .shift import router as shift_router
 from .store_item import router as store_item_router
 from .supplier import router as supplier_router
 from .supply import router as supply_router
-from .tag import router as tag_router
 from .user import router as user_router

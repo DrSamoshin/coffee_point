@@ -30,25 +30,6 @@
         ]
       }
     },
-    "/cafe-data/": {
-      "get": {
-        "tags": [
-          "cafe_data"
-        ],
-        "summary": "Get Cafe Data",
-        "operationId": "get_cafe_data_cafe_data__get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      }
-    },
     "/categories/": {
       "get": {
         "tags": [
@@ -181,13 +162,13 @@
         }
       }
     },
-    "/check-list/start": {
+    "/check-lists/start/": {
       "get": {
         "tags": [
-          "check_list"
+          "check_lists"
         ],
         "summary": "Get Start Check List",
-        "operationId": "get_start_check_list_check_list_start_get",
+        "operationId": "get_start_check_list_check_lists_start__get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -207,13 +188,13 @@
         ]
       }
     },
-    "/check-list/end": {
+    "/check-lists/end/": {
       "get": {
         "tags": [
-          "check_list"
+          "check_lists"
         ],
         "summary": "Get End Check List",
-        "operationId": "get_end_check_list_check_list_end_get",
+        "operationId": "get_end_check_list_check_lists_end__get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -233,13 +214,13 @@
         ]
       }
     },
-    "/check-list/{check_list_id}": {
+    "/check-lists/{check_list_id}/": {
       "put": {
         "tags": [
-          "check_list"
+          "check_lists"
         ],
         "summary": "Update Start Check List",
-        "operationId": "update_start_check_list_check_list__check_list_id__put",
+        "operationId": "update_start_check_list_check_lists__check_list_id___put",
         "security": [
           {
             "HTTPBearer": []
@@ -469,6 +450,25 @@
         }
       }
     },
+    "/coffee-shop/info/": {
+      "get": {
+        "tags": [
+          "coffee_shop"
+        ],
+        "summary": "Get Coffee Shop Info",
+        "operationId": "get_coffee_shop_info_coffee_shop_info__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
     "/employees/": {
       "get": {
         "tags": [
@@ -531,6 +531,36 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/employees/available/": {
+      "get": {
+        "tags": [
+          "employees"
+        ],
+        "summary": "Get Available Employees",
+        "operationId": "get_available_employees_employees_available__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/EmployeeOut"
+                  },
+                  "type": "array",
+                  "title": "Response Get Available Employees Employees Available  Get"
                 }
               }
             }
@@ -1355,6 +1385,52 @@
             }
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "products"
+        ],
+        "summary": "Deactivate Product",
+        "operationId": "deactivate_product_products__product_id___delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Product Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductFullInfoOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/product_orders/": {
@@ -1518,184 +1594,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/app__schemas__product_order__ProductOrderOut"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/product_tags/": {
-      "get": {
-        "tags": [
-          "product_tags"
-        ],
-        "summary": "Read Product Tags",
-        "operationId": "read_product_tags_product_tags__get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/ProductTagOut"
-                  },
-                  "type": "array",
-                  "title": "Response Read Product Tags Product Tags  Get"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "product_tags"
-        ],
-        "summary": "Create Product Tag",
-        "operationId": "create_product_tag_product_tags__post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ProductTagCreate"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProductTagOut"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ]
-      }
-    },
-    "/product_tags/{product_tag_id}/": {
-      "get": {
-        "tags": [
-          "product_tags"
-        ],
-        "summary": "Read Product Tag",
-        "operationId": "read_product_tag_product_tags__product_tag_id___get",
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "product_tag_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "title": "Product Tag Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProductTagOut"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "product_tags"
-        ],
-        "summary": "Update Product Tag",
-        "operationId": "update_product_tag_product_tags__product_tag_id___put",
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "product_tag_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "title": "Product Tag Id"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ProductTagUpdate"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProductTagOut"
                 }
               }
             }
@@ -2516,184 +2414,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SupplyOut"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/tags/": {
-      "get": {
-        "tags": [
-          "tags"
-        ],
-        "summary": "Read Tags",
-        "operationId": "read_tags_tags__get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/TagOut"
-                  },
-                  "type": "array",
-                  "title": "Response Read Tags Tags  Get"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "tags"
-        ],
-        "summary": "Create Tag",
-        "operationId": "create_tag_tags__post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TagCreate"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TagOut"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ]
-      }
-    },
-    "/tags/{tag_id}/": {
-      "get": {
-        "tags": [
-          "tags"
-        ],
-        "summary": "Read Tag",
-        "operationId": "read_tag_tags__tag_id___get",
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "tag_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "title": "Tag Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TagOut"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "tags"
-        ],
-        "summary": "Update Tag",
-        "operationId": "update_tag_tags__tag_id___put",
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "tag_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "title": "Tag Id"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TagUpdate"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TagOut"
                 }
               }
             }
@@ -3628,6 +3348,53 @@
         ],
         "title": "ProductCreate"
       },
+      "ProductFullInfoOut": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "category_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Category Id"
+          },
+          "price": {
+            "type": "string",
+            "title": "Price"
+          },
+          "online_shop": {
+            "type": "boolean",
+            "title": "Online Shop"
+          },
+          "image_url": {
+            "title": "Image Url",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "active": {
+            "type": "boolean",
+            "title": "Active"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "category_id",
+          "price",
+          "online_shop",
+          "id",
+          "active"
+        ],
+        "title": "ProductFullInfoOut"
+      },
       "ProductOrderCreate": {
         "properties": {
           "product_id": {
@@ -3712,72 +3479,6 @@
           "category"
         ],
         "title": "ProductOut"
-      },
-      "ProductTagCreate": {
-        "properties": {
-          "product_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Product Id"
-          },
-          "tag_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Tag Id"
-          }
-        },
-        "type": "object",
-        "required": [
-          "product_id",
-          "tag_id"
-        ],
-        "title": "ProductTagCreate"
-      },
-      "ProductTagOut": {
-        "properties": {
-          "product_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Product Id"
-          },
-          "tag_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Tag Id"
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          }
-        },
-        "type": "object",
-        "required": [
-          "product_id",
-          "tag_id",
-          "id"
-        ],
-        "title": "ProductTagOut"
-      },
-      "ProductTagUpdate": {
-        "properties": {
-          "product_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Product Id"
-          },
-          "tag_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Tag Id"
-          }
-        },
-        "type": "object",
-        "required": [
-          "product_id",
-          "tag_id"
-        ],
-        "title": "ProductTagUpdate"
       },
       "ProductUpdate": {
         "properties": {
@@ -4256,56 +3957,6 @@
           "supplier_id"
         ],
         "title": "SupplyUpdate"
-      },
-      "TagCreate": {
-        "properties": {
-          "name": {
-            "type": "string",
-            "title": "Name"
-          }
-        },
-        "type": "object",
-        "required": [
-          "name"
-        ],
-        "title": "TagCreate"
-      },
-      "TagOut": {
-        "properties": {
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          },
-          "active": {
-            "type": "boolean",
-            "title": "Active"
-          }
-        },
-        "type": "object",
-        "required": [
-          "name",
-          "id",
-          "active"
-        ],
-        "title": "TagOut"
-      },
-      "TagUpdate": {
-        "properties": {
-          "name": {
-            "type": "string",
-            "title": "Name"
-          }
-        },
-        "type": "object",
-        "required": [
-          "name"
-        ],
-        "title": "TagUpdate"
       },
       "UserCreate": {
         "properties": {

@@ -1,3 +1,4 @@
+import logging
 from uuid import UUID
 from sqlalchemy.orm import Session
 
@@ -24,12 +25,16 @@ def create_recipe_item(db: Session, recipe_item: RecipeItemCreate):
     return db_recipe_item
 
 @db_safe
-def update_recipe_item(db: Session, db_recipe_item: RecipeItem, updates: RecipeItemUpdate):
-    for field, value in updates.model_dump(exclude_unset=True).items():
-        setattr(db_recipe_item, field, value)
-    db.commit()
-    db.refresh(db_recipe_item)
-    return db_recipe_item
+def update_recipe_item(db: Session, recipe_item_id: UUID, updates: RecipeItemUpdate):
+    try:
+        db_recipe_item = db.query(RecipeItem).filter(RecipeItem.id == recipe_item_id).first()
+        for field, value in updates.model_dump(exclude_unset=True).items():
+            setattr(db_recipe_item, field, value)
+        db.commit()
+        db.refresh(db_recipe_item)
+        return db_recipe_item
+    except Exception as error:
+        logging.warning(error)
 
 @db_safe
 def delete_recipe_item(db: Session, db_recipe_item: RecipeItem):

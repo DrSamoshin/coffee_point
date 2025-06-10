@@ -1,11 +1,10 @@
 import logging
-
+from fastapi import HTTPException
+from functools import wraps
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from app.core.configs import settings
-from functools import wraps
 from sqlalchemy.exc import OperationalError
-from fastapi import HTTPException
+from app.core.configs import settings
 
 
 engine = create_engine(settings.data_base.sqlalchemy_url, echo=False)

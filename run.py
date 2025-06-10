@@ -1,9 +1,8 @@
 import logging
-
 import uvicorn
-from app.core.configs import settings
 from alembic import command
 from alembic.config import Config
+from app.core.configs import settings
 from app.db.session import check_db_availability
 
 

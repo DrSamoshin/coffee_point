@@ -7,11 +7,9 @@ from .item import Item
 from .order import Order
 from .product import Product
 from .product_order import ProductOrder
-from .product_tag import ProductTag
 from .recipe_item import RecipeItem
 from .shift import Shift
 from .store_item import StoreItem
 from .supplier import Supplier
 from .supply import Supply
-from .tag import Tag
 from .user import User

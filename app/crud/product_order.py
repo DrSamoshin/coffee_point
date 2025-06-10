@@ -1,3 +1,4 @@
+import logging
 from uuid import UUID
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
@@ -34,12 +35,16 @@ def create_product_order(db: Session, product_order: ProductOrderCreate):
     return db_product_order
 
 @db_safe
-def update_product_order(db: Session, db_product_order: ProductOrder, updates: ProductOrderUpdate):
-    for field, value in updates.model_dump(exclude_unset=True).items():
-        setattr(db_product_order, field, value)
-    db.commit()
-    db.refresh(db_product_order)
-    return db_product_order
+def update_product_order(db: Session, product_order_id: UUID, updates: ProductOrderUpdate):
+    try:
+        db_product_order = db.query(ProductOrder).filter(ProductOrder.id == product_order_id).first()
+        for field, value in updates.model_dump(exclude_unset=True).items():
+            setattr(db_product_order, field, value)
+        db.commit()
+        db.refresh(db_product_order)
+        return db_product_order
+    except Exception as error:
+        logging.warning(error)
 
 @db_safe
 def delete_product_order(db: Session, db_product_order: ProductOrder):

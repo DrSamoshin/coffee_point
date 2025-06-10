@@ -18,12 +18,14 @@ async def create_product(product: ProductCreate, db: Session = Depends(get_db), 
 # barista
 @router.get("/", response_model=list[ProductOut])
 async def get_products(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
-    return crud_product.get_products(db)
+    db_products = crud_product.get_products(db)
+    return db_products
 
 # web_page
 @router.get("/online-shop/", response_model=list[ProductOut])
 async def get_online_shop_products(db: Session = Depends(get_db)):
-    return crud_product.get_online_shop_products(db)
+    db_products = crud_product.get_online_shop_products(db)
+    return db_products
 
 # barista
 @router.put("/{product_id}/", response_model=ProductOut)

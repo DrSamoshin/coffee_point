@@ -11,11 +11,11 @@ from app.services.authentication import get_user_id_from_token
 router = APIRouter(prefix='/store_items', tags=['store_items'])
 
 @router.get("/", response_model=list[StoreItemOut])
-async def read_store_items(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+async def get_store_items(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     return crud_store_item.get_store_items(db)
 
 @router.get("/{store_item_id}/", response_model=StoreItemOut)
-async def read_store_item(store_item_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+async def get_store_item(store_item_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_store_item = crud_store_item.get_store_item(db, store_item_id)
     if not db_store_item:
         return response("store_item not found", 404)

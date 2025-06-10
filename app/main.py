@@ -5,10 +5,10 @@ from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 from app.core.configs import settings
 from app.api.endpoints import (admin_router,
-                               cafe_data_router,
                                category_router,
                                check_list_router,
                                client_router,
+                               coffee_shop_router,
                                employee_router,
                                employee_shift_router,
                                health_router,
@@ -16,13 +16,11 @@ from app.api.endpoints import (admin_router,
                                order_router,
                                product_router,
                                product_order_router,
-                               product_tag_router,
                                recipe_item_router,
                                shift_router,
                                store_item_router,
                                supplier_router,
                                supply_router,
-                               tag_router,
                                user_router)
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -69,10 +67,10 @@ main_app.openapi = custom_openapi
 
 # routers
 main_app.include_router(admin_router)
-main_app.include_router(cafe_data_router)
 main_app.include_router(category_router)
 main_app.include_router(check_list_router)
 main_app.include_router(client_router)
+main_app.include_router(coffee_shop_router)
 main_app.include_router(employee_router)
 main_app.include_router(employee_shift_router)
 main_app.include_router(health_router)
@@ -80,13 +78,11 @@ main_app.include_router(item_router)
 main_app.include_router(order_router)
 main_app.include_router(product_router)
 main_app.include_router(product_order_router)
-main_app.include_router(product_tag_router)
 main_app.include_router(recipe_item_router)
 main_app.include_router(shift_router)
 main_app.include_router(store_item_router)
 main_app.include_router(supplier_router)
 main_app.include_router(supply_router)
-main_app.include_router(tag_router)
 main_app.include_router(user_router)
 
 logging.info("Starting FastAPI")

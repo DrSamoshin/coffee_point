@@ -39,30 +39,33 @@ def get_only_order(db: Session, order_id: UUID):
 
 @db_safe
 def get_order(db: Session, order_id: UUID):
-    order = db.query(Order).filter(Order.id == order_id).options(
-        joinedload(Order.product_orders).joinedload(ProductOrder.product)
-    ).first()
+    try:
+        order = db.query(Order).filter(Order.id == order_id).options(
+            joinedload(Order.product_orders).joinedload(ProductOrder.product)
+        ).first()
 
-    order_data = ShiftOrderOut(
-                id=order.id,
-                date=order.date,
-                price=order.price,
-                client_id=order.client_id,
-                type=order.type,
-                status=order.status,
-                payment_method=order.payment_method,
-                active=order.active,
-                products=[ProductOrderOut(
-                    id=po.product.id,
-                    name=po.product.name,
-                    price=po.product.price,
-                    image_url=po.product.image_url,
-                    product_order_id=po.id,
-                    count=po.count,
-                    category=po.product.category
-                    ) for po in order.product_orders]
-            )
-    return order_data
+        order_data = ShiftOrderOut(
+                    id=order.id,
+                    date=order.date,
+                    price=order.price,
+                    client_id=order.client_id,
+                    type=order.type,
+                    status=order.status,
+                    payment_method=order.payment_method,
+                    active=order.active,
+                    products=[ProductOrderOut(
+                        id=po.product.id,
+                        name=po.product.name,
+                        price=po.product.price,
+                        image_url=po.product.image_url,
+                        product_order_id=po.id,
+                        count=po.count,
+                        category=po.product.category
+                        ) for po in order.product_orders]
+                )
+        return order_data
+    except Exception as error:
+        logging.warning(error)
 
 
 @db_safe
@@ -108,11 +111,15 @@ def get_deactivated_orders(db: Session):
     return db.query(Order).filter(Order.active == False).all()
 
 @db_safe
-def update_order_status(db: Session, db_order: OrderBase, updates: OrderStatusUpdate):
-    db_order.status = updates.status
-    db.commit()
-    db.refresh(db_order)
-    return db_order
+def update_order_status(db: Session, order_id: UUID, updates: OrderStatusUpdate):
+    try:
+        db_order = db.query(Order).filter(Order.id == order_id).first()
+        db_order.status = updates.status
+        db.commit()
+        db.refresh(db_order)
+        return db_order
+    except Exception as error:
+        logging.warning(error)
 
 @db_safe
 def update_order(db: Session, order_id: UUID, updates: OrderUpdate):

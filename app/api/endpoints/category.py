@@ -12,7 +12,8 @@ router = APIRouter(prefix='/categories', tags=['categories'])
 
 @router.get("/", response_model=list[CategoryOut])
 async def get_categories(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
-    return crud_category.get_categories(db)
+    db_categories = crud_category.get_categories(db)
+    return db_categories
 
 @router.post("/", response_model=CategoryOut)
 async def create_category(category: CategoryCreate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):

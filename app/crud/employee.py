@@ -46,18 +46,27 @@ def create_employee(db: Session, employee: EmployeeCreate):
     return db_employee
 
 @db_safe
-def update_employee(db: Session, db_employee: Employee, updates: EmployeeUpdate):
-    for field, value in updates.model_dump(exclude_unset=True).items():
-        setattr(db_employee, field, value)
-    db.commit()
-    db.refresh(db_employee)
-    return db_employee
+def update_employee(db: Session, employee_id: UUID, updates: EmployeeUpdate):
+    try:
+        db_employee = db.query(Employee).filter(Employee.id == employee_id).first()
+        for field, value in updates.model_dump(exclude_unset=True).items():
+            setattr(db_employee, field, value)
+        db.commit()
+        db.refresh(db_employee)
+        return db_employee
+    except Exception as error:
+        logging.warning(error)
 
 @db_safe
-def deactivate_employee(db: Session, db_employee: Employee):
-    db_employee.deactivated = True
-    db.commit()
-    db.refresh(db_employee)
+def deactivate_employee(db: Session, employee_id: UUID):
+    try:
+        db_employee = db.query(Employee).filter(Employee.id == employee_id).first()
+        db_employee.deactivated = True
+        db.commit()
+        db.refresh(db_employee)
+        return db_employee
+    except Exception as error:
+        logging.warning(error)
 
 @db_safe
 def activate_employee(db: Session, employee_id: UUID):

@@ -9,21 +9,21 @@ from app.services.authentication import get_user_id_from_token
 from app.schemas.check_list import CheckListOut, CheckListUpdate
 
 
-router = APIRouter(prefix='/check-list', tags=['check_list'])
+router = APIRouter(prefix='/check-lists', tags=['check_lists'])
 
-@router.get("/start", response_model=CheckListOut)
+@router.get("/start/", response_model=CheckListOut)
 async def get_start_check_list(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     check_list = crud_check_list.get_check_list(db, time_point=CheckListTimePoint.start_shift)
     check_list.check_list = check_list.check_list.split(",")
     return check_list
 
-@router.get("/end", response_model=CheckListOut)
+@router.get("/end/", response_model=CheckListOut)
 async def get_end_check_list(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     check_list = crud_check_list.get_check_list(db, time_point=CheckListTimePoint.end_shift)
     check_list.check_list = check_list.check_list.split(",")
     return check_list
 
-@router.put("/{check_list_id}", response_model=CheckListOut)
+@router.put("/{check_list_id}/", response_model=CheckListOut)
 async def update_start_check_list(check_list_id: UUID,
                                   check_list_update: CheckListUpdate,
                                   db: Session = Depends(get_db),
