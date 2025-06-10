@@ -15,7 +15,6 @@ def run_alembic_upgrade():
     except Exception as error:
         logging.warning(error)
 
-
 def run():
     check_db_availability()
     logging.info("check DB")

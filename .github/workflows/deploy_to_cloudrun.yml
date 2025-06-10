@@ -6,7 +6,11 @@ on:
       admin_mode:
         description: "Enable admin mode"
         required: true
+        type: choice
         default: "false"
+        options:
+          - "false"
+          - "true"
 
 jobs:
   deploy:
