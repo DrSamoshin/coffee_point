@@ -1,8 +1,8 @@
-"""initial_2
+"""initial
 
-Revision ID: 18ecca93afdd
+Revision ID: 99360e5395e8
 Revises: 
-Create Date: 2025-05-31 21:59:57.901045
+Create Date: 2025-06-10 19:39:02.083871
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '18ecca93afdd'
+revision: str = '99360e5395e8'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -29,6 +29,14 @@ def upgrade() -> None:
     sa.UniqueConstraint('name')
     )
     op.create_index(op.f('ix_categories_id'), 'categories', ['id'], unique=False)
+    op.create_table('check_lists',
+    sa.Column('id', sa.UUID(), nullable=False),
+    sa.Column('time_point', sa.Enum('start_shift', 'end_shift', name='checklisttimepoint'), nullable=False),
+    sa.Column('check_list', sa.String(), nullable=True),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('time_point')
+    )
+    op.create_index(op.f('ix_check_lists_id'), 'check_lists', ['id'], unique=False)
     op.create_table('clients',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
@@ -69,14 +77,6 @@ def upgrade() -> None:
     sa.UniqueConstraint('name')
     )
     op.create_index(op.f('ix_suppliers_id'), 'suppliers', ['id'], unique=False)
-    op.create_table('tags',
-    sa.Column('id', sa.UUID(), nullable=False),
-    sa.Column('name', sa.String(), nullable=False),
-    sa.Column('active', sa.Boolean(), nullable=True),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('name')
-    )
-    op.create_index(op.f('ix_tags_id'), 'tags', ['id'], unique=False)
     op.create_table('users',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('name', sa.String(), nullable=True),
@@ -142,15 +142,6 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_product_orders_id'), 'product_orders', ['id'], unique=False)
-    op.create_table('product_tag',
-    sa.Column('id', sa.UUID(), nullable=False),
-    sa.Column('product_id', sa.UUID(), nullable=False),
-    sa.Column('tag_id', sa.UUID(), nullable=False),
-    sa.ForeignKeyConstraint(['product_id'], ['products.id'], ),
-    sa.ForeignKeyConstraint(['tag_id'], ['tags.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_index(op.f('ix_product_tag_id'), 'product_tag', ['id'], unique=False)
     op.create_table('recipe_items',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('product_id', sa.UUID(), nullable=False),
@@ -183,8 +174,6 @@ def downgrade() -> None:
     op.drop_table('store_items')
     op.drop_index(op.f('ix_recipe_items_id'), table_name='recipe_items')
     op.drop_table('recipe_items')
-    op.drop_index(op.f('ix_product_tag_id'), table_name='product_tag')
-    op.drop_table('product_tag')
     op.drop_index(op.f('ix_product_orders_id'), table_name='product_orders')
     op.drop_table('product_orders')
     op.drop_table('supplies')
@@ -196,8 +185,6 @@ def downgrade() -> None:
     op.drop_table('employee_shifts')
     op.drop_index(op.f('ix_users_id'), table_name='users')
     op.drop_table('users')
-    op.drop_index(op.f('ix_tags_id'), table_name='tags')
-    op.drop_table('tags')
     op.drop_index(op.f('ix_suppliers_id'), table_name='suppliers')
     op.drop_table('suppliers')
     op.drop_index(op.f('ix_shifts_id'), table_name='shifts')
@@ -208,6 +195,8 @@ def downgrade() -> None:
     op.drop_table('employees')
     op.drop_index(op.f('ix_clients_id'), table_name='clients')
     op.drop_table('clients')
+    op.drop_index(op.f('ix_check_lists_id'), table_name='check_lists')
+    op.drop_table('check_lists')
     op.drop_index(op.f('ix_categories_id'), table_name='categories')
     op.drop_table('categories')
     # ### end Alembic commands ###

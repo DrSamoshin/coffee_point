@@ -8,6 +8,7 @@ from pydantic_settings import BaseSettings
 class Run(BaseModel):
     host: str = "0.0.0.0"
     port: int = 8080
+    ADMIN_MODE: bool = os.getenv("ADMIN_MODE", "false").lower() == "true"
 
 class AppData(BaseModel):
     title: str = "Coffee point"

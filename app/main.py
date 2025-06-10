@@ -66,7 +66,6 @@ def custom_openapi():
 main_app.openapi = custom_openapi
 
 # routers
-main_app.include_router(admin_router)
 main_app.include_router(category_router)
 main_app.include_router(check_list_router)
 main_app.include_router(client_router)
@@ -85,6 +84,10 @@ main_app.include_router(supplier_router)
 main_app.include_router(supply_router)
 main_app.include_router(user_router)
 
+if settings.run.ADMIN_MODE:
+    main_app.include_router(admin_router)
+
+logging.info("Admin mode: %s", settings.run.ADMIN_MODE)
 logging.info("Starting FastAPI")
 logging.info(f"DB url: %s", settings.data_base.sqlalchemy_url)
 logging.info(f"Folder contents %s: %s", BASE_DIR, contents)
