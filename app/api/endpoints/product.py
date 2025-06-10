@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from uuid import UUID
 
 from app.db.session import get_db
-from app.schemas.product import ProductCreate, ProductOut, ProductUpdate
+from app.schemas.product import ProductCreate, ProductOut, ProductUpdate, ProductFullInfoOut
 from app.crud import product as crud_product
 from app.core.responses import response
 from app.services.authentication import get_user_id_from_token
@@ -26,13 +26,6 @@ async def get_products(db: Session = Depends(get_db), user_id: str = Depends(get
 async def get_online_shop_products(db: Session = Depends(get_db)):
     return crud_product.get_online_shop_products(db)
 
-# @router.get("/{product_id}/", response_model=ProductOut)
-# async def read_product(product_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
-#     db_product = crud_product.get_product(db, product_id)
-#     if not db_product:
-#         return response("product not found", 404)
-#     return db_product
-
 # barista
 @router.put("/{product_id}/", response_model=ProductOut)
 async def update_product(product_id: UUID, product_update: ProductUpdate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
@@ -40,4 +33,10 @@ async def update_product(product_id: UUID, product_update: ProductUpdate, db: Se
     if not db_product:
         return response("product not found", 404)
     db_product = crud_product.update_product(db, db_product, product_update)
+    return db_product
+
+# barista
+@router.delete("/{product_id}/", response_model=ProductFullInfoOut)
+async def deactivate_product(product_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+    db_product = crud_product.deactivate_product(db, product_id)
     return db_product

@@ -1,3 +1,4 @@
+import logging
 from uuid import UUID
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
@@ -42,7 +43,6 @@ def create_product(db: Session, product: ProductCreate):
     db.refresh(db_product)
     return db_product
 
-# +
 @db_safe
 def update_product(db: Session, db_product: Product, updates: ProductUpdate):
     for field, value in updates.model_dump(exclude_unset=True).items():
@@ -52,10 +52,15 @@ def update_product(db: Session, db_product: Product, updates: ProductUpdate):
     return db_product
 
 @db_safe
-def deactivate_product(db: Session, db_product: Product):
-    db_product.active = False
-    db.commit()
-    db.refresh(db_product)
+def deactivate_product(db: Session, product_id: UUID):
+    try:
+        db_product = db.query(Product).filter(Product.id == product_id).first()
+        db_product.active = False
+        db.commit()
+        db.refresh(db_product)
+        return db_product
+    except Exception as error:
+        logging.warning(error)
 
 @db_safe
 def activate_product(db: Session, category_id: UUID):

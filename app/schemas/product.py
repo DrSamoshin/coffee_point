@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union
 from uuid import UUID
 from pydantic import BaseModel
 from decimal import Decimal
@@ -27,7 +27,6 @@ class ProductUpdate(BaseModel):
 class ProductFullInfoOut(ProductBase):
     id: UUID
     active: bool
-    category: CategoryOut
 
     model_config = {"from_attributes": True}
 
@@ -37,7 +36,7 @@ class ProductOut(BaseModel):
     price: Decimal
     online_shop: bool
     category: CategoryOut
-    image_url: Optional[str] = None
+    image_url: Union[str, None] = None
 
     model_config = {"from_attributes": True}
 
