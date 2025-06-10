@@ -44,12 +44,16 @@ def create_product(db: Session, product: ProductCreate):
     return db_product
 
 @db_safe
-def update_product(db: Session, db_product: Product, updates: ProductUpdate):
-    for field, value in updates.model_dump(exclude_unset=True).items():
-        setattr(db_product, field, value)
-    db.commit()
-    db.refresh(db_product)
-    return db_product
+def update_product(db: Session, product_id: UUID, updates: ProductUpdate):
+    try:
+        db_product = db.query(Product).filter(Product.id == product_id).first()
+        for field, value in updates.model_dump(exclude_unset=True).items():
+            setattr(db_product, field, value)
+        db.commit()
+        db.refresh(db_product)
+        return db_product
+    except Exception as error:
+        logging.warning(error)
 
 @db_safe
 def deactivate_product(db: Session, product_id: UUID):
