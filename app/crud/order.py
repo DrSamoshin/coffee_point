@@ -1,5 +1,6 @@
 import logging
 from uuid import UUID
+from datetime import datetime, timezone
 from sqlalchemy import func, desc
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
@@ -19,7 +20,7 @@ def create_order_with_products(db: Session, order: OrderCreate):
             last_order_number =  db.query(func.max(Order.order_number)).filter(Order.shift_id == order.shift_id).scalar()
             db_order = Order(price=order.price,
                              discount=order.discount,
-                             date=order.date,
+                             date=datetime.now(timezone.utc),
                              client_id=order.client_id,
                              payment_method=order.payment_method,
                              type=order.type,
@@ -74,7 +75,6 @@ def get_order(db: Session, order_id: UUID):
     else:
         logging.info(f"order: {order_data}")
         return order_data
-
 
 @db_safe
 def get_shift_orders(db: Session, shift_id: UUID, skip: int = 0, limit: int = 10):

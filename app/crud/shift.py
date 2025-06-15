@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from uuid import UUID
 
 from sqlalchemy.orm import Session
@@ -34,7 +34,7 @@ def update_start_shift(db: Session, shift_id: UUID):
     logging.info(f"call method update_start_shift")
     try:
         db_shift = db.query(Shift).filter(Shift.id == shift_id).first()
-        db_shift.start_time = datetime.now()
+        db_shift.start_time = datetime.now(timezone.utc)
         db.commit()
         db.refresh(db_shift)
     except Exception as error:
