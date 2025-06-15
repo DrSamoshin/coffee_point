@@ -1,8 +1,8 @@
 """initial
 
-Revision ID: 99360e5395e8
+Revision ID: 855841e3b515
 Revises: 
-Create Date: 2025-06-10 19:39:02.083871
+Create Date: 2025-06-15 18:43:23.981890
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '99360e5395e8'
+revision: str = '855841e3b515'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -40,7 +40,7 @@ def upgrade() -> None:
     op.create_table('clients',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
-    sa.Column('active', sa.Boolean(), nullable=True),
+    sa.Column('deactivated', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_clients_id'), 'clients', ['id'], unique=False)
@@ -72,15 +72,15 @@ def upgrade() -> None:
     op.create_table('suppliers',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
-    sa.Column('active', sa.Boolean(), nullable=True),
+    sa.Column('deactivated', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
     op.create_index(op.f('ix_suppliers_id'), 'suppliers', ['id'], unique=False)
     op.create_table('users',
     sa.Column('id', sa.UUID(), nullable=False),
-    sa.Column('name', sa.String(), nullable=True),
-    sa.Column('active', sa.Boolean(), nullable=True),
+    sa.Column('name', sa.String(), nullable=False),
+    sa.Column('deactivated', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_users_id'), 'users', ['id'], unique=False)
@@ -106,6 +106,7 @@ def upgrade() -> None:
     sa.Column('status', sa.Enum('waiting', 'completed', 'cancelled', 'returned', name='orderstatus'), nullable=False),
     sa.Column('shift_id', sa.UUID(), nullable=False),
     sa.Column('active', sa.Boolean(), nullable=True),
+    sa.Column('order_number', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['client_id'], ['clients.id'], ),
     sa.ForeignKeyConstraint(['shift_id'], ['shifts.id'], ),
     sa.PrimaryKeyConstraint('id')
