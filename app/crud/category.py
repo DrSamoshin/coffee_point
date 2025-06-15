@@ -44,10 +44,16 @@ def update_category(db: Session, category_id: UUID, updates: CategoryUpdate):
 
 
 @db_safe
-def deactivate_category(db: Session, db_category: Category):
-    db_category.active = False
-    db.commit()
-    db.refresh(db_category)
+def delete_category(db: Session, category_id: UUID):
+    try:
+        db_category = db.query(Category).filter(Category.id == category_id).first()
+        db_category.active = False
+        db.commit()
+        db.refresh(db_category)
+        return db_category
+    except Exception as error:
+        logging.warning(error)
+
 
 @db_safe
 def activate_category(db: Session, category_id: UUID):

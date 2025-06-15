@@ -6,30 +6,6 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/admin/reset-db": {
-      "post": {
-        "tags": [
-          "admin"
-        ],
-        "summary": "Reset Database",
-        "operationId": "reset_database_admin_reset_db_post",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ]
-      }
-    },
     "/categories/": {
       "get": {
         "tags": [
@@ -571,6 +547,108 @@
             "HTTPBearer": []
           }
         ]
+      }
+    },
+    "/employees/{employee_id}/": {
+      "put": {
+        "tags": [
+          "employees"
+        ],
+        "summary": "Update Employee",
+        "operationId": "update_employee_employees__employee_id___put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "employee_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Employee Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "employees"
+        ],
+        "summary": "Deactivate Employee",
+        "operationId": "deactivate_employee_employees__employee_id___delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "employee_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Employee Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/employee_shifts/": {
@@ -1616,8 +1694,8 @@
         "tags": [
           "recipe_items"
         ],
-        "summary": "Read Recipe Items",
-        "operationId": "read_recipe_items_recipe_items__get",
+        "summary": "Get Recipe Items",
+        "operationId": "get_recipe_items_recipe_items__get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -1628,7 +1706,7 @@
                     "$ref": "#/components/schemas/RecipeItemOut"
                   },
                   "type": "array",
-                  "title": "Response Read Recipe Items Recipe Items  Get"
+                  "title": "Response Get Recipe Items Recipe Items  Get"
                 }
               }
             }
@@ -1690,8 +1768,8 @@
         "tags": [
           "recipe_items"
         ],
-        "summary": "Read Recipe Item",
-        "operationId": "read_recipe_item_recipe_items__recipe_item_id___get",
+        "summary": "Get Recipe Item",
+        "operationId": "get_recipe_item_recipe_items__recipe_item_id___get",
         "security": [
           {
             "HTTPBearer": []
@@ -1902,8 +1980,8 @@
         "tags": [
           "store_items"
         ],
-        "summary": "Read Store Items",
-        "operationId": "read_store_items_store_items__get",
+        "summary": "Get Store Items",
+        "operationId": "get_store_items_store_items__get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -1914,7 +1992,7 @@
                     "$ref": "#/components/schemas/StoreItemOut"
                   },
                   "type": "array",
-                  "title": "Response Read Store Items Store Items  Get"
+                  "title": "Response Get Store Items Store Items  Get"
                 }
               }
             }
@@ -1976,8 +2054,8 @@
         "tags": [
           "store_items"
         ],
-        "summary": "Read Store Item",
-        "operationId": "read_store_item_store_items__store_item_id___get",
+        "summary": "Get Store Item",
+        "operationId": "get_store_item_store_items__store_item_id___get",
         "security": [
           {
             "HTTPBearer": []
@@ -3013,6 +3091,29 @@
         ],
         "title": "EmployeeShiftWithEmployeeOut"
       },
+      "EmployeeUpdate": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "position": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EmployeePosition"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "title": "EmployeeUpdate"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -3190,6 +3291,10 @@
           "active": {
             "type": "boolean",
             "title": "Active"
+          },
+          "order_number": {
+            "type": "integer",
+            "title": "Order Number"
           }
         },
         "type": "object",
@@ -3201,7 +3306,8 @@
           "status",
           "shift_id",
           "id",
-          "active"
+          "active",
+          "order_number"
         ],
         "title": "OrderOut"
       },
@@ -3659,6 +3765,10 @@
               "null"
             ]
           },
+          "order_number": {
+            "type": "integer",
+            "title": "Order Number"
+          },
           "products": {
             "items": {
               "$ref": "#/components/schemas/app__schemas__product__ProductOrderOut"
@@ -3676,6 +3786,7 @@
           "payment_method",
           "type",
           "status",
+          "order_number",
           "products"
         ],
         "title": "ShiftOrderOut"

@@ -1,3 +1,4 @@
+import logging
 from uuid import UUID
 from sqlalchemy.orm import Session
 
@@ -7,7 +8,11 @@ from app.schemas.client import ClientCreate, ClientUpdate
 
 @db_safe
 def get_client(db: Session, client_id: UUID):
-    return db.query(Client).filter(Client.id == client_id, Client.active == True).first()
+    try:
+        db_client = db.query(Client).filter(Client.id == client_id, Client.active == True).first()
+        return db_client
+    except Exception as error:
+        logging.warning(error)
 
 @db_safe
 def get_clients(db: Session):
@@ -22,12 +27,16 @@ def create_client(db: Session, client: ClientCreate):
     return db_client
 
 @db_safe
-def update_client(db: Session, db_client: Client, updates: ClientUpdate):
-    for field, value in updates.model_dump(exclude_unset=True).items():
-        setattr(db_client, field, value)
-    db.commit()
-    db.refresh(db_client)
-    return db_client
+def update_client(db: Session, client_id: UUID, updates: ClientUpdate):
+    try:
+        db_client = db.query(Client).filter(Client.id == client_id, Client.active == True).first()
+        for field, value in updates.model_dump(exclude_unset=True).items():
+            setattr(db_client, field, value)
+        db.commit()
+        db.refresh(db_client)
+        return db_client
+    except Exception as error:
+        logging.warning(error)
 
 @db_safe
 def delete_client(db: Session, db_client: Client):

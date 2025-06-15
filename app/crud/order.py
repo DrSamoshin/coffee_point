@@ -15,7 +15,6 @@ def create_order_with_products(db: Session, order: OrderCreate):
     try:
         with db.begin():
             last_order_number =  db.query(func.max(Order.order_number)).filter(Order.shift_id == order.shift_id).scalar()
-            logging.info(f"last_order_number: - {last_order_number}")
             db_order = Order(price=order.price,
                              date=order.date,
                              client_id=order.client_id,

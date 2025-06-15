@@ -24,3 +24,8 @@ async def create_category(category: CategoryCreate, db: Session = Depends(get_db
 async def update_category(category_id: UUID, category_update: CategoryUpdate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_category = crud_category.update_category(db, category_id, category_update)
     return db_category
+
+@router.delete("/{category_id}/")
+async def delete_category(category_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+    db_category = crud_category.delete_category(db, category_id)
+    return db_category
