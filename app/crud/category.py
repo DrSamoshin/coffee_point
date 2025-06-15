@@ -13,7 +13,7 @@ def get_category(db: Session, category_id: UUID):
 # +
 @db_safe
 def get_categories(db: Session):
-    return db.query(Category).filter(Category.active == True).all()
+    return db.query(Category).filter(Category.active == True).order_by(Category.name).all()
 
 @db_safe
 def get_deactivated_categories(db: Session):
