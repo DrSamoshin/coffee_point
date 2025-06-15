@@ -12,6 +12,7 @@ from app.schemas.product_order import ProductOrderCreate, ProductOrderUpdate
 
 class OrderBase(BaseModel):
     price: Decimal
+    discount:Decimal
     date: datetime
     payment_method: OrderPaymentMethod
     type: OrderType
@@ -24,6 +25,7 @@ class OrderCreate(OrderBase):
 
 class OrderUpdate(BaseModel):
     price: Optional[Decimal] = None
+    discount:Optional[Decimal] = None
     date: Optional[datetime] = None
     payment_method: Optional[OrderPaymentMethod] = None
     type: Optional[OrderType] = None
@@ -42,6 +44,7 @@ class ShiftOrderOut(BaseModel):
     id: UUID
     active: bool
     price: Decimal
+    discount: Decimal
     date: datetime
     payment_method: OrderPaymentMethod
     type: OrderType
