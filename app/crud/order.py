@@ -1,5 +1,6 @@
 import logging
 from uuid import UUID
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 
@@ -13,13 +14,16 @@ from app.schemas.product import ProductOrderOut
 def create_order_with_products(db: Session, order: OrderCreate):
     try:
         with db.begin():
+            last_order_number =  db.query(func.max(Order.order_number)).filter(Order.shift_id == order.shift_id).scalar()
+            logging.info(f"last_order_number: - {last_order_number}")
             db_order = Order(price=order.price,
                              date=order.date,
                              client_id=order.client_id,
                              payment_method=order.payment_method,
                              type=order.type,
                              status=order.status,
-                             shift_id=order.shift_id)
+                             shift_id=order.shift_id,
+                             order_number=(last_order_number or 0) + 1)
             db.add(db_order)
             db.flush()
 
@@ -53,6 +57,7 @@ def get_order(db: Session, order_id: UUID):
                     status=order.status,
                     payment_method=order.payment_method,
                     active=order.active,
+                    order_number=order.order_number,
                     products=[ProductOrderOut(
                         id=po.product.id,
                         name=po.product.name,
@@ -91,6 +96,7 @@ def get_shift_orders(db: Session, shift_id: UUID, skip: int = 0, limit: int = 10
             status=order.status,
             payment_method=order.payment_method,
             active=order.active,
+            order_number=order.order_number,
             products=[ProductOrderOut(
                 id=po.product.id,
                 name=po.product.name,

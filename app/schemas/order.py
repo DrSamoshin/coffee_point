@@ -36,6 +36,7 @@ class OrderStatusUpdate(BaseModel):
 class OrderOut(OrderBase):
     id: UUID
     active: bool
+    order_number: int
 
 class ShiftOrderOut(BaseModel):
     id: UUID
@@ -46,6 +47,7 @@ class ShiftOrderOut(BaseModel):
     type: OrderType
     status: OrderStatus
     client_id: Optional[UUID] = None
+    order_number: int
     products: list[ProductOrderOut]
 
     model_config = ConfigDict(

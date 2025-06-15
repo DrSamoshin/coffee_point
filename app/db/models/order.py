@@ -1,5 +1,5 @@
 import uuid
-from sqlalchemy import Column, ForeignKey, Numeric, DateTime, Boolean
+from sqlalchemy import Column, ForeignKey, Numeric, DateTime, Boolean, Integer
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from app.db.models.base_class import Base
@@ -19,6 +19,7 @@ class Order(Base):
     status = Column(SQLAlchemyEnum(OrderStatus), nullable=False) # example: "waiting", "completed", "cancelled", "returned"
     shift_id = Column(UUID(as_uuid=True), ForeignKey("shifts.id"), nullable=False)
     active = Column(Boolean, default=True)
+    order_number = Column(Integer, nullable=False, default=0)
 
     client = relationship("Client", backref="orders", lazy="joined")
     shift = relationship("Shift", backref="orders", lazy="joined")
