@@ -1,3 +1,4 @@
+import logging
 from uuid import UUID
 from sqlalchemy.orm import Session
 
@@ -29,12 +30,16 @@ def create_store_item(db: Session, store_item: StoreItemCreate):
     return db_store_item
 
 @db_safe
-def update_store_item(db: Session, db_store_item: StoreItem, updates: StoreItemUpdate):
-    for field, value in updates.model_dump(exclude_unset=True).items():
-        setattr(db_store_item, field, value)
-    db.commit()
-    db.refresh(db_store_item)
-    return db_store_item
+def update_store_item(db: Session, store_item_id: UUID, updates: StoreItemUpdate):
+    try:
+        db_store_item = db.query(StoreItem).filter(StoreItem.id == store_item_id).first()
+        for field, value in updates.model_dump(exclude_unset=True).items():
+            setattr(db_store_item, field, value)
+        db.commit()
+        db.refresh(db_store_item)
+        return db_store_item
+    except Exception as error:
+        logging.warning(error)
 
 @db_safe
 def deactivate_store_item(db: Session, db_store_item: StoreItem):

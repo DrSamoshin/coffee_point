@@ -14,3 +14,6 @@ class ProductOrder(Base):
 
     product = relationship("Product", backref="product_orders", lazy="joined")
     order = relationship("Order", backref="product_orders", lazy="joined")
+
+    def __repr__(self):
+        return f"id={self.id} product_id={self.product_id} order_id={self.order_id} count={self.count}"

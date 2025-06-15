@@ -87,9 +87,8 @@ main_app.include_router(user_router)
 if settings.run.ADMIN_MODE:
     main_app.include_router(admin_router)
 
-logging.info("Admin mode: %s", settings.run.ADMIN_MODE)
-logging.info("Starting FastAPI")
+logging.info("admin mode: %s", settings.run.ADMIN_MODE)
+logging.info("starting FastAPI")
 logging.info(f"DB url: %s", settings.data_base.sqlalchemy_url)
-logging.info(f"Folder contents %s: %s", BASE_DIR, contents)
 
 

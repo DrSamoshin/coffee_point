@@ -1,3 +1,4 @@
+import logging
 from uuid import UUID
 from sqlalchemy.orm import Session
 
@@ -10,7 +11,7 @@ def get_supply(db: Session, supply_id: UUID):
     return db.query(Supply).filter(Supply.id == supply_id).first()
 
 @db_safe
-def get_supplys(db: Session):
+def get_supplies(db: Session):
     return db.query(Supply).filter(Supply.active == True).all()
 
 @db_safe
@@ -27,12 +28,16 @@ def create_supply(db: Session, supply: SupplyCreate):
     return db_supply
 
 @db_safe
-def update_supply(db: Session, db_supply: Supply, updates: SupplyUpdate):
-    for field, value in updates.model_dump(exclude_unset=True).items():
-        setattr(db_supply, field, value)
-    db.commit()
-    db.refresh(db_supply)
-    return db_supply
+def update_supply(db: Session, supply_id: UUID, updates: SupplyUpdate):
+    try:
+        db_supply = db.query(Supply).filter(Supply.id == supply_id).first()
+        for field, value in updates.model_dump(exclude_unset=True).items():
+            setattr(db_supply, field, value)
+        db.commit()
+        db.refresh(db_supply)
+        return db_supply
+    except Exception as error:
+        logging.warning(error)
 
 @db_safe
 def deactivate_supply(db: Session, db_supply: Supply):

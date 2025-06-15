@@ -11,39 +11,27 @@ from app.services.authentication import get_user_id_from_token
 
 router = APIRouter(prefix='/users', tags=['users'])
 
-@router.post("/", response_model=UserOut)
-async def create_user(user: UserCreate, db: Session = Depends(get_db), auth_user_id: str = Depends(get_user_id_from_token)):
-    return crud_user.create_user(db, user)
+@router.get("/", response_model=List[UserOut])
+async def get_users(db: Session = Depends(get_db), auth_user_id: str = Depends(get_user_id_from_token)):
+    db_users = crud_user.get_users(db)
+    return db_users
 
 @router.get("/{user_id}/", response_model=UserOut)
-async def read_user(user_id: str, db: Session = Depends(get_db), auth_user_id: str = Depends(get_user_id_from_token)):
+async def get_user(user_id: str, db: Session = Depends(get_db), auth_user_id: str = Depends(get_user_id_from_token)):
     db_user = crud_user.get_user(db, UUID(user_id))
-    if not db_user:
-        return response("user not found", 404, "error")
     return db_user
 
-@router.get("/", response_model=List[UserOut])
-async def read_users(skip: int = 0, limit: int = 10, db: Session = Depends(get_db), auth_user_id: str = Depends(get_user_id_from_token)):
-    return crud_user.get_users(db, skip, limit)
+@router.post("/", response_model=UserOut)
+async def create_user(user: UserCreate, db: Session = Depends(get_db), auth_user_id: str = Depends(get_user_id_from_token)):
+    db_user = crud_user.create_user(db, user)
+    return db_user
 
 @router.put("/{user_id}/", response_model=UserOut)
-async def update_user(user_id: str, user_update: UserUpdate, db: Session = Depends(get_db), auth_user_id: str = Depends(get_user_id_from_token)):
-    db_user = crud_user.get_user(db, UUID(user_id))
-    if not db_user:
-        return response("user not found", 404, "error")
-    return crud_user.update_user(db, db_user, user_update)
+async def update_user(user_id: UUID, user_update: UserUpdate, db: Session = Depends(get_db), auth_user_id: str = Depends(get_user_id_from_token)):
+    db_user = crud_user.update_user(db, user_id, user_update)
+    return db_user
 
 @router.delete("/{user_id}/")
-async def delete_user(user_id: str, db: Session = Depends(get_db), auth_user_id: str = Depends(get_user_id_from_token)):
-    db_user = crud_user.get_user(db, UUID(user_id))
-    if not db_user:
-        return response("user not found", 404, "error")
-    crud_user.deactivate_user(db, db_user)
-    return response("user deleted", 200, 'success')
-
-@router.post("/{user_id}/restore/", response_model=UserOut)
-async def restore_user(user_id: str, db: Session = Depends(get_db), auth_user_id: str = Depends(get_user_id_from_token)):
-    db_user = crud_user.activate_user(db, UUID(user_id))
-    if not db_user:
-        return response("user not found or already active", 404, 'error')
+async def deactivate_user(user_id: UUID, db: Session = Depends(get_db), auth_user_id: str = Depends(get_user_id_from_token)):
+    db_user = crud_user.deactivate_user(db, user_id)
     return db_user

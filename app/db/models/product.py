@@ -15,3 +15,7 @@ class Product(Base):
     image_url = Column(String, nullable=True)
 
     category = relationship("Category", backref="products", lazy="joined")
+
+    def __repr__(self):
+        return (f"id={self.id} name={self.name} category_id={self.category_id} price={self.price}"
+                f"active={self.active} online_shop={self.online_shop} image_url={self.image_url}")

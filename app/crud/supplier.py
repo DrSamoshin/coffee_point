@@ -1,3 +1,4 @@
+import logging
 from uuid import UUID
 from sqlalchemy.orm import Session
 
@@ -11,11 +12,11 @@ def get_supplier(db: Session, supplier_id: UUID):
 
 @db_safe
 def get_suppliers(db: Session):
-    return db.query(Supplier).filter(Supplier.active == True).all()
+    return db.query(Supplier).filter(Supplier.deactivated == False).all()
 
 @db_safe
 def get_deactivated_suppliers(db: Session):
-    return db.query(Supplier).filter(Supplier.active == False).all()
+    return db.query(Supplier).filter(Supplier.deactivated == True).all()
 
 @db_safe
 def create_supplier(db: Session, supplier: SupplierCreate):
@@ -26,24 +27,28 @@ def create_supplier(db: Session, supplier: SupplierCreate):
     return db_supplier
 
 @db_safe
-def update_supplier(db: Session, db_supplier: Supplier, updates: SupplierUpdate):
-    for field, value in updates.model_dump(exclude_unset=True).items():
-        setattr(db_supplier, field, value)
-    db.commit()
-    db.refresh(db_supplier)
-    return db_supplier
+def update_supplier(db: Session, supplier_id: UUID, updates: SupplierUpdate):
+    try:
+        db_supplier = db.query(Supplier).filter(Supplier.id == supplier_id).first()
+        for field, value in updates.model_dump(exclude_unset=True).items():
+            setattr(db_supplier, field, value)
+        db.commit()
+        db.refresh(db_supplier)
+        return db_supplier
+    except Exception as error:
+        logging.warning(error)
 
 @db_safe
 def deactivate_supplier(db: Session, db_supplier: Supplier):
-    db_supplier.active = False
+    db_supplier.deactivated = True
     db.commit()
     db.refresh(db_supplier)
 
 @db_safe
 def activate_supplier(db: Session, supplier_id: UUID):
-    db_supplier = db.query(Supplier).filter(Supplier.id == supplier_id, Supplier.active == False).first()
+    db_supplier = db.query(Supplier).filter(Supplier.id == supplier_id, Supplier.deactivated == True).first()
     if db_supplier:
-        db_supplier.active = True
+        db_supplier.deactivated = False
         db.commit()
         db.refresh(db_supplier)
     return db_supplier

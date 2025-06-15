@@ -1,5 +1,7 @@
 from enum import Enum
 
+CHECK_LIST_DIVIDER = "#"
+
 class OrderPaymentMethod(str, Enum):
     cash = "cash"
     card = "card"

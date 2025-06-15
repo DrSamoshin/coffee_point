@@ -9,7 +9,7 @@ from app.services.authentication import get_user_id_from_token
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
-@router.post("/reset-db")
+@router.post("/reset-db/")
 def reset_database(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db.execute(text("DROP SCHEMA public CASCADE"))
     db.execute(text("CREATE SCHEMA public"))

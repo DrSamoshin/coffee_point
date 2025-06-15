@@ -15,3 +15,7 @@ class StoreItem(Base):
 
     item = relationship("Item", backref="store_items", lazy="joined")
     supply = relationship("Supply", backref="store_items", lazy="joined")
+
+    def __repr__(self):
+        return (f"id={self.id} item_id={self.item_id} supply_id={self.supply_id} amount={self.amount}"
+                f"price_per_item={self.price_per_item} active={self.active}")

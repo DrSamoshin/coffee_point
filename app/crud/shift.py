@@ -5,58 +5,40 @@ from uuid import UUID
 from sqlalchemy.orm import Session
 from app.db.models import Shift
 from app.db.session import db_safe
-from app.schemas.shift import ShiftCreate, ShiftStartUpdate, ShiftEndUpdate
 
 
-# +
-@db_safe
-def get_shift(db: Session, shift_id: UUID):
-    return db.query(Shift).filter(Shift.id == shift_id).first()
-
-# +
 @db_safe
 def get_shifts(db: Session):
-    return db.query(Shift).filter().all()
+    logging.info(f"call method get_shifts")
+    try:
+        db_shifts = db.query(Shift).filter().all()
+    except Exception as error:
+        logging.error(error)
+    else:
+        logging.info(f"employee_shifts: {len(db_shifts)}")
+        return db_shifts
 
-# +
 @db_safe
 def get_active_shifts(db: Session):
-    return db.query(Shift).filter(Shift.active == True).all()
+    logging.info(f"call method get_active_shifts")
+    try:
+        db_shifts = db.query(Shift).filter(Shift.active == True).all()
+    except Exception as error:
+        logging.error(error)
+    else:
+        logging.info(f"active employee shifts: {len(db_shifts)}")
+        return db_shifts
 
-
-@db_safe
-def get_finished_shifts(db: Session):
-    return db.query(Shift).filter(Shift.active == False).all()
-
-@db_safe
-def create_shift(db: Session):
-    db_shift = Shift()
-    db.add(db_shift)
-    db.commit()
-    db.refresh(db_shift)
-    logging.info(f"Shift is created: {db_shift}")
-    return db_shift
-
-# +
 @db_safe
 def update_start_shift(db: Session, shift_id: UUID):
+    logging.info(f"call method update_start_shift")
     try:
         db_shift = db.query(Shift).filter(Shift.id == shift_id).first()
         db_shift.start_time = datetime.now()
-        logging.info(datetime.now())
         db.commit()
         db.refresh(db_shift)
-        logging.info(f"Shift is started: {db_shift}")
-        return db_shift
     except Exception as error:
-        logging.warning(error)
-
-
-@db_safe
-def update_end_shift(db: Session, db_shift: Shift):
-    db_shift.end_time = datetime.now()
-    db_shift.active = False
-    db.commit()
-    db.refresh(db_shift)
-    logging.info(f"Shift is closed: {db_shift}")
-    return db_shift
+        logging.error(error)
+    else:
+        logging.info(f"shift is updated: {db_shift}")
+        return db_shift

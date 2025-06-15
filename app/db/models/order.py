@@ -23,3 +23,7 @@ class Order(Base):
 
     client = relationship("Client", backref="orders", lazy="joined")
     shift = relationship("Shift", backref="orders", lazy="joined")
+
+    def __repr__(self):
+        return (f"id={self.id} price={self.price} date={self.date} payment_method={self.payment_method}"
+                f" type={self.type} shift_id={self.shift_id} order_number={self.order_number}")

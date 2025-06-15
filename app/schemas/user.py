@@ -13,6 +13,6 @@ class UserUpdate(UserBase):
 
 class UserOut(UserBase):
     id: UUID
-    active: bool
+    deactivated: bool
 
     model_config = {"from_attributes": True}

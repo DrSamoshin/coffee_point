@@ -12,6 +12,7 @@ from app.schemas.product import ProductOrderOut
 
 @db_safe
 def create_order_with_products(db: Session, order: OrderCreate):
+    logging.info(f"call method create_employee_shift")
     try:
         with db.begin():
             last_order_number =  db.query(func.max(Order.order_number)).filter(Order.shift_id == order.shift_id).scalar()
@@ -37,11 +38,9 @@ def create_order_with_products(db: Session, order: OrderCreate):
         raise e
 
 @db_safe
-def get_only_order(db: Session, order_id: UUID):
-    return db.query(Order).filter(Order.id == order_id).first()
-
-@db_safe
 def get_order(db: Session, order_id: UUID):
+    logging.info(f"call method create_employee_shift")
+
     try:
         order = db.query(Order).filter(Order.id == order_id).options(
             joinedload(Order.product_orders).joinedload(ProductOrder.product)
@@ -73,11 +72,9 @@ def get_order(db: Session, order_id: UUID):
 
 
 @db_safe
-def get_orders(db: Session):
-    return db.query(Order).filter(Order.active == True).all()
-
-@db_safe
 def get_shift_orders(db: Session, shift_id: UUID, skip: int = 0, limit: int = 10):
+    logging.info(f"call method create_employee_shift")
+
     orders = db.query(Order).filter(Order.active == True, Order.shift_id == shift_id).options(
         joinedload(Order.product_orders).joinedload(ProductOrder.product)
     ).offset(skip).limit(limit).all()
@@ -111,12 +108,11 @@ def get_shift_orders(db: Session, shift_id: UUID, skip: int = 0, limit: int = 10
 
     return result
 
-@db_safe
-def get_deactivated_orders(db: Session):
-    return db.query(Order).filter(Order.active == False).all()
 
 @db_safe
 def update_order_status(db: Session, order_id: UUID, updates: OrderStatusUpdate):
+    logging.info(f"call method create_employee_shift")
+
     try:
         db_order = db.query(Order).filter(Order.id == order_id).first()
         db_order.status = updates.status
@@ -128,6 +124,8 @@ def update_order_status(db: Session, order_id: UUID, updates: OrderStatusUpdate)
 
 @db_safe
 def update_order(db: Session, order_id: UUID, updates: OrderUpdate):
+    logging.info(f"call method create_employee_shift")
+
     try:
         with db.begin():
             db_order = db.query(Order).filter(Order.id == order_id).first()
@@ -157,17 +155,3 @@ def update_order(db: Session, order_id: UUID, updates: OrderUpdate):
         db.rollback()
         raise e
 
-@db_safe
-def deactivate_order(db: Session, db_order: Order):
-    db_order.active = False
-    db.commit()
-    db.refresh(db_order)
-
-@db_safe
-def activate_order(db: Session, order_id: UUID):
-    db_order = db.query(Order).filter(Order.id == order_id, Order.active == False).first()
-    if db_order:
-        db_order.active = True
-        db.commit()
-        db.refresh(db_order)
-    return db_order

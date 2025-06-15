@@ -9,3 +9,6 @@ class Item(Base):
     name = Column(String, unique=True, nullable=False)
     measurement = Column(String, nullable=False)
     active = Column(Boolean, default=True)
+
+    def __repr__(self):
+        return f"id={self.id} name={self.name} measurement={self.measurement} active={self.active}"

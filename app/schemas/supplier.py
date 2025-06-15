@@ -12,7 +12,7 @@ class SupplierUpdate(SupplierBase):
 
 class SupplierOut(SupplierBase):
     id: UUID
-    active: bool
+    deactivated: bool
 
     model_config = {"from_attributes": True}
 

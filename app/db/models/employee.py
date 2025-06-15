@@ -10,8 +10,8 @@ class Employee(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
     name = Column(String, nullable=False)
-    position = Column(SQLAlchemyEnum(EmployeePosition), nullable=False) # barista
+    position = Column(SQLAlchemyEnum(EmployeePosition), nullable=False)
     deactivated = Column(Boolean, default=False)
 
     def __repr__(self):
-        return f"id={self.id} name={self.name} position={self.position} active={self.deactivated}"
+        return f"id={self.id} name={self.name} position={self.position} deactivated={self.deactivated}"

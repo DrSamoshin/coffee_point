@@ -10,19 +10,16 @@ from app.services.authentication import get_user_id_from_token
 
 router = APIRouter(prefix='/shifts', tags=['shifts'])
 
-# manager_app
 @router.get("/", response_model=list[ShiftOut])
 async def get_shifts(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_shifts = crud_shift.get_shifts(db)
     return db_shifts
 
-# barista_app
 @router.get("/active-shifts/", response_model=list[ShiftOut])
 async def get_active_shifts(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_shifts = crud_shift.get_active_shifts(db)
     return db_shifts
 
-# barista_app
 @router.put("/shift-start-update/{shift_id}/", response_model=ShiftOut)
 async def update_shift_start(shift_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_shift = crud_shift.update_start_shift(db, shift_id)

@@ -13,3 +13,6 @@ class Supply(Base):
     active = Column(Boolean, default=True)
 
     supplier = relationship("Supplier", backref="supplies", lazy="joined")
+
+    def __repr__(self):
+        return f"id={self.id} date={self.date} supplier_id={self.supplier_id} active={self.active}"

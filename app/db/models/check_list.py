@@ -8,7 +8,7 @@ class CheckList(Base):
     __tablename__ = "check_lists"
 
     id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
-    time_point = Column(SQLAlchemyEnum(CheckListTimePoint), nullable=False, unique=True)  # example: "start_shift", "end_shift"
+    time_point = Column(SQLAlchemyEnum(CheckListTimePoint), nullable=False, unique=True)
     check_list = Column(String, nullable=True)
 
     def __repr__(self):
