@@ -1,6 +1,6 @@
 import logging
 from uuid import UUID
-from sqlalchemy import func
+from sqlalchemy import func, desc
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 
@@ -8,6 +8,7 @@ from app.db.models import Order, ProductOrder
 from app.db.session import db_safe
 from app.schemas.order import OrderCreate, OrderUpdate, ShiftOrderOut, OrderStatusUpdate, OrderBase
 from app.schemas.product import ProductOrderOut
+from app.core.consts import OrderStatus
 
 
 @db_safe
@@ -79,9 +80,13 @@ def get_order(db: Session, order_id: UUID):
 def get_shift_orders(db: Session, shift_id: UUID, skip: int = 0, limit: int = 10):
     logging.info(f"call method get_shift_orders")
     try:
-        orders = db.query(Order).filter(Order.active == True, Order.shift_id == shift_id).options(
-            joinedload(Order.product_orders).joinedload(ProductOrder.product)
-        ).offset(skip).limit(limit).all()
+        orders = (db.query(Order)
+                  .filter(Order.active == True, Order.shift_id == shift_id)
+                  .options(joinedload(Order.product_orders).joinedload(ProductOrder.product))
+                  .order_by(desc(Order.date))
+                  .offset(skip)
+                  .limit(limit)
+                  .all())
         shift_orders = []
         for order in orders:
             order_data = ShiftOrderOut(
@@ -110,6 +115,44 @@ def get_shift_orders(db: Session, shift_id: UUID, skip: int = 0, limit: int = 10
         logging.info(f"orders: {len(shift_orders)}")
         return shift_orders
 
+@db_safe
+def get_waiting_shift_orders(db: Session, shift_id: UUID, skip: int = 0, limit: int = 10):
+    logging.info(f"call method get_waiting_shift_orders")
+    try:
+        orders = (db.query(Order)
+                  .filter(Order.active == True, Order.shift_id == shift_id, Order.status == OrderStatus.waiting)
+                  .options(joinedload(Order.product_orders).joinedload(ProductOrder.product))
+                  .order_by(desc(Order.date))
+                  .offset(skip)
+                  .limit(limit)
+                  .all())
+        shift_orders = []
+        for order in orders:
+            order_data = ShiftOrderOut(
+                id=order.id,
+                date=order.date,
+                price=order.price,
+                discount=order.discount,
+                client_id=order.client_id,
+                type=order.type,
+                status=order.status,
+                payment_method=order.payment_method,
+                active=order.active,
+                order_number=order.order_number,
+                products=[ProductOrderOut(
+                    product_order_id=po.id,
+                    count=po.count,
+                    product_id=po.product.id,
+                    product_name=po.product.name,
+                    product_price=po.product.price
+                    ) for po in order.product_orders]
+            )
+            shift_orders.append(order_data)
+    except Exception as error:
+            logging.error(error)
+    else:
+        logging.info(f"orders: {len(shift_orders)}")
+        return shift_orders
 
 @db_safe
 def update_order_status(db: Session, order_id: UUID, updates: OrderStatusUpdate):

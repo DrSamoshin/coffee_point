@@ -14,6 +14,11 @@ async def get_shift_orders(shift_id: UUID, skip: int = 0, limit: int = 10, db: S
     db_orders = crud_order.get_shift_orders(db, shift_id, skip, limit)
     return db_orders
 
+@router.get("/waiting-shift-orders/{shift_id}/", response_model=list[ShiftOrderOut])
+async def get_shift_orders(shift_id: UUID, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    db_orders = crud_order.get_waiting_shift_orders(db, shift_id, skip, limit)
+    return db_orders
+
 @router.get("/{order_id}/", response_model=ShiftOrderOut)
 async def get_order(order_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_order = crud_order.get_order(db, order_id)
