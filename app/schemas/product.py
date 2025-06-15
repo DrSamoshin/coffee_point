@@ -41,11 +41,11 @@ class ProductOut(BaseModel):
     model_config = {"from_attributes": True}
 
 class ProductOrderOut(BaseModel):
-    id: UUID
-    name: str
-    price: Decimal
     product_order_id: UUID
     count: int
+    product_id: UUID
+    product_name: str
+    product_price: Decimal
 
     model_config = {"from_attributes": True}
 

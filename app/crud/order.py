@@ -28,20 +28,22 @@ def create_order_with_products(db: Session, order: OrderCreate):
             db.add(db_order)
             db.flush()
 
-            for product in order.products:
-                db_product_order = ProductOrder(product_id=product.product_id,
-                                                order_id=db_order.id,
-                                                count=product.count)
-                db.add(db_product_order)
+            if order.products:
+                for product in order.products:
+                    db_product_order = ProductOrder(product_id=product.product_id,
+                                                    order_id=db_order.id,
+                                                    count=product.count)
+                    db.add(db_product_order)
+        db.refresh(db_order)
+    except Exception as error:
+        logging.error(error)
+    else:
+        logging.info(f"order is created: {db_order}")
         return db_order
-    except Exception as e:
-        db.rollback()
-        raise e
 
 @db_safe
 def get_order(db: Session, order_id: UUID):
     logging.info(f"call method get_order")
-
     try:
         order = db.query(Order).filter(Order.id == order_id).options(
             joinedload(Order.product_orders).joinedload(ProductOrder.product)
@@ -59,108 +61,97 @@ def get_order(db: Session, order_id: UUID):
                     active=order.active,
                     order_number=order.order_number,
                     products=[ProductOrderOut(
-                        id=po.product.id,
-                        name=po.product.name,
-                        price=po.product.price,
-                        image_url=po.product.image_url,
                         product_order_id=po.id,
                         count=po.count,
-                        category=po.product.category
+                        product_id=po.product.id,
+                        product_name=po.product.name,
+                        product_price=po.product.price
                         ) for po in order.product_orders]
                 )
-        return order_data
     except Exception as error:
-        logging.warning(error)
+        logging.error(error)
+    else:
+        logging.info(f"order: {order_data}")
+        return order_data
 
 
 @db_safe
 def get_shift_orders(db: Session, shift_id: UUID, skip: int = 0, limit: int = 10):
     logging.info(f"call method get_shift_orders")
-
-    orders = db.query(Order).filter(Order.active == True, Order.shift_id == shift_id).options(
-        joinedload(Order.product_orders).joinedload(ProductOrder.product)
-    ).offset(skip).limit(limit).all()
-    logging.info(orders)
-    result = []
-
-    for order in orders:
-
-        order_data = ShiftOrderOut(
-            id=order.id,
-            date=order.date,
-            price=order.price,
-            discount=order.discount,
-            client_id=order.client_id,
-            type=order.type,
-            status=order.status,
-            payment_method=order.payment_method,
-            active=order.active,
-            order_number=order.order_number,
-            products=[ProductOrderOut(
-                id=po.product.id,
-                name=po.product.name,
-                price=po.product.price,
-                image_url=po.product.image_url,
-                product_order_id=po.id,
-                count=po.count,
-                category=po.product.category
-                ) for po in order.product_orders]
-        )
-
-        result.append(order_data)
-
-    return result
+    try:
+        orders = db.query(Order).filter(Order.active == True, Order.shift_id == shift_id).options(
+            joinedload(Order.product_orders).joinedload(ProductOrder.product)
+        ).offset(skip).limit(limit).all()
+        shift_orders = []
+        for order in orders:
+            order_data = ShiftOrderOut(
+                id=order.id,
+                date=order.date,
+                price=order.price,
+                discount=order.discount,
+                client_id=order.client_id,
+                type=order.type,
+                status=order.status,
+                payment_method=order.payment_method,
+                active=order.active,
+                order_number=order.order_number,
+                products=[ProductOrderOut(
+                    product_order_id=po.id,
+                    count=po.count,
+                    product_id=po.product.id,
+                    product_name=po.product.name,
+                    product_price=po.product.price
+                    ) for po in order.product_orders]
+            )
+            shift_orders.append(order_data)
+    except Exception as error:
+            logging.error(error)
+    else:
+        logging.info(f"orders: {len(shift_orders)}")
+        return shift_orders
 
 
 @db_safe
 def update_order_status(db: Session, order_id: UUID, updates: OrderStatusUpdate):
     logging.info(f"call method update_order_status")
-
     try:
         db_order = db.query(Order).filter(Order.id == order_id).first()
         db_order.status = updates.status
         db.commit()
         db.refresh(db_order)
-        return db_order
     except Exception as error:
-        logging.warning(error)
+        logging.error(error)
+    else:
+        logging.info(f"order: {db_order}")
+        return db_order
 
 @db_safe
 def update_order(db: Session, order_id: UUID, updates: OrderUpdate):
     logging.info(f"call method update_order")
-    print(updates)
     try:
         with db.begin():
             db_order = db.query(Order).filter(Order.id == order_id).first()
-
             for field, value in updates.model_dump(exclude_unset=True).items():
                 setattr(db_order, field, value)
-
-            # db_order.price = updates.price
-            # db_order.discount = updates.discount
-            # db_order.date = updates.date
-            # db_order.payment_method = updates.payment_method
-            # db_order.type = updates.type
-            # db_order.client_id = updates.client_id
             db.add(db_order)
             db.flush()
-            print(db_order)
 
-            for product in (updates.products or []):
-                if product_order_id:= product.product_order_id:
-                    product_order = db.query(ProductOrder).filter(ProductOrder.id == product_order_id).first()
-                    if product_order and product.count < 1:
-                        db.delete(product_order)
-                    elif product_order:
-                        product_order.count = product.count
-                else:
-                    db_product_order = ProductOrder(product_id=product.product_id,
-                                                    order_id=db_order.id,
-                                                    count=product.count)
-                    db.add(db_product_order)
-        print(db_order)
+            if updates.products:
+                for product in updates.products:
+                    if product_order_id:= product.product_order_id:
+                        product_order = db.query(ProductOrder).filter(ProductOrder.id == product_order_id).first()
+                        if product_order and product.count < 1:
+                            db.delete(product_order)
+                        elif product_order:
+                            product_order.count = product.count
+                    else:
+                        db_product_order = ProductOrder(product_id=product.product_id,
+                                                        order_id=db_order.id,
+                                                        count=product.count)
+                        db.add(db_product_order)
+        db.refresh(db_order)
+    except Exception as error:
+        logging.error(error)
+    else:
         return db_order
-    except Exception as e:
-        db.rollback()
-        raise e
 

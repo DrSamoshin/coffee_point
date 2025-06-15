@@ -292,6 +292,80 @@
         }
       }
     },
+    "/clients/": {
+      "get": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Get Clients",
+        "operationId": "get_clients_clients__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ClientOut"
+                  },
+                  "type": "array",
+                  "title": "Response Get Clients Clients  Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Create Client",
+        "operationId": "create_client_clients__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "/clients/{client_id}/": {
       "get": {
         "tags": [
@@ -394,80 +468,6 @@
             }
           }
         }
-      }
-    },
-    "/clients/": {
-      "get": {
-        "tags": [
-          "clients"
-        ],
-        "summary": "Get Clients",
-        "operationId": "get_clients_clients__get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/ClientOut"
-                  },
-                  "type": "array",
-                  "title": "Response Get Clients Clients  Get"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "clients"
-        ],
-        "summary": "Create Client",
-        "operationId": "create_client_clients__post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ClientCreate"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ClientOut"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ]
       }
     },
     "/coffee-shop/info/": {
@@ -904,8 +904,8 @@
         "tags": [
           "items"
         ],
-        "summary": "Read Items",
-        "operationId": "read_items_items__get",
+        "summary": "Get Items",
+        "operationId": "get_items_items__get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -916,7 +916,7 @@
                     "$ref": "#/components/schemas/ItemOut"
                   },
                   "type": "array",
-                  "title": "Response Read Items Items  Get"
+                  "title": "Response Get Items Items  Get"
                 }
               }
             }
@@ -978,8 +978,8 @@
         "tags": [
           "items"
         ],
-        "summary": "Read Item",
-        "operationId": "read_item_items__item_id___get",
+        "summary": "Get Item",
+        "operationId": "get_item_items__item_id___get",
         "security": [
           {
             "HTTPBearer": []
@@ -1075,52 +1075,6 @@
             }
           }
         }
-      }
-    },
-    "/orders/": {
-      "post": {
-        "tags": [
-          "orders"
-        ],
-        "summary": "Create Order With Products",
-        "operationId": "create_order_with_products_orders__post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/OrderCreate"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OrderOut"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ]
       }
     },
     "/orders/shift-orders/{shift_id}/": {
@@ -1292,6 +1246,52 @@
             }
           }
         }
+      }
+    },
+    "/orders/": {
+      "post": {
+        "tags": [
+          "orders"
+        ],
+        "summary": "Create Order With Products",
+        "operationId": "create_order_with_products_orders__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
       }
     },
     "/orders/status-update/{order_id}/": {
@@ -2202,8 +2202,8 @@
         "tags": [
           "suppliers"
         ],
-        "summary": "Read Suppliers",
-        "operationId": "read_suppliers_suppliers__get",
+        "summary": "Get Suppliers",
+        "operationId": "get_suppliers_suppliers__get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -2214,7 +2214,7 @@
                     "$ref": "#/components/schemas/SupplierOut"
                   },
                   "type": "array",
-                  "title": "Response Read Suppliers Suppliers  Get"
+                  "title": "Response Get Suppliers Suppliers  Get"
                 }
               }
             }
@@ -2276,8 +2276,8 @@
         "tags": [
           "suppliers"
         ],
-        "summary": "Read Supplier",
-        "operationId": "read_supplier_suppliers__supplier_id___get",
+        "summary": "Get Supplier",
+        "operationId": "get_supplier_suppliers__supplier_id___get",
         "security": [
           {
             "HTTPBearer": []
@@ -2380,8 +2380,8 @@
         "tags": [
           "supplies"
         ],
-        "summary": "Read Supplys",
-        "operationId": "read_supplys_supplies__get",
+        "summary": "Get Supplies",
+        "operationId": "get_supplies_supplies__get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -2392,7 +2392,7 @@
                     "$ref": "#/components/schemas/SupplyOut"
                   },
                   "type": "array",
-                  "title": "Response Read Supplys Supplies  Get"
+                  "title": "Response Get Supplies Supplies  Get"
                 }
               }
             }
@@ -2454,8 +2454,8 @@
         "tags": [
           "supplies"
         ],
-        "summary": "Read Supply",
-        "operationId": "read_supply_supplies__supply_id___get",
+        "summary": "Get Supply",
+        "operationId": "get_supply_supplies__supply_id___get",
         "security": [
           {
             "HTTPBearer": []
@@ -2554,26 +2554,49 @@
       }
     },
     "/users/": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get Users",
+        "operationId": "get_users_users__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/UserOut"
+                  },
+                  "type": "array",
+                  "title": "Response Get Users Users  Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
       "post": {
         "tags": [
           "users"
         ],
         "summary": "Create User",
         "operationId": "create_user_users__post",
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ],
         "requestBody": {
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/UserCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -2596,67 +2619,12 @@
               }
             }
           }
-        }
-      },
-      "get": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Read Users",
-        "operationId": "read_users_users__get",
+        },
         "security": [
           {
             "HTTPBearer": []
           }
-        ],
-        "parameters": [
-          {
-            "name": "skip",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 0,
-              "title": "Skip"
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 10,
-              "title": "Limit"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UserOut"
-                  },
-                  "title": "Response Read Users Users  Get"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
+        ]
       }
     },
     "/users/{user_id}/": {
@@ -2664,8 +2632,8 @@
         "tags": [
           "users"
         ],
-        "summary": "Read User",
-        "operationId": "read_user_users__user_id___get",
+        "summary": "Get User",
+        "operationId": "get_user_users__user_id___get",
         "security": [
           {
             "HTTPBearer": []
@@ -2723,6 +2691,7 @@
             "required": true,
             "schema": {
               "type": "string",
+              "format": "uuid",
               "title": "User Id"
             }
           }
@@ -2764,8 +2733,8 @@
         "tags": [
           "users"
         ],
-        "summary": "Delete User",
-        "operationId": "delete_user_users__user_id___delete",
+        "summary": "Deactivate User",
+        "operationId": "deactivate_user_users__user_id___delete",
         "security": [
           {
             "HTTPBearer": []
@@ -2778,6 +2747,7 @@
             "required": true,
             "schema": {
               "type": "string",
+              "format": "uuid",
               "title": "User Id"
             }
           }
@@ -2788,53 +2758,6 @@
             "content": {
               "application/json": {
                 "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/users/{user_id}/restore/": {
-      "post": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Restore User",
-        "operationId": "restore_user_users__user_id__restore__post",
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "User Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserOut"
-                }
               }
             }
           },
@@ -2966,16 +2889,16 @@
             "format": "uuid",
             "title": "Id"
           },
-          "active": {
+          "deactivated": {
             "type": "boolean",
-            "title": "Active"
+            "title": "Deactivated"
           }
         },
         "type": "object",
         "required": [
           "name",
           "id",
-          "active"
+          "deactivated"
         ],
         "title": "ClientOut"
       },
@@ -3249,6 +3172,17 @@
             ],
             "title": "Price"
           },
+          "discount": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Discount"
+          },
           "date": {
             "type": "string",
             "format": "date-time",
@@ -3286,6 +3220,7 @@
         "type": "object",
         "required": [
           "price",
+          "discount",
           "date",
           "payment_method",
           "type",
@@ -3300,6 +3235,10 @@
           "price": {
             "type": "string",
             "title": "Price"
+          },
+          "discount": {
+            "type": "string",
+            "title": "Discount"
           },
           "date": {
             "type": "string",
@@ -3344,6 +3283,7 @@
         "type": "object",
         "required": [
           "price",
+          "discount",
           "date",
           "payment_method",
           "type",
@@ -3409,6 +3349,20 @@
               }
             ],
             "title": "Price"
+          },
+          "discount": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Discount"
           },
           "date": {
             "title": "Date",
@@ -3788,6 +3742,10 @@
             "type": "string",
             "title": "Price"
           },
+          "discount": {
+            "type": "string",
+            "title": "Discount"
+          },
           "date": {
             "type": "string",
             "format": "date-time",
@@ -3826,6 +3784,7 @@
           "id",
           "active",
           "price",
+          "discount",
           "date",
           "payment_method",
           "type",
@@ -4016,16 +3975,16 @@
             "format": "uuid",
             "title": "Id"
           },
-          "active": {
+          "deactivated": {
             "type": "boolean",
-            "title": "Active"
+            "title": "Deactivated"
           }
         },
         "type": "object",
         "required": [
           "name",
           "id",
-          "active"
+          "deactivated"
         ],
         "title": "SupplierOut"
       },
@@ -4140,15 +4099,15 @@
             "format": "uuid",
             "title": "Id"
           },
-          "active": {
+          "deactivated": {
             "type": "boolean",
-            "title": "Active"
+            "title": "Deactivated"
           }
         },
         "type": "object",
         "required": [
           "id",
-          "active"
+          "deactivated"
         ],
         "title": "UserOut"
       },
