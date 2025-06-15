@@ -122,7 +122,7 @@ def update_order_status(db: Session, order_id: UUID, updates: OrderStatusUpdate)
     except Exception as error:
         logging.error(error)
     else:
-        logging.info(f"order: {db_order}")
+        logging.info(f"order status is updated: {db_order}")
         return db_order
 
 @db_safe
@@ -153,5 +153,6 @@ def update_order(db: Session, order_id: UUID, updates: OrderUpdate):
     except Exception as error:
         logging.error(error)
     else:
+        logging.info(f"order is updated: {db_order}")
         return db_order
 

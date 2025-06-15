@@ -4159,19 +4159,6 @@
       },
       "app__schemas__product__ProductOrderOut": {
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          },
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "price": {
-            "type": "string",
-            "title": "Price"
-          },
           "product_order_id": {
             "type": "string",
             "format": "uuid",
@@ -4180,15 +4167,28 @@
           "count": {
             "type": "integer",
             "title": "Count"
+          },
+          "product_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Product Id"
+          },
+          "product_name": {
+            "type": "string",
+            "title": "Product Name"
+          },
+          "product_price": {
+            "type": "string",
+            "title": "Product Price"
           }
         },
         "type": "object",
         "required": [
-          "id",
-          "name",
-          "price",
           "product_order_id",
-          "count"
+          "count",
+          "product_id",
+          "product_name",
+          "product_price"
         ],
         "title": "ProductOrderOut"
       },
