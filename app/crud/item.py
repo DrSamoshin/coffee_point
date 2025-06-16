@@ -9,22 +9,40 @@ from app.schemas.item import ItemCreate, ItemUpdate
 @db_safe
 def get_item(db: Session, item_id: UUID):
     logging.info(f"call method get_item")
-    return db.query(Item).filter(Item.id == item_id).first()
+    try:
+        db_item = db.query(Item).filter(Item.id == item_id).first()
+    except Exception as error:
+        logging.error(error)
+    else:
+        logging.info(f"item: {db_item}")
+        return db_item
+
 
 @db_safe
 def get_items(db: Session):
     logging.info(f"call method get_items")
-    return db.query(Item).filter(Item.active == True).all()
+    try:
+        db_items = db.query(Item).filter(Item.active == True).all()
+    except Exception as error:
+        logging.error(error)
+    else:
+        logging.info(f"items: {len(db_items)}")
+        return db_items
 
 @db_safe
 def create_item(db: Session, item: ItemCreate):
     logging.info(f"call method create_item")
-    db_item = Item(name=item.name,
-                   measurement=item.measurement)
-    db.add(db_item)
-    db.commit()
-    db.refresh(db_item)
-    return db_item
+    try:
+        db_item = Item(name=item.name,
+                       measurement=item.measurement)
+        db.add(db_item)
+        db.commit()
+        db.refresh(db_item)
+    except Exception as error:
+        logging.error(error)
+    else:
+        logging.info(f"item is created: {db_item}")
+        return db_item
 
 @db_safe
 def update_item(db: Session, item_id: UUID, updates: ItemUpdate):
@@ -35,7 +53,9 @@ def update_item(db: Session, item_id: UUID, updates: ItemUpdate):
             setattr(db_item, field, value)
         db.commit()
         db.refresh(db_item)
-        return db_item
     except Exception as error:
-        logging.warning(error)
+        logging.error(error)
+    else:
+        logging.info(f"item is updated: {db_item}")
+        return db_item
 

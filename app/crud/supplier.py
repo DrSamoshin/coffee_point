@@ -8,47 +8,52 @@ from app.schemas.supplier import SupplierCreate, SupplierUpdate
 
 @db_safe
 def get_supplier(db: Session, supplier_id: UUID):
-    return db.query(Supplier).filter(Supplier.id == supplier_id).first()
+    logging.info(f"call method get_supplier")
+    try:
+        db_supplier = db.query(Supplier).filter(Supplier.id == supplier_id).first()
+    except Exception as error:
+        logging.error(error)
+    else:
+        logging.info(f"db_supplier: {db_supplier}")
+        return db_supplier
 
 @db_safe
 def get_suppliers(db: Session):
-    return db.query(Supplier).filter(Supplier.deactivated == False).all()
-
-@db_safe
-def get_deactivated_suppliers(db: Session):
-    return db.query(Supplier).filter(Supplier.deactivated == True).all()
+    logging.info(f"call method get_suppliers")
+    try:
+        db_suppliers = db.query(Supplier).filter(Supplier.deactivated == False).all()
+    except Exception as error:
+        logging.error(error)
+    else:
+        logging.info(f"db_suppliers: {len(db_suppliers)}")
+        return db_suppliers
 
 @db_safe
 def create_supplier(db: Session, supplier: SupplierCreate):
-    db_supplier = Supplier(name=supplier.name)
-    db.add(db_supplier)
-    db.commit()
-    db.refresh(db_supplier)
-    return db_supplier
+    logging.info(f"call method create_supplier")
+    try:
+        db_supplier = Supplier(name=supplier.name)
+        db.add(db_supplier)
+        db.commit()
+        db.refresh(db_supplier)
+    except Exception as error:
+        logging.error(error)
+    else:
+        logging.info(f"db_supplier is created: {db_supplier}")
+        return db_supplier
 
 @db_safe
 def update_supplier(db: Session, supplier_id: UUID, updates: SupplierUpdate):
+    logging.info(f"call method update_supplier")
     try:
         db_supplier = db.query(Supplier).filter(Supplier.id == supplier_id).first()
         for field, value in updates.model_dump(exclude_unset=True).items():
             setattr(db_supplier, field, value)
         db.commit()
         db.refresh(db_supplier)
-        return db_supplier
     except Exception as error:
-        logging.warning(error)
+        logging.error(error)
+    else:
+        logging.info(f"db_supplier is updated: {db_supplier}")
+        return db_supplier
 
-@db_safe
-def deactivate_supplier(db: Session, db_supplier: Supplier):
-    db_supplier.deactivated = True
-    db.commit()
-    db.refresh(db_supplier)
-
-@db_safe
-def activate_supplier(db: Session, supplier_id: UUID):
-    db_supplier = db.query(Supplier).filter(Supplier.id == supplier_id, Supplier.deactivated == True).first()
-    if db_supplier:
-        db_supplier.deactivated = False
-        db.commit()
-        db.refresh(db_supplier)
-    return db_supplier

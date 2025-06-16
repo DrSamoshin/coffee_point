@@ -11,12 +11,12 @@ from app.schemas.category import CategoryCreate, CategoryUpdate
 def get_categories(db: Session):
     logging.info(f"call method get_categories")
     try:
-        db_category = db.query(Category).filter(Category.active == True).order_by(Category.name).all()
+        db_categories = db.query(Category).filter(Category.active == True).order_by(Category.name).all()
     except Exception as error:
         logging.error(error)
     else:
-        logging.info(f"categories: {len(db_category)}")
-        return db_category
+        logging.info(f"categories: {len(db_categories)}")
+        return db_categories
 
 @db_safe
 def create_category(db: Session, category: CategoryCreate):

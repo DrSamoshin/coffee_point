@@ -9,44 +9,53 @@ from app.schemas.product_order import ProductOrderCreate, ProductOrderUpdate
 
 @db_safe
 def get_product_order(db: Session, product_order_id: UUID):
-    return db.query(ProductOrder).filter(ProductOrder.id == product_order_id).first()
+    logging.info(f"call method get_product_order")
+    try:
+        db_product_order = db.query(ProductOrder).filter(ProductOrder.id == product_order_id).first()
+    except Exception as error:
+        logging.error(error)
+    else:
+        logging.info(f"product_order: {db_product_order}")
+        return db_product_order
 
 @db_safe
 def get_product_orders(db: Session):
-    return db.query(ProductOrder).all()
-
-
-@db_safe
-def get_product_with_orders(db: Session):
-    return db.query(ProductOrder).options(
-        joinedload(ProductOrder.product),
-        joinedload(ProductOrder.order)
-    ).all()
-
+    logging.info(f"call method get_product_orders")
+    try:
+        db_product_orders = db.query(ProductOrder).all()
+    except Exception as error:
+        logging.error(error)
+    else:
+        logging.info(f"product_orders: {len(db_product_orders)}")
+        return db_product_orders
 
 @db_safe
 def create_product_order(db: Session, product_order: ProductOrderCreate):
-    db_product_order = ProductOrder(product_id=product_order.product_id,
-                                    order_id=product_order.order_id,
-                                    count=product_order.count)
-    db.add(db_product_order)
-    db.commit()
-    db.refresh(db_product_order)
-    return db_product_order
+    logging.info(f"call method create_product_order")
+    try:
+        db_product_order = ProductOrder(product_id=product_order.product_id,
+                                        order_id=product_order.order_id,
+                                        count=product_order.count)
+        db.add(db_product_order)
+        db.commit()
+        db.refresh(db_product_order)
+    except Exception as error:
+        logging.error(error)
+    else:
+        logging.info(f"product_order is created: {db_product_order}")
+        return db_product_order
 
 @db_safe
 def update_product_order(db: Session, product_order_id: UUID, updates: ProductOrderUpdate):
+    logging.info(f"call method update_product_order")
     try:
         db_product_order = db.query(ProductOrder).filter(ProductOrder.id == product_order_id).first()
         for field, value in updates.model_dump(exclude_unset=True).items():
             setattr(db_product_order, field, value)
         db.commit()
         db.refresh(db_product_order)
-        return db_product_order
     except Exception as error:
-        logging.warning(error)
-
-@db_safe
-def delete_product_order(db: Session, db_product_order: ProductOrder):
-    db.delete(db_product_order)
-    db.commit()
+        logging.error(error)
+    else:
+        logging.info(f"product_order is updated: {db_product_order}")
+        return db_product_order
