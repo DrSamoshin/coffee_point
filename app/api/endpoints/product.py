@@ -31,5 +31,5 @@ async def update_product(product_id: UUID, product_update: ProductUpdate, db: Se
 
 @router.delete("/{product_id}/", response_model=ProductFullInfoOut)
 async def deactivate_product(product_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
-    db_product = crud_product.deactivate_product(db, product_id)
+    db_product = crud_product.delete_product(db, product_id)
     return db_product

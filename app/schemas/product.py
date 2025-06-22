@@ -12,6 +12,7 @@ class ProductBase(BaseModel):
     price: Decimal
     online_shop: bool
     image_url: Optional[str] = None
+    active: Optional[bool] = True
 
 class ProductCreate(ProductBase):
     pass

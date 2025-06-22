@@ -22,10 +22,16 @@ def get_categories(db: Session):
 def create_category(db: Session, category: CategoryCreate):
     logging.info(f"call method create_category")
     try:
-        db_category = Category(name=category.name)
-        db.add(db_category)
-        db.commit()
-        db.refresh(db_category)
+        db_category = db.query(Category).filter(Category.name == category.name).first()
+        if not db_category:
+            db_category = Category(name=category.name)
+            db.add(db_category)
+            db.commit()
+            db.refresh(db_category)
+        elif not db_category.active:
+            db_category.active = True
+            db.commit()
+            db.refresh(db_category)
     except Exception as error:
         logging.error(error)
     else:

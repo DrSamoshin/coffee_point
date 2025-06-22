@@ -18,4 +18,4 @@ class Product(Base):
 
     def __repr__(self):
         return (f"id={self.id} name={self.name} category_id={self.category_id} price={self.price}"
-                f"active={self.active} online_shop={self.online_shop} image_url={self.image_url}")
+                f" active={self.active} online_shop={self.online_shop} image_url={self.image_url}")
