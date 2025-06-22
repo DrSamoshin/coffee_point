@@ -12,13 +12,13 @@ from app.core.consts import OrderStatus
 
 def _get_total_sales(db: Session, shift_id: UUID):
     total_sales = db.query(func.sum(Order.price)) \
-        .filter(Order.shift_id == shift_id, Order.status != OrderStatus.returned) \
+        .filter(Order.shift_id == shift_id, Order.debit == False) \
         .scalar()
     return total_sales
 
 def _get_total_returns(db: Session, shift_id: UUID):
     total_returns = db.query(func.sum(Order.price)) \
-        .filter(Order.shift_id == shift_id, Order.status == OrderStatus.returned) \
+        .filter(Order.shift_id == shift_id, Order.debit) \
         .scalar()
     return total_returns
 

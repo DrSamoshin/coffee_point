@@ -15,7 +15,6 @@ class OrderStatus(str, Enum):
     waiting = "waiting"
     completed = "completed"
     cancelled = "cancelled"
-    returned = "returned"
 
 class EmployeePosition(str, Enum):
     barista = "barista"

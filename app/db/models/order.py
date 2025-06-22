@@ -16,10 +16,10 @@ class Order(Base):
     payment_method = Column(SQLAlchemyEnum(OrderPaymentMethod), nullable=False)  # example: "cash", "card"
     type = Column(SQLAlchemyEnum(OrderType), nullable=False)  # example: "dine-in", "takeaway"
     date = Column(DateTime, nullable=False)
-    status = Column(SQLAlchemyEnum(OrderStatus), nullable=False) # example: "waiting", "completed", "cancelled", "returned"
+    status = Column(SQLAlchemyEnum(OrderStatus), nullable=False) # example: "waiting", "completed", "cancelled"
     shift_id = Column(UUID(as_uuid=True), ForeignKey("shifts.id"), nullable=False)
     order_number = Column(Integer, nullable=False, default=0)
-    active = Column(Boolean, default=True)
+    debit = Column(Boolean, default=False)
     client_id = Column(UUID(as_uuid=True), ForeignKey("clients.id"), nullable=True)
 
     client = relationship("Client", backref="orders", lazy="joined")
@@ -28,4 +28,4 @@ class Order(Base):
     def __repr__(self):
         return (f"id={self.id} price={self.price} discount={self.discount} payment_method={self.payment_method}"
                 f" type={self.type} date={self.date} status={self.status} shift_id={self.shift_id}"
-                f" order_number={self.order_number} active={self.active} client_id={self.client_id}")
+                f" order_number={self.order_number} active={self.debit} client_id={self.client_id}")

@@ -22,6 +22,7 @@ class OrderBase(BaseModel):
 
 class OrderCreate(OrderBase):
     order_number: Optional[int] = None
+    debit: Optional[bool] = False
     products: list[ProductOrderCreate]
 
 class OrderUpdate(BaseModel):
@@ -38,7 +39,7 @@ class OrderStatusUpdate(BaseModel):
 
 class OrderOut(OrderBase):
     id: UUID
-    active: bool
+    debit: bool
     order_number: int
 
     model_config = ConfigDict(
@@ -52,7 +53,7 @@ class OrderOut(OrderBase):
 
 class ShiftOrderOut(BaseModel):
     id: UUID
-    active: bool
+    debit: bool
     price: Decimal
     discount: Decimal
     date: datetime

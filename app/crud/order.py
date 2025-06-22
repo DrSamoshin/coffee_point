@@ -17,7 +17,7 @@ def create_order_with_products(db: Session, order: OrderCreate):
     logging.info(f"call method create_order_with_products")
     try:
         with db.begin():
-            if order.order_number and order.status == OrderStatus.returned:
+            if order.order_number and order.debit:
                 order_number = order.order_number
             else:
                 last_order_number = db.query(func.max(Order.order_number)).filter(Order.shift_id == order.shift_id).scalar()
@@ -30,7 +30,8 @@ def create_order_with_products(db: Session, order: OrderCreate):
                              type=order.type,
                              status=order.status,
                              shift_id=order.shift_id,
-                             order_number=order_number)
+                             order_number=order_number,
+                             debit=order.debit)
             db.add(db_order)
             db.flush()
 
@@ -64,7 +65,7 @@ def get_order(db: Session, order_id: UUID):
                     type=order.type,
                     status=order.status,
                     payment_method=order.payment_method,
-                    active=order.active,
+                    debit=order.debit,
                     order_number=order.order_number,
                     products=[ProductOrderOut(
                         product_order_id=po.id,
@@ -85,7 +86,7 @@ def get_shift_orders(db: Session, shift_id: UUID, skip: int = 0, limit: int = 10
     logging.info(f"call method get_shift_orders")
     try:
         orders = (db.query(Order)
-                  .filter(Order.active == True, Order.shift_id == shift_id)
+                  .filter(Order.shift_id == shift_id)
                   .options(joinedload(Order.product_orders).joinedload(ProductOrder.product))
                   .order_by(desc(Order.date))
                   .offset(skip)
@@ -102,7 +103,7 @@ def get_shift_orders(db: Session, shift_id: UUID, skip: int = 0, limit: int = 10
                 type=order.type,
                 status=order.status,
                 payment_method=order.payment_method,
-                active=order.active,
+                debit=order.debit,
                 order_number=order.order_number,
                 products=[ProductOrderOut(
                     product_order_id=po.id,
@@ -124,7 +125,7 @@ def get_waiting_shift_orders(db: Session, shift_id: UUID, skip: int = 0, limit: 
     logging.info(f"call method get_waiting_shift_orders")
     try:
         orders = (db.query(Order)
-                  .filter(Order.active == True, Order.shift_id == shift_id, Order.status == OrderStatus.waiting)
+                  .filter(Order.shift_id == shift_id, Order.status == OrderStatus.waiting)
                   .options(joinedload(Order.product_orders).joinedload(ProductOrder.product))
                   .order_by(desc(Order.date))
                   .offset(skip)
@@ -141,7 +142,7 @@ def get_waiting_shift_orders(db: Session, shift_id: UUID, skip: int = 0, limit: 
                 type=order.type,
                 status=order.status,
                 payment_method=order.payment_method,
-                active=order.active,
+                debit=order.debit,
                 order_number=order.order_number,
                 products=[ProductOrderOut(
                     product_order_id=po.id,
