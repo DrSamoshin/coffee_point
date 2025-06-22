@@ -17,7 +17,11 @@ def create_order_with_products(db: Session, order: OrderCreate):
     logging.info(f"call method create_order_with_products")
     try:
         with db.begin():
-            last_order_number =  db.query(func.max(Order.order_number)).filter(Order.shift_id == order.shift_id).scalar()
+            if OrderCreate.order_number and OrderCreate.status == OrderStatus.returned:
+                order_number = OrderCreate.order_number
+            else:
+                last_order_number = db.query(func.max(Order.order_number)).filter(Order.shift_id == order.shift_id).scalar()
+                order_number = (last_order_number or 0) + 1
             db_order = Order(price=order.price,
                              discount=order.discount,
                              date=datetime.now(timezone.utc),
@@ -26,7 +30,7 @@ def create_order_with_products(db: Session, order: OrderCreate):
                              type=order.type,
                              status=order.status,
                              shift_id=order.shift_id,
-                             order_number=(last_order_number or 0) + 1)
+                             order_number=order_number)
             db.add(db_order)
             db.flush()
 

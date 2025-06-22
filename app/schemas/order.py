@@ -2,7 +2,7 @@
 from uuid import UUID
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict
-from typing import Optional
+from typing import Optional, Union
 from decimal import Decimal
 
 from app.core.consts import OrderType, OrderPaymentMethod, OrderStatus
@@ -22,6 +22,7 @@ class OrderBase(BaseModel):
 
 class OrderCreate(OrderBase):
     products: list[ProductOrderCreate]
+    order_number: Union[int, None] = None
 
 class OrderUpdate(BaseModel):
     price: Optional[Decimal] = None
