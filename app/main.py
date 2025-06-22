@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 from app.core.configs import settings
 from app.api.endpoints import (admin_router,
+                               analytics_router,
                                category_router,
                                check_list_router,
                                client_router,
@@ -66,6 +67,7 @@ def custom_openapi():
 main_app.openapi = custom_openapi
 
 # routers
+main_app.include_router(analytics_router)
 main_app.include_router(category_router)
 main_app.include_router(check_list_router)
 main_app.include_router(client_router)

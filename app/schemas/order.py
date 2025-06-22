@@ -13,7 +13,7 @@ from app.schemas.product_order import ProductOrderCreate, ProductOrderUpdate
 class OrderBase(BaseModel):
     price: Decimal
     discount:Decimal
-    date: datetime
+    date: Union[datetime, None] = None
     payment_method: OrderPaymentMethod
     type: OrderType
     status: OrderStatus
@@ -21,8 +21,8 @@ class OrderBase(BaseModel):
     client_id: Optional[UUID] = None
 
 class OrderCreate(OrderBase):
+    order_number: Optional[int] = None
     products: list[ProductOrderCreate]
-    order_number: Union[int, None] = None
 
 class OrderUpdate(BaseModel):
     price: Optional[Decimal] = None

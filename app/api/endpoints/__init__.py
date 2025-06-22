@@ -1,4 +1,5 @@
 from .admin import router as admin_router
+from .analytics import router as analytics_router
 from .category import router as category_router
 from .check_list import router as check_list_router
 from .client import router as client_router
