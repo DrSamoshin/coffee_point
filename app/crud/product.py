@@ -50,8 +50,7 @@ def create_product(db: Session, product: ProductCreate):
             db.commit()
             db.refresh(db_product)
         else:
-            for field, value in product.model_dump().items():
-                setattr(db_product, field, value)
+            db_product.active = True
             db.commit()
             db.refresh(db_product)
     except Exception as error:

@@ -1,5 +1,5 @@
 import uuid
-from sqlalchemy import Column, UUID, ForeignKey, Numeric, Boolean
+from sqlalchemy import Column, UUID, ForeignKey, Numeric, Boolean, DateTime
 from sqlalchemy.orm import relationship
 from app.db.models.base_class import Base
 
@@ -9,13 +9,16 @@ class StoreItem(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
     item_id = Column(UUID(as_uuid=True), ForeignKey("items.id"), nullable=False)
     amount = Column(Numeric(10, 2), nullable=False)
+    price_per_item = Column(Numeric(10, 2), nullable=True)
+    date = Column(DateTime, nullable=False)
     debit = Column(Boolean, default=False)
     supply_id = Column(UUID(as_uuid=True), ForeignKey("supplies.id"), nullable=True)
-    price_per_item = Column(Numeric(10, 2), nullable=True)
+    reporting_period_id = Column(UUID(as_uuid=True), ForeignKey("reporting_periods.id"), nullable=False)
 
     item = relationship("Item", backref="store_items", lazy="joined")
     supply = relationship("Supply", backref="store_items", lazy="joined")
+    reporting_period = relationship("ReportingPeriod", backref="store_items", lazy="joined")
 
     def __repr__(self):
         return (f"id={self.id} item_id={self.item_id} supply_id={self.supply_id} amount={self.amount}"
-                f"price_per_item={self.price_per_item} active={self.active}")
+                f"price_per_item={self.price_per_item} debit={self.debit}")

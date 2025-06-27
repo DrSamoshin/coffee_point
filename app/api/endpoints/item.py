@@ -29,3 +29,8 @@ async def create_item(item: ItemCreate, db: Session = Depends(get_db), user_id: 
 async def update_item(item_id: UUID, item_update: ItemUpdate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_item = crud_item.update_item(db, item_id, item_update)
     return db_item
+
+@router.delete("/{item_id}/", response_model=ItemOut)
+async def deactivate_item(item_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+    db_item = crud_item.delete_item(db, item_id)
+    return db_item

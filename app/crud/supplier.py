@@ -32,10 +32,16 @@ def get_suppliers(db: Session):
 def create_supplier(db: Session, supplier: SupplierCreate):
     logging.info(f"call method create_supplier")
     try:
-        db_supplier = Supplier(name=supplier.name)
-        db.add(db_supplier)
-        db.commit()
-        db.refresh(db_supplier)
+        db_supplier = db.query(Supplier).filter(Supplier.name == supplier.name).first()
+        if not db_supplier:
+            db_supplier = Supplier(name=supplier.name)
+            db.add(db_supplier)
+            db.commit()
+            db.refresh(db_supplier)
+        elif db_supplier.deactivated:
+            db_supplier.deactivated = False
+            db.commit()
+            db.refresh(db_supplier)
     except Exception as error:
         logging.error(error)
     else:
@@ -57,3 +63,16 @@ def update_supplier(db: Session, supplier_id: UUID, updates: SupplierUpdate):
         logging.info(f"db_supplier is updated: {db_supplier}")
         return db_supplier
 
+@db_safe
+def delete_supplier(db: Session, supplier_id: UUID):
+    logging.info(f"call method delete_supplier")
+    try:
+        db_supplier = db.query(Supplier).filter(Supplier.id == supplier_id).first()
+        db_supplier.deactivated = True
+        db.commit()
+        db.refresh(db_supplier)
+    except Exception as error:
+        logging.error(error)
+    else:
+        logging.info(f"supplier is deleted: {db_supplier}")
+        return db_supplier

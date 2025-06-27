@@ -14,7 +14,7 @@ class ProductBase(BaseModel):
     image_url: Optional[str] = None
 
 class ProductCreate(ProductBase):
-    active: Optional[bool] = True
+    pass
 
 class ProductUpdate(BaseModel):
     name: Optional[str] = None

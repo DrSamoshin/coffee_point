@@ -1,3 +1,4 @@
+from typing import Optional
 from uuid import UUID
 from pydantic import BaseModel
 from datetime import datetime
@@ -5,7 +6,7 @@ from datetime import datetime
 
 class SupplyBase(BaseModel):
     date: datetime
-    supplier_id: UUID
+    supplier_id: Optional[UUID] = None
 
 class SupplyCreate(SupplyBase):
     pass

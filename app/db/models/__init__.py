@@ -8,6 +8,7 @@ from .order import Order
 from .product import Product
 from .product_order import ProductOrder
 from .recipe_item import RecipeItem
+from .reporting_period import ReportingPeriod
 from .shift import Shift
 from .store_item import StoreItem
 from .supplier import Supplier

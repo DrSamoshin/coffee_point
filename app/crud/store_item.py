@@ -1,5 +1,6 @@
 import logging
 from uuid import UUID
+from datetime import datetime, timezone
 from sqlalchemy.orm import Session
 
 from app.db.models import StoreItem
@@ -33,6 +34,7 @@ def create_store_item(db: Session, store_item: StoreItemCreate):
     logging.info(f"call method create_store_item")
     try:
         db_store_item = StoreItem(item_id=store_item.item_id,
+                                  date=datetime.now(timezone.utc),
                                   supply_id=store_item.supply_id,
                                   amount=store_item.amount,
                                   price_per_item=store_item.price_per_item)

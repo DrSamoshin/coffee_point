@@ -17,7 +17,6 @@ def get_item(db: Session, item_id: UUID):
         logging.info(f"item: {db_item}")
         return db_item
 
-
 @db_safe
 def get_items(db: Session):
     logging.info(f"call method get_items")
@@ -33,11 +32,17 @@ def get_items(db: Session):
 def create_item(db: Session, item: ItemCreate):
     logging.info(f"call method create_item")
     try:
-        db_item = Item(name=item.name,
-                       measurement=item.measurement)
-        db.add(db_item)
-        db.commit()
-        db.refresh(db_item)
+        db_item = db.query(Item).filter(Item.name == item.name).first()
+        if not db_item:
+            db_item = Item(name=item.name,
+                           measurement=item.measurement)
+            db.add(db_item)
+            db.commit()
+            db.refresh(db_item)
+        elif not db_item.active:
+            db_item.active = True
+            db.commit()
+            db.refresh(db_item)
     except Exception as error:
         logging.error(error)
     else:
@@ -57,5 +62,19 @@ def update_item(db: Session, item_id: UUID, updates: ItemUpdate):
         logging.error(error)
     else:
         logging.info(f"item is updated: {db_item}")
+        return db_item
+
+@db_safe
+def delete_item(db: Session, item_id: UUID):
+    logging.info(f"call method delete_item")
+    try:
+        db_item = db.query(Item).filter(Item.id == item_id).first()
+        db_item.active = False
+        db.commit()
+        db.refresh(db_item)
+    except Exception as error:
+        logging.error(error)
+    else:
+        logging.info(f"item is deleted: {db_item}")
         return db_item
 

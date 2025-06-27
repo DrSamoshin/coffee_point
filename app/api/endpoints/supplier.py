@@ -28,3 +28,8 @@ async def create_supplier(supplier: SupplierCreate, db: Session = Depends(get_db
 async def update_supplier(supplier_id: UUID, supplier_update: SupplierUpdate, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_supplier = crud_supplier.update_supplier(db, supplier_id, supplier_update)
     return db_supplier
+
+@router.delete("/{supplier_id}/", response_model=SupplierOut)
+async def deactivate_supplier(supplier_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+    db_supplier = crud_supplier.delete_supplier(db, supplier_id)
+    return db_supplier

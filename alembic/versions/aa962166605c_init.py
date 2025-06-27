@@ -1,8 +1,8 @@
-"""initial
+"""init
 
-Revision ID: 855841e3b515
+Revision ID: aa962166605c
 Revises: 
-Create Date: 2025-06-15 18:43:23.981890
+Create Date: 2025-06-23 19:30:10.152888
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '855841e3b515'
+revision: str = 'aa962166605c'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -56,11 +56,20 @@ def upgrade() -> None:
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
     sa.Column('measurement', sa.String(), nullable=False),
+    sa.Column('lower_limit', sa.Integer(), nullable=True),
     sa.Column('active', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
     op.create_index(op.f('ix_items_id'), 'items', ['id'], unique=False)
+    op.create_table('reporting_periods',
+    sa.Column('id', sa.UUID(), nullable=False),
+    sa.Column('start_time', sa.DateTime(), nullable=True),
+    sa.Column('end_time', sa.DateTime(), nullable=True),
+    sa.Column('active', sa.Boolean(), nullable=True),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_reporting_periods_id'), 'reporting_periods', ['id'], unique=False)
     op.create_table('shifts',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('start_time', sa.DateTime(), nullable=True),
@@ -99,14 +108,15 @@ def upgrade() -> None:
     op.create_table('orders',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('price', sa.Numeric(precision=10, scale=2), nullable=False),
-    sa.Column('date', sa.DateTime(), nullable=False),
-    sa.Column('client_id', sa.UUID(), nullable=True),
+    sa.Column('discount', sa.Numeric(precision=3, scale=0), nullable=True),
     sa.Column('payment_method', sa.Enum('cash', 'card', name='orderpaymentmethod'), nullable=False),
     sa.Column('type', sa.Enum('dine_in', 'delivery', 'takeout', name='ordertype'), nullable=False),
-    sa.Column('status', sa.Enum('waiting', 'completed', 'cancelled', 'returned', name='orderstatus'), nullable=False),
+    sa.Column('date', sa.DateTime(), nullable=False),
+    sa.Column('status', sa.Enum('waiting', 'completed', 'cancelled', name='orderstatus'), nullable=False),
     sa.Column('shift_id', sa.UUID(), nullable=False),
-    sa.Column('active', sa.Boolean(), nullable=True),
     sa.Column('order_number', sa.Integer(), nullable=False),
+    sa.Column('debit', sa.Boolean(), nullable=True),
+    sa.Column('client_id', sa.UUID(), nullable=True),
     sa.ForeignKeyConstraint(['client_id'], ['clients.id'], ),
     sa.ForeignKeyConstraint(['shift_id'], ['shifts.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -128,7 +138,7 @@ def upgrade() -> None:
     op.create_table('supplies',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('date', sa.DateTime(), nullable=False),
-    sa.Column('supplier_id', sa.UUID(), nullable=False),
+    sa.Column('supplier_id', sa.UUID(), nullable=True),
     sa.Column('active', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['supplier_id'], ['suppliers.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -156,11 +166,14 @@ def upgrade() -> None:
     op.create_table('store_items',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('item_id', sa.UUID(), nullable=False),
-    sa.Column('supply_id', sa.UUID(), nullable=False),
     sa.Column('amount', sa.Numeric(precision=10, scale=2), nullable=False),
-    sa.Column('price_per_item', sa.Numeric(precision=10, scale=2), nullable=False),
-    sa.Column('active', sa.Boolean(), nullable=True),
+    sa.Column('price_per_item', sa.Numeric(precision=10, scale=2), nullable=True),
+    sa.Column('date', sa.DateTime(), nullable=False),
+    sa.Column('debit', sa.Boolean(), nullable=True),
+    sa.Column('supply_id', sa.UUID(), nullable=True),
+    sa.Column('reporting_period_id', sa.UUID(), nullable=False),
     sa.ForeignKeyConstraint(['item_id'], ['items.id'], ),
+    sa.ForeignKeyConstraint(['reporting_period_id'], ['reporting_periods.id'], ),
     sa.ForeignKeyConstraint(['supply_id'], ['supplies.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -190,6 +203,8 @@ def downgrade() -> None:
     op.drop_table('suppliers')
     op.drop_index(op.f('ix_shifts_id'), table_name='shifts')
     op.drop_table('shifts')
+    op.drop_index(op.f('ix_reporting_periods_id'), table_name='reporting_periods')
+    op.drop_table('reporting_periods')
     op.drop_index(op.f('ix_items_id'), table_name='items')
     op.drop_table('items')
     op.drop_index(op.f('ix_employees_id'), table_name='employees')
