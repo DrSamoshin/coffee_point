@@ -14,6 +14,11 @@ async def get_suppliers(db: Session = Depends(get_db), user_id: str = Depends(ge
     db_suppliers = crud_supplier.get_suppliers(db)
     return db_suppliers
 
+@router.get("/deactivated/", response_model=list[SupplierOut])
+async def get_deactivated_suppliers(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+    db_suppliers = crud_supplier.get_deactivated_suppliers(db)
+    return db_suppliers
+
 @router.get("/{supplier_id}/", response_model=SupplierOut)
 async def get_supplier(supplier_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_supplier = crud_supplier.get_supplier(db, supplier_id)
@@ -32,4 +37,9 @@ async def update_supplier(supplier_id: UUID, supplier_update: SupplierUpdate, db
 @router.delete("/{supplier_id}/", response_model=SupplierOut)
 async def deactivate_supplier(supplier_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_supplier = crud_supplier.delete_supplier(db, supplier_id)
+    return db_supplier
+
+@router.post("/activate/{supplier_id}/", response_model=SupplierOut)
+async def activate_supplier(supplier_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+    db_supplier = crud_supplier.activate_supplier(db, supplier_id)
     return db_supplier

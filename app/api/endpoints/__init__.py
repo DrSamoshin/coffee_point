@@ -6,6 +6,7 @@ from .client import router as client_router
 from .coffee_shop import router as coffee_shop_router
 from .employee import router as employee_router
 from .employee_shift import router as employee_shift_router
+from .files import router as files_router
 from .health import router as health_router
 from .item import router as item_router
 from .order import router as order_router

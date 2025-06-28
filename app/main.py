@@ -12,6 +12,7 @@ from app.api.endpoints import (admin_router,
                                coffee_shop_router,
                                employee_router,
                                employee_shift_router,
+                               files_router,
                                health_router,
                                item_router,
                                order_router,
@@ -74,6 +75,7 @@ main_app.include_router(client_router)
 main_app.include_router(coffee_shop_router)
 main_app.include_router(employee_router)
 main_app.include_router(employee_shift_router)
+main_app.include_router(files_router)
 main_app.include_router(health_router)
 main_app.include_router(item_router)
 main_app.include_router(order_router)

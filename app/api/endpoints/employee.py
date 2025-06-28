@@ -15,6 +15,11 @@ async def get_employees(db: Session = Depends(get_db), user_id: str = Depends(ge
     employees = crud_employee.get_employees(db)
     return employees
 
+@router.get("/deactivated/", response_model=List[EmployeeOut])
+async def get_deactivated_employees(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+    employees = crud_employee.get_deactivated_employees(db)
+    return employees
+
 @router.get("/available/", response_model=List[EmployeeOut])
 async def get_available_employees(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     employees = crud_employee.get_available_employees(db)
@@ -30,7 +35,12 @@ async def update_employee(employee_id: UUID, user_update: EmployeeUpdate, db: Se
     db_employee = crud_employee.update_employee(db, employee_id, user_update)
     return db_employee
 
-@router.delete("/{employee_id}/")
+@router.delete("/{employee_id}/", response_model=EmployeeOut)
 async def deactivate_employee(employee_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
     db_employee = crud_employee.deactivate_employee(db, employee_id)
+    return db_employee
+
+@router.post("/activate/{employee_id}/", response_model=EmployeeOut)
+async def activate_employee(employee_id: UUID, db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):
+    db_employee = crud_employee.activate_employee(db, employee_id)
     return db_employee

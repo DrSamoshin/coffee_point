@@ -14,6 +14,7 @@ def get_products(db: Session):
         db_products = (db.query(Product)
                        .filter(Product.active == True)
                        .options(joinedload(Product.category))
+                       .order_by(Product.name)
                        .all())
     except Exception as error:
         logging.error(error)
@@ -64,7 +65,7 @@ def update_product(db: Session, product_id: UUID, updates: ProductUpdate):
     logging.info(f"call method update_product")
     try:
         db_product = db.query(Product).filter(Product.id == product_id).first()
-        for field, value in updates.model_dump(exclude_unset=True).items():
+        for field, value in updates.model_dump().items():
             setattr(db_product, field, value)
         db.commit()
         db.refresh(db_product)

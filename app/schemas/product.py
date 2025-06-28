@@ -16,12 +16,8 @@ class ProductBase(BaseModel):
 class ProductCreate(ProductBase):
     pass
 
-class ProductUpdate(BaseModel):
-    name: Optional[str] = None
-    category_id: Optional[UUID] = None
-    price: Optional[Decimal] = None
-    online_shop: Optional[bool] = None
-    image_url: Optional[str] = None
+class ProductUpdate(ProductBase):
+    pass
 
 
 class ProductFullInfoOut(ProductBase):
