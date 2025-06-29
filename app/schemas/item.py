@@ -1,9 +1,10 @@
 from uuid import UUID
 from pydantic import BaseModel
+from app.core.consts import ItemMeasurements
 
 class ItemBase(BaseModel):
     name: str
-    measurement: str
+    measurement: ItemMeasurements
 
 class ItemCreate(ItemBase):
     pass

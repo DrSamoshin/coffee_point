@@ -1,5 +1,6 @@
 import logging
 from uuid import UUID
+from sqlalchemy import desc
 from sqlalchemy.orm import Session
 
 from app.db.models import Supply
@@ -21,7 +22,7 @@ def get_supply(db: Session, supply_id: UUID):
 def get_supplies(db: Session):
     logging.info(f"call method get_supplies")
     try:
-        db_supplies = db.query(Supply).filter(Supply.active == True).all()
+        db_supplies = db.query(Supply).filter(Supply.active == True).order_by(desc(Supply.date)).all()
     except Exception as error:
         logging.error(error)
     else:

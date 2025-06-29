@@ -1,4 +1,3 @@
-from typing import Union
 from uuid import UUID
 from pydantic import BaseModel
 from app.core.consts import EmployeePosition

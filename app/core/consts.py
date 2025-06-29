@@ -20,6 +20,13 @@ class EmployeePosition(str, Enum):
     barista = "barista"
     manager = "manager"
 
+class ItemMeasurements(str, Enum):
+    kilogram = "kg"
+    gram = "g"
+    liter = "l"
+    milliliter = "ml"
+    piece = "pcs"
+
 class CheckListTimePoint(str, Enum):
     start_shift = "start_shift"
     end_shift = "end_shift"

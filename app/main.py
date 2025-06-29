@@ -10,6 +10,7 @@ from app.api.endpoints import (admin_router,
                                check_list_router,
                                client_router,
                                coffee_shop_router,
+                               constants_router,
                                employee_router,
                                employee_shift_router,
                                files_router,
@@ -19,6 +20,7 @@ from app.api.endpoints import (admin_router,
                                product_router,
                                product_order_router,
                                recipe_item_router,
+                               reporting_period_router,
                                shift_router,
                                store_item_router,
                                supplier_router,
@@ -73,6 +75,7 @@ main_app.include_router(category_router)
 main_app.include_router(check_list_router)
 main_app.include_router(client_router)
 main_app.include_router(coffee_shop_router)
+main_app.include_router(constants_router)
 main_app.include_router(employee_router)
 main_app.include_router(employee_shift_router)
 main_app.include_router(files_router)
@@ -82,6 +85,7 @@ main_app.include_router(order_router)
 main_app.include_router(product_router)
 main_app.include_router(product_order_router)
 main_app.include_router(recipe_item_router)
+main_app.include_router(reporting_period_router)
 main_app.include_router(shift_router)
 main_app.include_router(store_item_router)
 main_app.include_router(supplier_router)
