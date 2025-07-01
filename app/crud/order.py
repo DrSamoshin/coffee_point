@@ -5,7 +5,7 @@ from sqlalchemy import func, desc
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 
-from app.db.models import Order, ProductOrder
+from app.db.models import Order, ProductOrder, Shift
 from app.db.session import db_safe
 from app.schemas.order import OrderCreate, OrderUpdate, ShiftOrderOut, OrderStatusUpdate, OrderBase
 from app.schemas.product import ProductOrderOut
@@ -22,6 +22,7 @@ def create_order_with_products(db: Session, order: OrderCreate):
             else:
                 last_order_number = db.query(func.max(Order.order_number)).filter(Order.shift_id == order.shift_id).scalar()
                 order_number = (last_order_number or 0) + 1
+            db_shift = db.query(Shift).order_by(Shift.active == True).first()
             db_order = Order(price=order.price,
                              discount=order.discount,
                              date=datetime.now(timezone.utc),
@@ -29,7 +30,7 @@ def create_order_with_products(db: Session, order: OrderCreate):
                              payment_method=order.payment_method,
                              type=order.type,
                              status=order.status,
-                             shift_id=order.shift_id,
+                             shift_id=db_shift.id,
                              order_number=order_number,
                              debit=order.debit)
             db.add(db_order)
@@ -179,7 +180,7 @@ def update_order(db: Session, order_id: UUID, updates: OrderUpdate):
     try:
         with db.begin():
             db_order = db.query(Order).filter(Order.id == order_id).first()
-            for field, value in updates.model_dump(exclude_unset=True).items():
+            for field, value in updates.model_dump().items():
                 setattr(db_order, field, value)
             db.add(db_order)
             db.flush()

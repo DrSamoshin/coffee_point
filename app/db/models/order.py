@@ -12,7 +12,7 @@ class Order(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
     price = Column(Numeric(10, 2), nullable=False)
-    discount = Column(Numeric(3, 0), nullable=True, default=0)
+    discount = Column(Numeric(3, 0), nullable=False, default=0)
     payment_method = Column(SQLAlchemyEnum(OrderPaymentMethod), nullable=False)  # example: "cash", "card"
     type = Column(SQLAlchemyEnum(OrderType), nullable=False)  # example: "dine-in", "takeaway"
     date = Column(DateTime, nullable=False)

@@ -14,7 +14,7 @@ class EmployeeShiftCreate(EmployeeShiftBase):
     pass
 
 class EmployeeShiftUpdate(BaseModel):
-    last_employee_shift: bool = False
+    last_employee_shift: bool
 
 class EmployeeShiftOut(EmployeeShiftBase):
     id: UUID

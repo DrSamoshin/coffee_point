@@ -1,6 +1,6 @@
 import logging
 import os
-
+from dotenv import load_dotenv
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings
 
@@ -63,6 +63,7 @@ class GoogleAccount(BaseModel):
     universe_domain: str = "googleapis.com"
 
 class Settings(BaseSettings):
+    load_dotenv()
     logging: Logging = Logging()
     run: Run = Run()
     app_data: AppData = AppData()

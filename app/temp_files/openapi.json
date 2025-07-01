@@ -6,6 +6,54 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/analytics/{shift_id}/": {
+      "get": {
+        "tags": [
+          "analytics"
+        ],
+        "summary": "Get Shift Income",
+        "operationId": "get_shift_income_analytics__shift_id___get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "shift_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Shift Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShiftIncomeOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/categories/": {
       "get": {
         "tags": [
@@ -489,6 +537,101 @@
         }
       }
     },
+    "/constants/payment-methods/": {
+      "get": {
+        "tags": [
+          "constants"
+        ],
+        "summary": "Get Payment Methods",
+        "operationId": "get_payment_methods_constants_payment_methods__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/constants/order-types/": {
+      "get": {
+        "tags": [
+          "constants"
+        ],
+        "summary": "Get Order Types",
+        "operationId": "get_order_types_constants_order_types__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/constants/order-statuses/": {
+      "get": {
+        "tags": [
+          "constants"
+        ],
+        "summary": "Get Order Statuses",
+        "operationId": "get_order_statuses_constants_order_statuses__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/constants/employee-positions/": {
+      "get": {
+        "tags": [
+          "constants"
+        ],
+        "summary": "Get Employee Positions",
+        "operationId": "get_employee_positions_constants_employee_positions__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/constants/item-measurements/": {
+      "get": {
+        "tags": [
+          "constants"
+        ],
+        "summary": "Get Item Measurements",
+        "operationId": "get_item_measurements_constants_item_measurements__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
     "/employees/": {
       "get": {
         "tags": [
@@ -551,6 +694,36 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/employees/deactivated/": {
+      "get": {
+        "tags": [
+          "employees"
+        ],
+        "summary": "Get Deactivated Employees",
+        "operationId": "get_deactivated_employees_employees_deactivated__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/EmployeeOut"
+                  },
+                  "type": "array",
+                  "title": "Response Get Deactivated Employees Employees Deactivated  Get"
                 }
               }
             }
@@ -678,7 +851,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeOut"
+                }
               }
             }
           },
@@ -695,7 +870,55 @@
         }
       }
     },
-    "/employee_shifts/": {
+    "/employees/activate/{employee_id}/": {
+      "post": {
+        "tags": [
+          "employees"
+        ],
+        "summary": "Activate Employee",
+        "operationId": "activate_employee_employees_activate__employee_id___post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "employee_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Employee Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/employee-shifts/": {
       "get": {
         "tags": [
           "employee_shifts"
@@ -769,7 +992,7 @@
         ]
       }
     },
-    "/employee_shifts/active-employee-shifts/": {
+    "/employee-shifts/active-employee-shifts/": {
       "get": {
         "tags": [
           "employee_shifts"
@@ -799,7 +1022,7 @@
         ]
       }
     },
-    "/employee_shifts/shift-end-update/{shift_id}/": {
+    "/employee-shifts/shift-end-update/{shift_id}/": {
       "put": {
         "tags": [
           "employee_shifts"
@@ -854,6 +1077,118 @@
             }
           }
         }
+      }
+    },
+    "/files/": {
+      "get": {
+        "tags": [
+          "files"
+        ],
+        "summary": "Get Image Urls",
+        "operationId": "get_image_urls_files__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/files/upload-image/": {
+      "post": {
+        "tags": [
+          "files"
+        ],
+        "summary": "Upload Image",
+        "operationId": "upload_image_files_upload_image__post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_image_files_upload_image__post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/files/delete/": {
+      "post": {
+        "tags": [
+          "files"
+        ],
+        "summary": "Delete Image",
+        "operationId": "delete_image_files_delete__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageDelete"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
       }
     },
     "/health/app/": {
@@ -1075,6 +1410,52 @@
             }
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "items"
+        ],
+        "summary": "Deactivate Item",
+        "operationId": "deactivate_item_items__item_id___delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "item_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Item Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/orders/shift-orders/{shift_id}/": {
@@ -1127,6 +1508,73 @@
                     "$ref": "#/components/schemas/ShiftOrderOut"
                   },
                   "title": "Response Get Shift Orders Orders Shift Orders  Shift Id   Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders/waiting-shift-orders/{shift_id}/": {
+      "get": {
+        "tags": [
+          "orders"
+        ],
+        "summary": "Get Shift Orders",
+        "operationId": "get_shift_orders_orders_waiting_shift_orders__shift_id___get",
+        "parameters": [
+          {
+            "name": "shift_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Shift Id"
+            }
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Skip"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ShiftOrderOut"
+                  },
+                  "title": "Response Get Shift Orders Orders Waiting Shift Orders  Shift Id   Get"
                 }
               }
             }
@@ -1555,7 +2003,7 @@
         }
       }
     },
-    "/product_orders/": {
+    "/product-orders/": {
       "get": {
         "tags": [
           "product_orders"
@@ -1629,7 +2077,7 @@
         ]
       }
     },
-    "/product_orders/{product_order_id}/": {
+    "/product-orders/{product_order_id}/": {
       "get": {
         "tags": [
           "product_orders"
@@ -1733,7 +2181,7 @@
         }
       }
     },
-    "/recipe_items/": {
+    "/recipe-items/": {
       "get": {
         "tags": [
           "recipe_items"
@@ -1807,7 +2255,7 @@
         ]
       }
     },
-    "/recipe_items/{recipe_item_id}/": {
+    "/recipe-items/{recipe_item_id}/": {
       "get": {
         "tags": [
           "recipe_items"
@@ -1909,6 +2357,62 @@
             }
           }
         }
+      }
+    },
+    "/reporting-periods/reporting-periods/": {
+      "get": {
+        "tags": [
+          "reporting_periods"
+        ],
+        "summary": "Get Reporting Periods",
+        "operationId": "get_reporting_periods_reporting_periods_reporting_periods__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ReportingPeriodOut"
+                  },
+                  "type": "array",
+                  "title": "Response Get Reporting Periods Reporting Periods Reporting Periods  Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/reporting-periods/": {
+      "post": {
+        "tags": [
+          "reporting_periods"
+        ],
+        "summary": "Create Reporting Period",
+        "operationId": "create_reporting_period_reporting_periods__post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportingPeriodOut"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
       }
     },
     "/shifts/": {
@@ -2019,7 +2523,7 @@
         }
       }
     },
-    "/store_items/": {
+    "/store-items/": {
       "get": {
         "tags": [
           "store_items"
@@ -2047,40 +2551,26 @@
             "HTTPBearer": []
           }
         ]
-      },
-      "post": {
+      }
+    },
+    "/store-items/calculation/": {
+      "get": {
         "tags": [
           "store_items"
         ],
-        "summary": "Create Store Item",
-        "operationId": "create_store_item_store_items__post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/StoreItemCreate"
-              }
-            }
-          },
-          "required": true
-        },
+        "summary": "Get Store Items Calculation",
+        "operationId": "get_store_items_calculation_store_items_calculation__get",
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/StoreItemOut"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "items": {
+                    "$ref": "#/components/schemas/CalculationStoreItemOut"
+                  },
+                  "type": "array",
+                  "title": "Response Get Store Items Calculation Store Items Calculation  Get"
                 }
               }
             }
@@ -2093,7 +2583,7 @@
         ]
       }
     },
-    "/store_items/{store_item_id}/": {
+    "/store-items/{store_item_id}/": {
       "get": {
         "tags": [
           "store_items"
@@ -2197,6 +2687,98 @@
         }
       }
     },
+    "/store-items/add/": {
+      "post": {
+        "tags": [
+          "store_items"
+        ],
+        "summary": "Add Store Item",
+        "operationId": "add_store_item_store_items_add__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StoreItemCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreItemOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/store-items/remove/": {
+      "post": {
+        "tags": [
+          "store_items"
+        ],
+        "summary": "Remove Store Item",
+        "operationId": "remove_store_item_store_items_remove__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StoreItemCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreItemOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "/suppliers/": {
       "get": {
         "tags": [
@@ -2259,6 +2841,36 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/suppliers/deactivated/": {
+      "get": {
+        "tags": [
+          "suppliers"
+        ],
+        "summary": "Get Deactivated Suppliers",
+        "operationId": "get_deactivated_suppliers_suppliers_deactivated__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SupplierOut"
+                  },
+                  "type": "array",
+                  "title": "Response Get Deactivated Suppliers Suppliers Deactivated  Get"
                 }
               }
             }
@@ -2351,6 +2963,100 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SupplierOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "suppliers"
+        ],
+        "summary": "Deactivate Supplier",
+        "operationId": "deactivate_supplier_suppliers__supplier_id___delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "supplier_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Supplier Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SupplierOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/suppliers/activate/{supplier_id}/": {
+      "post": {
+        "tags": [
+          "suppliers"
+        ],
+        "summary": "Activate Supplier",
+        "operationId": "activate_supplier_suppliers_activate__supplier_id___post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "supplier_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Supplier Id"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -2777,6 +3483,44 @@
   },
   "components": {
     "schemas": {
+      "Body_upload_image_files_upload_image__post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_upload_image_files_upload_image__post"
+      },
+      "CalculationStoreItemOut": {
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Item Id"
+          },
+          "amount": {
+            "type": "string",
+            "title": "Amount"
+          },
+          "item_name": {
+            "type": "string",
+            "title": "Item Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "item_id",
+          "amount",
+          "item_name"
+        ],
+        "title": "CalculationStoreItemOut"
+      },
       "CategoryCreate": {
         "properties": {
           "name": {
@@ -3061,24 +3805,18 @@
       "EmployeeUpdate": {
         "properties": {
           "name": {
-            "title": "Name",
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string",
+            "title": "Name"
           },
           "position": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/EmployeePosition"
-              },
-              {
-                "type": "null"
-              }
-            ]
+            "$ref": "#/components/schemas/EmployeePosition"
           }
         },
         "type": "object",
+        "required": [
+          "name",
+          "position"
+        ],
         "title": "EmployeeUpdate"
       },
       "HTTPValidationError": {
@@ -3094,6 +3832,19 @@
         "type": "object",
         "title": "HTTPValidationError"
       },
+      "ImageDelete": {
+        "properties": {
+          "image_url": {
+            "type": "string",
+            "title": "Image Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image_url"
+        ],
+        "title": "ImageDelete"
+      },
       "ItemCreate": {
         "properties": {
           "name": {
@@ -3101,8 +3852,7 @@
             "title": "Name"
           },
           "measurement": {
-            "type": "string",
-            "title": "Measurement"
+            "$ref": "#/components/schemas/ItemMeasurements"
           }
         },
         "type": "object",
@@ -3112,6 +3862,17 @@
         ],
         "title": "ItemCreate"
       },
+      "ItemMeasurements": {
+        "type": "string",
+        "enum": [
+          "kg",
+          "g",
+          "l",
+          "ml",
+          "pcs"
+        ],
+        "title": "ItemMeasurements"
+      },
       "ItemOut": {
         "properties": {
           "name": {
@@ -3119,8 +3880,7 @@
             "title": "Name"
           },
           "measurement": {
-            "type": "string",
-            "title": "Measurement"
+            "$ref": "#/components/schemas/ItemMeasurements"
           },
           "id": {
             "type": "string",
@@ -3148,8 +3908,7 @@
             "title": "Name"
           },
           "measurement": {
-            "type": "string",
-            "title": "Measurement"
+            "$ref": "#/components/schemas/ItemMeasurements"
           }
         },
         "type": "object",
@@ -3184,9 +3943,11 @@
             "title": "Discount"
           },
           "date": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Date"
+            "title": "Date",
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "payment_method": {
             "$ref": "#/components/schemas/OrderPaymentMethod"
@@ -3209,6 +3970,21 @@
               "null"
             ]
           },
+          "order_number": {
+            "title": "Order Number",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "debit": {
+            "title": "Debit",
+            "default": false,
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
           "products": {
             "items": {
               "$ref": "#/components/schemas/ProductOrderCreate"
@@ -3221,7 +3997,6 @@
         "required": [
           "price",
           "discount",
-          "date",
           "payment_method",
           "type",
           "status",
@@ -3241,9 +4016,11 @@
             "title": "Discount"
           },
           "date": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Date"
+            "title": "Date",
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "payment_method": {
             "$ref": "#/components/schemas/OrderPaymentMethod"
@@ -3271,9 +4048,9 @@
             "format": "uuid",
             "title": "Id"
           },
-          "active": {
+          "debit": {
             "type": "boolean",
-            "title": "Active"
+            "title": "Debit"
           },
           "order_number": {
             "type": "integer",
@@ -3284,13 +4061,12 @@
         "required": [
           "price",
           "discount",
-          "date",
           "payment_method",
           "type",
           "status",
           "shift_id",
           "id",
-          "active",
+          "debit",
           "order_number"
         ],
         "title": "OrderOut"
@@ -3308,8 +4084,7 @@
         "enum": [
           "waiting",
           "completed",
-          "cancelled",
-          "returned"
+          "cancelled"
         ],
         "title": "OrderStatus"
       },
@@ -3587,18 +4362,13 @@
       "ProductUpdate": {
         "properties": {
           "name": {
-            "title": "Name",
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string",
+            "title": "Name"
           },
           "category_id": {
-            "title": "Category Id",
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string",
+            "format": "uuid",
+            "title": "Category Id"
           },
           "price": {
             "anyOf": [
@@ -3607,19 +4377,13 @@
               },
               {
                 "type": "string"
-              },
-              {
-                "type": "null"
               }
             ],
             "title": "Price"
           },
           "online_shop": {
-            "title": "Online Shop",
-            "type": [
-              "boolean",
-              "null"
-            ]
+            "type": "boolean",
+            "title": "Online Shop"
           },
           "image_url": {
             "title": "Image Url",
@@ -3630,6 +4394,12 @@
           }
         },
         "type": "object",
+        "required": [
+          "name",
+          "category_id",
+          "price",
+          "online_shop"
+        ],
         "title": "ProductUpdate"
       },
       "RecipeItemCreate": {
@@ -3727,7 +4497,7 @@
         ],
         "title": "RecipeItemUpdate"
       },
-      "ShiftOrderOut": {
+      "ReportingPeriodOut": {
         "properties": {
           "id": {
             "type": "string",
@@ -3737,6 +4507,52 @@
           "active": {
             "type": "boolean",
             "title": "Active"
+          },
+          "start_time": {
+            "title": "Start Time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "end_time": {
+            "title": "End Time",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "active"
+        ],
+        "title": "ReportingPeriodOut"
+      },
+      "ShiftIncomeOut": {
+        "properties": {
+          "income": {
+            "type": "string",
+            "title": "Income"
+          }
+        },
+        "type": "object",
+        "required": [
+          "income"
+        ],
+        "title": "ShiftIncomeOut"
+      },
+      "ShiftOrderOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "debit": {
+            "type": "boolean",
+            "title": "Debit"
           },
           "price": {
             "type": "string",
@@ -3782,7 +4598,7 @@
         "type": "object",
         "required": [
           "id",
-          "active",
+          "debit",
           "price",
           "discount",
           "date",
@@ -3834,11 +4650,6 @@
             "format": "uuid",
             "title": "Item Id"
           },
-          "supply_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Supply Id"
-          },
           "amount": {
             "anyOf": [
               {
@@ -3857,17 +4668,25 @@
               },
               {
                 "type": "string"
+              },
+              {
+                "type": "null"
               }
             ],
             "title": "Price Per Item"
+          },
+          "supply_id": {
+            "title": "Supply Id",
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "type": "object",
         "required": [
           "item_id",
-          "supply_id",
-          "amount",
-          "price_per_item"
+          "amount"
         ],
         "title": "StoreItemCreate"
       },
@@ -3878,32 +4697,66 @@
             "format": "uuid",
             "title": "Item Id"
           },
-          "supply_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Supply Id"
-          },
           "amount": {
             "type": "string",
             "title": "Amount"
           },
           "price_per_item": {
-            "type": "string",
-            "title": "Price Per Item"
+            "title": "Price Per Item",
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "id": {
             "type": "string",
             "format": "uuid",
             "title": "Id"
+          },
+          "item_name": {
+            "title": "Item Name",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "shift_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Shift Id"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Date"
+          },
+          "debit": {
+            "type": "boolean",
+            "title": "Debit"
+          },
+          "supply_id": {
+            "title": "Supply Id",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "supplier": {
+            "title": "Supplier",
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "type": "object",
         "required": [
           "item_id",
-          "supply_id",
           "amount",
-          "price_per_item",
-          "id"
+          "id",
+          "shift_id",
+          "date",
+          "debit"
         ],
         "title": "StoreItemOut"
       },
@@ -3914,11 +4767,6 @@
             "format": "uuid",
             "title": "Item Id"
           },
-          "supply_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Supply Id"
-          },
           "amount": {
             "anyOf": [
               {
@@ -3937,17 +4785,25 @@
               },
               {
                 "type": "string"
+              },
+              {
+                "type": "null"
               }
             ],
             "title": "Price Per Item"
+          },
+          "supply_id": {
+            "title": "Supply Id",
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "type": "object",
         "required": [
           "item_id",
-          "supply_id",
-          "amount",
-          "price_per_item"
+          "amount"
         ],
         "title": "StoreItemUpdate"
       },
@@ -4009,15 +4865,16 @@
             "title": "Date"
           },
           "supplier_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Supplier Id"
+            "title": "Supplier Id",
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "type": "object",
         "required": [
-          "date",
-          "supplier_id"
+          "date"
         ],
         "title": "SupplyCreate"
       },
@@ -4029,9 +4886,11 @@
             "title": "Date"
           },
           "supplier_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Supplier Id"
+            "title": "Supplier Id",
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "id": {
             "type": "string",
@@ -4046,7 +4905,6 @@
         "type": "object",
         "required": [
           "date",
-          "supplier_id",
           "id",
           "active"
         ],
@@ -4060,15 +4918,16 @@
             "title": "Date"
           },
           "supplier_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Supplier Id"
+            "title": "Supplier Id",
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "type": "object",
         "required": [
-          "date",
-          "supplier_id"
+          "date"
         ],
         "title": "SupplyUpdate"
       },

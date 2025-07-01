@@ -8,7 +8,7 @@ from app.core.configs import settings
 
 
 GCS_BUCKET_NAME = "coffee_point_storage"
-GCS_CLIENT = storage.Client.from_service_account_info(settings.google_account.model_dump())
+# GCS_CLIENT = storage.Client.from_service_account_info(settings.google_account.model_dump())
 
 async def get_image_urls():
     logging.info(f"call method get_image_urls")

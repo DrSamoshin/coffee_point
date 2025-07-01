@@ -9,7 +9,7 @@ class OrderPaymentMethod(str, Enum):
 class OrderType(str, Enum):
     dine_in = "dine_in"
     delivery = "delivery"
-    takeout = "takeout"
+    takeaway = "takeaway"
 
 class OrderStatus(str, Enum):
     waiting = "waiting"

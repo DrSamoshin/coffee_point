@@ -13,26 +13,22 @@ from app.schemas.product_order import ProductOrderCreate, ProductOrderUpdate
 class OrderBase(BaseModel):
     price: Decimal
     discount:Decimal
-    date: Union[datetime, None] = None
     payment_method: OrderPaymentMethod
     type: OrderType
     status: OrderStatus
-    shift_id: UUID
     client_id: Optional[UUID] = None
 
 class OrderCreate(OrderBase):
-    order_number: Optional[int] = None
-    debit: Optional[bool] = False
+    debit: bool
     products: list[ProductOrderCreate]
 
 class OrderUpdate(BaseModel):
-    price: Optional[Decimal] = None
-    discount:Optional[Decimal] = None
-    date: Optional[datetime] = None
-    payment_method: Optional[OrderPaymentMethod] = None
-    type: Optional[OrderType] = None
+    price: Decimal
+    discount: Decimal
+    payment_method: OrderPaymentMethod
+    type: OrderType
     client_id: Optional[UUID] = None
-    products: Optional[list[ProductOrderUpdate]] = None
+    products: list[ProductOrderUpdate]
 
 class OrderStatusUpdate(BaseModel):
     status: OrderStatus
@@ -40,6 +36,7 @@ class OrderStatusUpdate(BaseModel):
 class OrderOut(OrderBase):
     id: UUID
     debit: bool
+    date: datetime
     order_number: int
 
     model_config = ConfigDict(
