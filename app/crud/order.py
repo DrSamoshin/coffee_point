@@ -18,10 +18,10 @@ def create_order_with_products(db: Session, order: OrderCreate):
     try:
         with db.begin():
             db_shift = db.query(Shift).filter(Shift.active == True).first()
+            print(db_shift.id)
             last_order_number = db.query(func.max(Order.order_number)).filter(Order.shift_id == db_shift.id).scalar()
             order_number = (last_order_number or 0) + 1
 
-            db_shift = db.query(Shift).order_by(Shift.active == True).first()
             db_order = Order(price=order.price,
                              discount=order.discount,
                              date=datetime.now(timezone.utc),
@@ -86,6 +86,7 @@ def get_shift_orders(db: Session, skip: int = 0, limit: int = 10):
     logging.info(f"call method get_shift_orders")
     try:
         db_shift = db.query(Shift).filter(Shift.active == True).first()
+        print(db_shift.id)
         orders = (db.query(Order)
                   .filter(Order.shift_id == db_shift.id)
                   .options(joinedload(Order.product_orders).joinedload(ProductOrder.product))
@@ -126,6 +127,7 @@ def get_waiting_shift_orders(db: Session, skip: int = 0, limit: int = 10):
     logging.info(f"call method get_waiting_shift_orders")
     try:
         db_shift = db.query(Shift).filter(Shift.active == True).first()
+        print(db_shift.id)
         orders = (db.query(Order)
                   .filter(Order.shift_id == db_shift.id, Order.status == OrderStatus.waiting)
                   .options(joinedload(Order.product_orders).joinedload(ProductOrder.product))
