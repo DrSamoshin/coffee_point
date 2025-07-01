@@ -3777,11 +3777,13 @@
         "properties": {
           "last_employee_shift": {
             "type": "boolean",
-            "title": "Last Employee Shift",
-            "default": false
+            "title": "Last Employee Shift"
           }
         },
         "type": "object",
+        "required": [
+          "last_employee_shift"
+        ],
         "title": "EmployeeShiftUpdate"
       },
       "EmployeeShiftWithEmployeeOut": {
@@ -3942,13 +3944,6 @@
             ],
             "title": "Discount"
           },
-          "date": {
-            "title": "Date",
-            "type": [
-              "string",
-              "null"
-            ]
-          },
           "payment_method": {
             "$ref": "#/components/schemas/OrderPaymentMethod"
           },
@@ -3958,11 +3953,6 @@
           "status": {
             "$ref": "#/components/schemas/OrderStatus"
           },
-          "shift_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Shift Id"
-          },
           "client_id": {
             "title": "Client Id",
             "type": [
@@ -3970,20 +3960,9 @@
               "null"
             ]
           },
-          "order_number": {
-            "title": "Order Number",
-            "type": [
-              "integer",
-              "null"
-            ]
-          },
           "debit": {
-            "title": "Debit",
-            "default": false,
-            "type": [
-              "boolean",
-              "null"
-            ]
+            "type": "boolean",
+            "title": "Debit"
           },
           "products": {
             "items": {
@@ -4000,7 +3979,7 @@
           "payment_method",
           "type",
           "status",
-          "shift_id",
+          "debit",
           "products"
         ],
         "title": "OrderCreate"
@@ -4015,13 +3994,6 @@
             "type": "string",
             "title": "Discount"
           },
-          "date": {
-            "title": "Date",
-            "type": [
-              "string",
-              "null"
-            ]
-          },
           "payment_method": {
             "$ref": "#/components/schemas/OrderPaymentMethod"
           },
@@ -4030,11 +4002,6 @@
           },
           "status": {
             "$ref": "#/components/schemas/OrderStatus"
-          },
-          "shift_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Shift Id"
           },
           "client_id": {
             "title": "Client Id",
@@ -4052,6 +4019,11 @@
             "type": "boolean",
             "title": "Debit"
           },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Date"
+          },
           "order_number": {
             "type": "integer",
             "title": "Order Number"
@@ -4064,9 +4036,9 @@
           "payment_method",
           "type",
           "status",
-          "shift_id",
           "id",
           "debit",
+          "date",
           "order_number"
         ],
         "title": "OrderOut"
@@ -4105,7 +4077,7 @@
         "enum": [
           "dine_in",
           "delivery",
-          "takeout"
+          "takeaway"
         ],
         "title": "OrderType"
       },
@@ -4118,9 +4090,6 @@
               },
               {
                 "type": "string"
-              },
-              {
-                "type": "null"
               }
             ],
             "title": "Price"
@@ -4132,39 +4101,15 @@
               },
               {
                 "type": "string"
-              },
-              {
-                "type": "null"
               }
             ],
             "title": "Discount"
           },
-          "date": {
-            "title": "Date",
-            "type": [
-              "string",
-              "null"
-            ]
-          },
           "payment_method": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/OrderPaymentMethod"
-              },
-              {
-                "type": "null"
-              }
-            ]
+            "$ref": "#/components/schemas/OrderPaymentMethod"
           },
           "type": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/OrderType"
-              },
-              {
-                "type": "null"
-              }
-            ]
+            "$ref": "#/components/schemas/OrderType"
           },
           "client_id": {
             "title": "Client Id",
@@ -4174,14 +4119,21 @@
             ]
           },
           "products": {
-            "title": "Products",
-            "type": [
-              "array",
-              "null"
-            ]
+            "items": {
+              "$ref": "#/components/schemas/ProductOrderUpdate"
+            },
+            "type": "array",
+            "title": "Products"
           }
         },
         "type": "object",
+        "required": [
+          "price",
+          "discount",
+          "payment_method",
+          "type",
+          "products"
+        ],
         "title": "OrderUpdate"
       },
       "ProductCreate": {

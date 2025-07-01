@@ -83,11 +83,12 @@ def get_order(db: Session, order_id: UUID):
         return order_data
 
 @db_safe
-def get_shift_orders(db: Session, shift_id: UUID, skip: int = 0, limit: int = 10):
+def get_shift_orders(db: Session, skip: int = 0, limit: int = 10):
     logging.info(f"call method get_shift_orders")
     try:
+        db_shift = db.query(Shift).order_by(Shift.active == True).first()
         orders = (db.query(Order)
-                  .filter(Order.shift_id == shift_id)
+                  .filter(Order.shift_id == db_shift.id)
                   .options(joinedload(Order.product_orders).joinedload(ProductOrder.product))
                   .order_by(desc(Order.date))
                   .offset(skip)
@@ -122,11 +123,12 @@ def get_shift_orders(db: Session, shift_id: UUID, skip: int = 0, limit: int = 10
         return shift_orders
 
 @db_safe
-def get_waiting_shift_orders(db: Session, shift_id: UUID, skip: int = 0, limit: int = 10):
+def get_waiting_shift_orders(db: Session, skip: int = 0, limit: int = 10):
     logging.info(f"call method get_waiting_shift_orders")
     try:
+        db_shift = db.query(Shift).order_by(Shift.active == True).first()
         orders = (db.query(Order)
-                  .filter(Order.shift_id == shift_id, Order.status == OrderStatus.waiting)
+                  .filter(Order.shift_id == db_shift.id, Order.status == OrderStatus.waiting)
                   .options(joinedload(Order.product_orders).joinedload(ProductOrder.product))
                   .order_by(desc(Order.date))
                   .offset(skip)

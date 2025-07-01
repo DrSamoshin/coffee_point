@@ -9,14 +9,14 @@ from app.services.authentication import get_user_id_from_token
 
 router = APIRouter(prefix='/orders', tags=['orders'])
 
-@router.get("/shift-orders/{shift_id}/", response_model=list[ShiftOrderOut])
-async def get_shift_orders(shift_id: UUID, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    db_orders = crud_order.get_shift_orders(db, shift_id, skip, limit)
+@router.get("/shift-orders/", response_model=list[ShiftOrderOut])
+async def get_shift_orders(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    db_orders = crud_order.get_shift_orders(db, skip, limit)
     return db_orders
 
-@router.get("/waiting-shift-orders/{shift_id}/", response_model=list[ShiftOrderOut])
-async def get_shift_orders(shift_id: UUID, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    db_orders = crud_order.get_waiting_shift_orders(db, shift_id, skip, limit)
+@router.get("/waiting-shift-orders/", response_model=list[ShiftOrderOut])
+async def get_shift_orders(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    db_orders = crud_order.get_waiting_shift_orders(db, skip, limit)
     return db_orders
 
 @router.get("/{order_id}/", response_model=ShiftOrderOut)
