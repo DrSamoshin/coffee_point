@@ -3,17 +3,22 @@ import io
 import uuid
 from fastapi import UploadFile
 from google.cloud import storage
+from google.cloud.client import Client
 from PIL import Image
 from app.core.configs import settings
 
 
 GCS_BUCKET_NAME = "coffee_point_storage"
-GCS_CLIENT = storage.Client.from_service_account_info(settings.google_account.model_dump())
+
+def get_google_client() -> Client:
+    client = storage.Client.from_service_account_info(settings.google_account.model_dump())
+    return client
+
 
 async def get_image_urls():
     logging.info(f"call method get_image_urls")
     try:
-        bucket = GCS_CLIENT.bucket(GCS_BUCKET_NAME)
+        bucket = get_google_client().bucket(GCS_BUCKET_NAME)
         blobs = bucket.list_blobs()
         urls = []
         for blob in blobs:
@@ -38,7 +43,7 @@ async def upload_image(file: UploadFile):
 
         filename = f"{uuid.uuid4()}.jpg"
 
-        bucket = GCS_CLIENT.bucket(GCS_BUCKET_NAME)
+        bucket = get_google_client().bucket(GCS_BUCKET_NAME)
         blob = bucket.blob(filename)
         blob.upload_from_file(buffer, content_type="image/jpeg")
         url = blob.public_url
