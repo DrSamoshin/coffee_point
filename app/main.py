@@ -33,6 +33,15 @@ main_app = FastAPI(
     openapi_version=settings.app_data.openapi_version,
 )
 
+# Set up CORS middleware
+# main_app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=settings.ALLOWED_HOSTS,
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
+
 def custom_openapi():
     if main_app.openapi_schema:
         return main_app.openapi_schema

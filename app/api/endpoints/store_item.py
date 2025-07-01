@@ -7,7 +7,7 @@ from app.schemas.store_item import StoreItemCreate, StoreItemOut, StoreItemUpdat
 from app.crud import store_item as crud_store_item
 from app.services.authentication import get_user_id_from_token
 
-router = APIRouter(prefix='/store_items', tags=['store_items'])
+router = APIRouter(prefix='/store-items', tags=['store_items'])
 
 @router.get("/", response_model=list[StoreItemOut])
 async def get_store_items(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):

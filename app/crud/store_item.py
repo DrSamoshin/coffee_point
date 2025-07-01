@@ -6,7 +6,7 @@ from sqlalchemy import desc
 from sqlalchemy.orm import joinedload
 from decimal import Decimal
 
-from app.db.models import StoreItem, ReportingPeriod, Supply, Supplier
+from app.db.models import StoreItem, ReportingPeriod, Supply, Supplier, Shift
 from app.db.session import db_safe
 from app.schemas.store_item import StoreItemCreate, StoreItemUpdate, StoreItemOut, CalculationStoreItemOut
 
@@ -40,9 +40,9 @@ def get_store_item(db: Session, store_item_id: UUID):
 def get_store_items(db: Session):
     logging.info(f"call method get_store_items")
     try:
-        db_reporting_period = db.query(ReportingPeriod).filter(ReportingPeriod.active == True).first()
+        db_shift = db.query(Shift).order_by(desc(Shift.start_time)).first()
         store_items = []
-        db_store_items = db.query(StoreItem).filter(StoreItem.reporting_period_id == db_reporting_period.id).order_by(desc(StoreItem.date)).all()
+        db_store_items = db.query(StoreItem).filter(StoreItem.shift_id == db_shift.id).order_by(desc(StoreItem.date)).all()
         for db_store_item in db_store_items:
             supplier = None
             if db_store_item.supply and db_store_item.supply.supplier:
@@ -52,7 +52,7 @@ def get_store_items(db: Session):
                                       item_name=db_store_item.item.name,
                                       amount=db_store_item.amount,
                                       price_per_item=db_store_item.price_per_item,
-                                      reporting_period_id=db_store_item.reporting_period_id,
+                                      shift_id=db_store_item.shift_id,
                                       date=db_store_item.date,
                                       debit=db_store_item.debit,
                                       supply_id=db_store_item.supply_id,
@@ -91,14 +91,14 @@ def get_store_items_calculation(db: Session):
 def add_store_item(db: Session, store_item: StoreItemCreate):
     logging.info(f"call method create_store_item")
     try:
-        db_reporting_period = db.query(ReportingPeriod).filter(ReportingPeriod.active == True).first()
+        db_shift = db.query(Shift).order_by(desc(Shift.start_time)).first()
         db_store_item = StoreItem(item_id=store_item.item_id,
                                   amount=store_item.amount,
                                   price_per_item=store_item.price_per_item,
                                   date=datetime.now(timezone.utc),
                                   debit=False,
                                   supply_id=store_item.supply_id,
-                                  reporting_period_id=db_reporting_period.id)
+                                  shift_id=db_shift.id)
         db.add(db_store_item)
         db.commit()
         db.refresh(db_store_item)
@@ -112,14 +112,14 @@ def add_store_item(db: Session, store_item: StoreItemCreate):
 def remove_store_item(db: Session, store_item: StoreItemCreate):
     logging.info(f"call method remove_store_item")
     try:
-        db_reporting_period = db.query(ReportingPeriod).filter(ReportingPeriod.active == True).first()
+        db_shift = db.query(Shift).order_by(desc(Shift.start_time)).first()
         db_store_item = StoreItem(item_id=store_item.item_id,
                                   amount=store_item.amount,
                                   price_per_item=store_item.price_per_item,
                                   date=datetime.now(timezone.utc),
                                   debit=True,
                                   supply_id=store_item.supply_id,
-                                  reporting_period_id=db_reporting_period.id)
+                                  shift_id=db_shift.id)
         db.add(db_store_item)
         db.commit()
         db.refresh(db_store_item)

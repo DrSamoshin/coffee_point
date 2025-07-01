@@ -7,7 +7,7 @@ from app.schemas.product_order import ProductOrderCreate, ProductOrderOut, Produ
 from app.crud import product_order as crud_product_order
 from app.services.authentication import get_user_id_from_token
 
-router = APIRouter(prefix='/product_orders', tags=['product_orders'])
+router = APIRouter(prefix='/product-orders', tags=['product_orders'])
 
 @router.get("/", response_model=list[ProductOrderOut])
 async def read_product_orders(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):

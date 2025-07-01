@@ -7,7 +7,7 @@ from app.schemas.employee_shift import (EmployeeShiftCreate, EmployeeShiftOut, E
 from app.crud import employee_shift as crud_employee_shift
 from app.services.authentication import get_user_id_from_token
 
-router = APIRouter(prefix='/employee_shifts', tags=['employee_shifts'])
+router = APIRouter(prefix='/employee-shifts', tags=['employee_shifts'])
 
 @router.get("/", response_model=list[EmployeeShiftOut])
 async def get_employee_shifts(db: Session = Depends(get_db), user_id: str = Depends(get_user_id_from_token)):

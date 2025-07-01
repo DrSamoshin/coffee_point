@@ -24,7 +24,7 @@ class CalculationStoreItemOut(BaseModel):
 class StoreItemOut(StoreItemBase):
     id: UUID
     item_name: Optional[str] = None
-    reporting_period_id: UUID
+    shift_id: UUID
     date: datetime
     debit: bool
     supply_id: Optional[UUID] = None

@@ -1,5 +1,6 @@
 import logging
 import uvicorn
+from dotenv import load_dotenv
 from alembic import command
 from alembic.config import Config
 from app.core.configs import settings
@@ -16,6 +17,7 @@ def run_alembic_upgrade():
         logging.warning(error)
 
 def run():
+    load_dotenv()
     check_db_availability()
     logging.info("check DB")
     try:

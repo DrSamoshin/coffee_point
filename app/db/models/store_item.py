@@ -13,11 +13,11 @@ class StoreItem(Base):
     date = Column(DateTime, nullable=False)
     debit = Column(Boolean, default=False)
     supply_id = Column(UUID(as_uuid=True), ForeignKey("supplies.id"), nullable=True)
-    reporting_period_id = Column(UUID(as_uuid=True), ForeignKey("reporting_periods.id"), nullable=False)
+    shift_id = Column(UUID(as_uuid=True), ForeignKey("shifts.id"), nullable=False)
 
     item = relationship("Item", backref="store_items", lazy="joined")
     supply = relationship("Supply", backref="store_items", lazy="joined")
-    reporting_period = relationship("ReportingPeriod", backref="store_items", lazy="joined")
+    shift = relationship("Shift", backref="store_items", lazy="joined")
 
     def __repr__(self):
         return (f"id={self.id} item_id={self.item_id} supply_id={self.supply_id} amount={self.amount}"

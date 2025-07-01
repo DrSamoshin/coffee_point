@@ -1,8 +1,8 @@
-"""init
+"""shifts
 
-Revision ID: aa962166605c
+Revision ID: 1c32a73a81d8
 Revises: 
-Create Date: 2025-06-23 19:30:10.152888
+Create Date: 2025-07-01 19:05:26.449227
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'aa962166605c'
+revision: str = '1c32a73a81d8'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -55,7 +55,7 @@ def upgrade() -> None:
     op.create_table('items',
     sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
-    sa.Column('measurement', sa.String(), nullable=False),
+    sa.Column('measurement', sa.Enum('kilogram', 'gram', 'liter', 'milliliter', 'piece', name='itemmeasurements'), nullable=False),
     sa.Column('lower_limit', sa.Integer(), nullable=True),
     sa.Column('active', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
@@ -64,7 +64,7 @@ def upgrade() -> None:
     op.create_index(op.f('ix_items_id'), 'items', ['id'], unique=False)
     op.create_table('reporting_periods',
     sa.Column('id', sa.UUID(), nullable=False),
-    sa.Column('start_time', sa.DateTime(), nullable=True),
+    sa.Column('start_time', sa.DateTime(), nullable=False),
     sa.Column('end_time', sa.DateTime(), nullable=True),
     sa.Column('active', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id')
@@ -171,9 +171,9 @@ def upgrade() -> None:
     sa.Column('date', sa.DateTime(), nullable=False),
     sa.Column('debit', sa.Boolean(), nullable=True),
     sa.Column('supply_id', sa.UUID(), nullable=True),
-    sa.Column('reporting_period_id', sa.UUID(), nullable=False),
+    sa.Column('shift_id', sa.UUID(), nullable=False),
     sa.ForeignKeyConstraint(['item_id'], ['items.id'], ),
-    sa.ForeignKeyConstraint(['reporting_period_id'], ['reporting_periods.id'], ),
+    sa.ForeignKeyConstraint(['shift_id'], ['shifts.id'], ),
     sa.ForeignKeyConstraint(['supply_id'], ['supplies.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
