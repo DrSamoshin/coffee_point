@@ -17,11 +17,10 @@ def create_order_with_products(db: Session, order: OrderCreate):
     logging.info(f"call method create_order_with_products")
     try:
         with db.begin():
-            if order.order_number and order.debit:
-                order_number = order.order_number
-            else:
-                last_order_number = db.query(func.max(Order.order_number)).filter(Order.shift_id == order.shift_id).scalar()
-                order_number = (last_order_number or 0) + 1
+            db_shift = db.query(Shift).order_by(Shift.active == True).first()
+            last_order_number = db.query(func.max(Order.order_number)).filter(Order.shift_id == db_shift.id).scalar()
+            order_number = (last_order_number or 0) + 1
+
             db_shift = db.query(Shift).order_by(Shift.active == True).first()
             db_order = Order(price=order.price,
                              discount=order.discount,

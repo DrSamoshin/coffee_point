@@ -1458,24 +1458,14 @@
         }
       }
     },
-    "/orders/shift-orders/{shift_id}/": {
+    "/orders/shift-orders/": {
       "get": {
         "tags": [
           "orders"
         ],
         "summary": "Get Shift Orders",
-        "operationId": "get_shift_orders_orders_shift_orders__shift_id___get",
+        "operationId": "get_shift_orders_orders_shift_orders__get",
         "parameters": [
-          {
-            "name": "shift_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "title": "Shift Id"
-            }
-          },
           {
             "name": "skip",
             "in": "query",
@@ -1507,7 +1497,7 @@
                   "items": {
                     "$ref": "#/components/schemas/ShiftOrderOut"
                   },
-                  "title": "Response Get Shift Orders Orders Shift Orders  Shift Id   Get"
+                  "title": "Response Get Shift Orders Orders Shift Orders  Get"
                 }
               }
             }
@@ -1525,24 +1515,14 @@
         }
       }
     },
-    "/orders/waiting-shift-orders/{shift_id}/": {
+    "/orders/waiting-shift-orders/": {
       "get": {
         "tags": [
           "orders"
         ],
         "summary": "Get Shift Orders",
-        "operationId": "get_shift_orders_orders_waiting_shift_orders__shift_id___get",
+        "operationId": "get_shift_orders_orders_waiting_shift_orders__get",
         "parameters": [
-          {
-            "name": "shift_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "title": "Shift Id"
-            }
-          },
           {
             "name": "skip",
             "in": "query",
@@ -1574,7 +1554,7 @@
                   "items": {
                     "$ref": "#/components/schemas/ShiftOrderOut"
                   },
-                  "title": "Response Get Shift Orders Orders Waiting Shift Orders  Shift Id   Get"
+                  "title": "Response Get Shift Orders Orders Waiting Shift Orders  Get"
                 }
               }
             }
