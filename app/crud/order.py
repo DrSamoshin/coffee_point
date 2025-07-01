@@ -85,7 +85,7 @@ def get_order(db: Session, order_id: UUID):
 def get_shift_orders(db: Session, skip: int = 0, limit: int = 10):
     logging.info(f"call method get_shift_orders")
     try:
-        db_shift = db.query(Shift).order_by(Shift.active == True).first()
+        db_shift = db.query(Shift).filter(Shift.active == True).first()
         orders = (db.query(Order)
                   .filter(Order.shift_id == db_shift.id)
                   .options(joinedload(Order.product_orders).joinedload(ProductOrder.product))
@@ -125,7 +125,7 @@ def get_shift_orders(db: Session, skip: int = 0, limit: int = 10):
 def get_waiting_shift_orders(db: Session, skip: int = 0, limit: int = 10):
     logging.info(f"call method get_waiting_shift_orders")
     try:
-        db_shift = db.query(Shift).order_by(Shift.active == True).first()
+        db_shift = db.query(Shift).filter(Shift.active == True).first()
         orders = (db.query(Order)
                   .filter(Order.shift_id == db_shift.id, Order.status == OrderStatus.waiting)
                   .options(joinedload(Order.product_orders).joinedload(ProductOrder.product))
