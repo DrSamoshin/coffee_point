@@ -35,3 +35,4 @@ jobs:
             INSTANCE_CONNECTION_NAME=${{ secrets.INSTANCE_CONNECTION_NAME }}
             DB_USER=${{ secrets.DB_USER }}
             DB_PASS=${{ secrets.DB_PASS }}
+            SA_KEY=${{ secrets.SA_KEY }}

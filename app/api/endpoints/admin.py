@@ -41,8 +41,3 @@ def migrate_point_db(db_name: str, user_id: UUID = Depends(get_user_id_from_toke
         return response("db is migrated", 200, "success")
     except subprocess.CalledProcessError as e:
         return response("db is not migrated", 500, "error")
-
-
-@router.post("/")
-def check(db: Session = Depends(get_users_db)):
-    return response("check", 200, "success")
