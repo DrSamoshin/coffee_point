@@ -1,9 +1,9 @@
 from pydantic import BaseModel
-from typing import Optional
 from uuid import UUID
 
 class UserBase(BaseModel):
-    name: Optional[str] = None
+    name: str
+    db_name: str
 
 class UserCreate(UserBase):
     pass

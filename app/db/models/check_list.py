@@ -1,7 +1,7 @@
 import uuid
 from sqlalchemy import Column, String, UUID
 from sqlalchemy import Enum as SQLAlchemyEnum
-from app.db.models.base_class import Base
+from app.db.base_classes import Base
 from app.core.consts import CheckListTimePoint
 
 class CheckList(Base):

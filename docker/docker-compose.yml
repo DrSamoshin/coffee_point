@@ -1,49 +1,54 @@
 services:
-#  web:
-#    build:
-#      # Переходим на уровень выше, чтобы Docker "видел" все файлы (pyproject.toml, poetry.lock)
-#      # Если у вас структура другая – корректируйте пути.
-#      context: ..
-#      dockerfile: docker/Dockerfile
-#    container_name: fastapi_app
-#    ports:
-#      - "8080:8080"
-#    environment:
-#      # Здесь можно пробросить переменные окружения для приложения
-#      USE_CLOUD_SQL_PROXY: false
-#      ADMIN_MODE: true
-#      DB_HOST: db
-#      DB_PORT: 5432
-#      DB_USER: myuser
-#      DB_PASS: mypassword
-#      DB_NAME: mydb
-#    depends_on:
-#      - db
+  web:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: coffee_point_crm_backend
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      USE_CLOUD_SQL_PROXY: false
+      ADMIN_MODE: true
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      PRIVATE_KEY_ID: ${PRIVATE_KEY_ID}
+      PRIVATE_KEY: ${PRIVATE_KEY}
+    depends_on:
+      - db
 
   db:
     image: postgres:15
     container_name: postgres_db
     restart: always
     environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
     ports:
       - "5432:5432"
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d
 
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin
+    restart: always
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_EMAIL: admin@local.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
       - "5050:80"
     depends_on:
       - db
-    restart: always
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
 
 volumes:
-  db-data:
+  postgres_data:
+  pgadmin_data:

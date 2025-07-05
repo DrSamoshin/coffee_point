@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 
 from app.db.models import Order
-from app.db.session import db_safe
+from app.db.db_sessions import db_safe
 from app.core.consts import OrderStatus
 
 

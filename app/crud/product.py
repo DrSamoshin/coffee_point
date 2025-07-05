@@ -3,7 +3,7 @@ from uuid import UUID
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 from app.db.models import Product
-from app.db.session import db_safe
+from app.db.db_sessions import db_safe
 from app.schemas.product import ProductCreate, ProductUpdate
 
 

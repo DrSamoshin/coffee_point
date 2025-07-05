@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from app.core.consts import CHECK_LIST_DIVIDER
 from app.db.models import CheckList
 from app.core.consts import CheckListTimePoint
-from app.db.session import db_safe
+from app.db.db_sessions import db_safe
 from app.schemas.check_list import CheckListUpdate
 
 

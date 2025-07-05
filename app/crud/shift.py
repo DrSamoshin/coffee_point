@@ -4,7 +4,7 @@ from uuid import UUID
 
 from sqlalchemy.orm import Session
 from app.db.models import Shift
-from app.db.session import db_safe
+from app.db.db_sessions import db_safe
 
 
 @db_safe

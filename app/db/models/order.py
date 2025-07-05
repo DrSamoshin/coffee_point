@@ -2,7 +2,7 @@ import uuid
 from sqlalchemy import Column, ForeignKey, Numeric, DateTime, Boolean, Integer
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-from app.db.models.base_class import Base
+from app.db.base_classes import Base
 from sqlalchemy import Enum as SQLAlchemyEnum
 from app.core.consts import OrderStatus, OrderPaymentMethod, OrderType
 

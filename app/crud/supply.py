@@ -4,7 +4,7 @@ from sqlalchemy import desc
 from sqlalchemy.orm import Session
 
 from app.db.models import Supply
-from app.db.session import db_safe
+from app.db.db_sessions import db_safe
 from app.schemas.supply import SupplyCreate, SupplyUpdate
 
 @db_safe

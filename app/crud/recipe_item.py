@@ -3,7 +3,7 @@ from uuid import UUID
 from sqlalchemy.orm import Session
 
 from app.db.models import RecipeItem
-from app.db.session import db_safe
+from app.db.db_sessions import db_safe
 from app.schemas.recipe_item import RecipeItemCreate, RecipeItemUpdate
 
 @db_safe

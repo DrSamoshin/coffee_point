@@ -20,7 +20,6 @@ from app.api.endpoints import (admin_router,
                                product_router,
                                product_order_router,
                                recipe_item_router,
-                               reporting_period_router,
                                shift_router,
                                store_item_router,
                                supplier_router,
@@ -94,18 +93,17 @@ main_app.include_router(order_router)
 main_app.include_router(product_router)
 main_app.include_router(product_order_router)
 main_app.include_router(recipe_item_router)
-main_app.include_router(reporting_period_router)
 main_app.include_router(shift_router)
 main_app.include_router(store_item_router)
 main_app.include_router(supplier_router)
 main_app.include_router(supply_router)
-main_app.include_router(user_router)
 
 if settings.run.ADMIN_MODE:
     main_app.include_router(admin_router)
+    main_app.include_router(user_router)
 
 logging.info("admin mode: %s", settings.run.ADMIN_MODE)
 logging.info("starting FastAPI")
-logging.info(f"DB url: %s", settings.data_base.sqlalchemy_url)
+logging.info(f"DB url: %s", settings.data_base.get_db_url('users'))
 
 

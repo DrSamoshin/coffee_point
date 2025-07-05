@@ -14,7 +14,6 @@ from .order import router as order_router
 from .product import router as product_router
 from .product_order import router as product_order_router
 from .recipe_item import router as recipe_item_router
-from .reporting_period import router as reporting_period_router
 from .shift import router as shift_router
 from .store_item import router as store_item_router
 from .supplier import router as supplier_router

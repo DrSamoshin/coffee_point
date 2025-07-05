@@ -2,7 +2,7 @@ from sqlalchemy import Column, ForeignKey, Numeric
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 import uuid
-from app.db.models.base_class import Base
+from app.db.base_classes import Base
 
 
 class RecipeItem(Base):
