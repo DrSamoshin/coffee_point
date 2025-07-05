@@ -88,7 +88,3 @@ def db_safe(func):
         except OperationalError:
             raise HTTPException(status_code=503, detail="Database is temporarily unavailable")
     return wrapper
-
-# temp
-def get_db():
-    ...
