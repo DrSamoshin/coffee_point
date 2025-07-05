@@ -31,8 +31,10 @@ def _create_db_engine(url: str, pool_size: int = 3, max_overflow: int = 1):
             pool_pre_ping=True,
             connect_args={"connect_timeout": 5}
         )
+        db_engine.connect()
     except Exception as error:
         logging.error(f"db engine error: {error}, db_url: {url}")
+        raise HTTPException(status_code=503, detail="Database temporarily unavailable")
     else:
         return db_engine
 
