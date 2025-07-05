@@ -4,7 +4,6 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.schemas.analytics import ShiftIncomeOut
-from app.core.responses import response
 from app.crud import analytics as crud_analytics
 from app.db.db_sessions import get_point_db
 from app.services.authentication import get_user_id_from_token

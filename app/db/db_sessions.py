@@ -28,7 +28,8 @@ def _create_db_engine(url: str, pool_size: int = 3, max_overflow: int = 1):
             max_overflow=max_overflow,
             pool_timeout=30,
             pool_recycle=1800,
-            pool_pre_ping=True
+            pool_pre_ping=True,
+            connect_args={"connect_timeout": 5}
         )
     except Exception as error:
         logging.error(f"db engine error: {error}, db_url: {url}")
