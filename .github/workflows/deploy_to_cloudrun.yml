@@ -35,5 +35,5 @@ jobs:
             INSTANCE_CONNECTION_NAME=${{ secrets.INSTANCE_CONNECTION_NAME }}
             DB_USER=${{ secrets.DB_USER }}
             DB_PASS=${{ secrets.DB_PASS }}
-            PRIVATE_KEY_ID=${{ PRIVATE_KEY_ID }}
-            PRIVATE_KEY=${{ PRIVATE_KEY }}
+            PRIVATE_KEY_ID=${{ secrets.PRIVATE_KEY_ID }}
+            PRIVATE_KEY=${{ secrets.PRIVATE_KEY }}
