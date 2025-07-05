@@ -1,3 +1,4 @@
+import json
 import logging
 import io
 import uuid
@@ -11,7 +12,7 @@ from app.core.configs import settings
 GCS_BUCKET_NAME = "coffee_point_storage"
 
 def get_google_client() -> Client:
-    client = storage.Client.from_service_account_info(settings.google_account.model_dump())
+    client = storage.Client.from_service_account_info(json.loads(settings.google_account.SA_KEY))
     return client
 
 

@@ -16,8 +16,7 @@ services:
       DB_USER: ${DB_USER}
       DB_PASS: ${DB_PASS}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
-      PRIVATE_KEY_ID: ${PRIVATE_KEY_ID}
-      PRIVATE_KEY: ${PRIVATE_KEY}
+      SA_KEY: ${SA_KEY}
     depends_on:
       - db
 

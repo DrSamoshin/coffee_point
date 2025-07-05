@@ -1,4 +1,5 @@
 import jwt
+import logging
 from datetime import datetime, timedelta, timezone
 from app.core.configs import settings
 
@@ -10,6 +11,6 @@ def create_access_token(subject: str, expires_delta: timedelta = timedelta(days=
 
 if __name__ == "__main__":
     user_id = input("user_id: ")
-    print(settings.jwt_token.JWT_SECRET_KEY)
+    logging.info(settings.jwt_token.JWT_SECRET_KEY)
     token = create_access_token(subject=user_id)
-    print(token)
+    logging.info(token)

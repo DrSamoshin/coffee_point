@@ -48,17 +48,7 @@ class JWTToken(BaseModel):
     ALGORITHM:str = "HS256"
 
 class GoogleAccount(BaseModel):
-    type: str = "service_account"
-    project_id: str = "cafemanager-458516"
-    private_key_id: str = os.getenv("PRIVATE_KEY_ID")
-    private_key: str = os.getenv("PRIVATE_KEY").replace('\\n', '\n')
-    client_email: str = "1011837808330-compute@developer.gserviceaccount.com"
-    client_id: str = "117076621690728653208"
-    auth_uri: str = "https://accounts.google.com/o/oauth2/auth"
-    token_uri: str = "https://oauth2.googleapis.com/token"
-    auth_provider_x509_cert_url: str = "https://www.googleapis.com/oauth2/v1/certs"
-    client_x509_cert_url: str = "https://www.googleapis.com/robot/v1/metadata/x509/1011837808330-compute%40developer.gserviceaccount.com"
-    universe_domain: str = "googleapis.com"
+    SA_KEY: str = os.getenv("SA_KEY")
 
 class Settings(BaseSettings):
     logging: Logging = Logging()
