@@ -1,12 +1,13 @@
 import uuid
 from sqlalchemy import Column, String, Boolean, UUID
-from app.db.models.base_class import Base
+from app.db.base_classes import BaseUser
 
-class User(Base):
+class User(BaseUser):
     __tablename__ = "users"
 
     id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
     name = Column(String, nullable=False)
+    db_name = Column(String, nullable=False)
     deactivated = Column(Boolean, default=False)
 
     def __repr__(self):

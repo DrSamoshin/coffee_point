@@ -1,7 +1,7 @@
 import uuid
 from sqlalchemy import Column, UUID, ForeignKey, Numeric, Boolean, DateTime
 from sqlalchemy.orm import relationship
-from app.db.models.base_class import Base
+from app.db.base_classes import Base
 
 class StoreItem(Base):
     __tablename__ = "store_items"

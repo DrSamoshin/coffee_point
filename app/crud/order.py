@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 
 from app.db.models import Order, ProductOrder, Shift
-from app.db.session import db_safe
+from app.db.db_sessions import db_safe
 from app.schemas.order import OrderCreate, OrderUpdate, ShiftOrderOut, OrderStatusUpdate, OrderBase
 from app.schemas.product import ProductOrderOut
 from app.core.consts import OrderStatus

@@ -5,7 +5,7 @@ from sqlalchemy.orm import joinedload
 
 from app.db.models import Shift
 from app.db.models.employee_shift import EmployeeShift
-from app.db.session import db_safe
+from app.db.db_sessions import db_safe
 from app.schemas.employee_shift import EmployeeShiftCreate, EmployeeShiftUpdate
 
 

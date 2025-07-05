@@ -1,6 +1,6 @@
 import uuid
 from sqlalchemy import Column, String, Boolean, UUID
-from app.db.models.base_class import Base
+from app.db.base_classes import Base
 
 class Supplier(Base):
     __tablename__ = "suppliers"

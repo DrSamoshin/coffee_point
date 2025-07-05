@@ -1,7 +1,7 @@
 import uuid
 from sqlalchemy import Column, ForeignKey, DateTime, UUID, Boolean
 from sqlalchemy.orm import relationship
-from app.db.models.base_class import Base
+from app.db.base_classes import Base
 
 class EmployeeShift(Base):
     __tablename__ = "employee_shifts"
