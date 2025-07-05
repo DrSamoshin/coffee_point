@@ -21,6 +21,7 @@ user_engine_lock = Lock()
 
 
 def _create_db_engine(url: str, pool_size: int = 3, max_overflow: int = 1):
+    logging.info(f"call method _create_db_engine")
     try:
         db_engine = create_engine(
             url,
@@ -31,11 +32,10 @@ def _create_db_engine(url: str, pool_size: int = 3, max_overflow: int = 1):
             pool_pre_ping=True,
             connect_args={"connect_timeout": 5}
         )
-        db_engine.connect()
     except Exception as error:
         logging.error(f"db engine error: {error}, db_url: {url}")
-        raise HTTPException(status_code=503, detail="Database temporarily unavailable")
     else:
+        logging.error(f"db engine: {db_engine}, db_url: {url}")
         return db_engine
 
 def _get_db_session(user_db_engine):
@@ -47,6 +47,7 @@ def _get_db_session(user_db_engine):
         return session()
 
 def check_users_db_availability():
+    logging.info(f"call method check_users_db_availability")
     try:
         users_db_engine = _get_users_db_engine()
         users_db_engine.connect()
@@ -57,19 +58,20 @@ def check_users_db_availability():
         logging.warning(f"users DB is not available")
 
 def _get_point_db_url(user_id: UUID):
-    with point_engine_lock:
-        if not POINT_URLS.get(user_id):
-            users_db_engine = _get_users_db_engine()
-            db = _get_db_session(users_db_engine)
-            db_user = crud_user.get_user(db=db, user_id=user_id)
-            if not db_user:
-                raise HTTPException(status_code=404, detail="User not found")
-            user_db_name = db_user.db_name
-            user_db_url = settings.data_base.get_db_url(user_db_name)
-            POINT_URLS[user_id] = user_db_url
-        return POINT_URLS.get(user_id)
+    logging.info(f"call method _get_point_db_url")
+    if not POINT_URLS.get(user_id):
+        users_db_engine = _get_users_db_engine()
+        db = _get_db_session(users_db_engine)
+        db_user = crud_user.get_user(db=db, user_id=user_id)
+        if not db_user:
+            raise HTTPException(status_code=404, detail="User not found")
+        user_db_name = db_user.db_name
+        user_db_url = settings.data_base.get_db_url(user_db_name)
+        POINT_URLS[user_id] = user_db_url
+    return POINT_URLS.get(user_id)
 
 def _get_point_db_engine(user_id: UUID):
+    logging.info(f"call method _get_point_db_engine")
     with point_engine_lock:
         if not POINT_DB_ENGINES.get(user_id):
             user_db_url = _get_point_db_url(user_id)
@@ -78,6 +80,7 @@ def _get_point_db_engine(user_id: UUID):
         return POINT_DB_ENGINES.get(user_id)
 
 def _get_users_db_engine():
+    logging.info(f"call method _get_users_db_engine")
     with user_engine_lock:
         if not USERS_DB_ENGINES.get('users'):
             users_db_engine = _create_db_engine(settings.data_base.get_db_url('users'), 5, 10)
