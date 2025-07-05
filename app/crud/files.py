@@ -1,21 +1,18 @@
 import logging
 import io
-import os
 import uuid
 from fastapi import UploadFile
 from google.cloud import storage
 from google.cloud.client import Client
 from PIL import Image
+from app.core.configs import settings
 
 
 GCS_BUCKET_NAME = "coffee_point_storage"
 
 def get_google_client() -> Client:
-    file_path = ".secrets/sa-coffee-point-crm.json"
-    if os.path.exists(file_path):
-        client = storage.Client.from_service_account_json(file_path)
-    else:
-        client = storage.Client()
+    client = storage.Client.from_service_account_info(settings.google_account.model_dump())
+    print(client)
     return client
 
 
