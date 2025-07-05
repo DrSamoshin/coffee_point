@@ -48,7 +48,7 @@ class JWTToken(BaseModel):
     ALGORITHM:str = "HS256"
 
 class GoogleAccount(BaseModel):
-    GCLOUD_SA_KEY: str = os.getenv("GCLOUD_SA_KEY")
+    SA_KEY: str = os.getenv("SA_KEY")
 
 class Settings(BaseSettings):
     logging: Logging = Logging()

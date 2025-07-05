@@ -1,4 +1,3 @@
-import json
 import logging
 import io
 import uuid
@@ -6,13 +5,12 @@ from fastapi import UploadFile
 from google.cloud import storage
 from google.cloud.client import Client
 from PIL import Image
-from app.core.configs import settings
 
 
 GCS_BUCKET_NAME = "coffee_point_storage"
 
 def get_google_client() -> Client:
-    client = storage.Client.from_service_account_info(json.loads(settings.google_account.SA_KEY))
+    client = storage.Client.from_service_account_json(".secrets/sa-coffee-point-crm.json")
     return client
 
 
