@@ -26,6 +26,7 @@ def get_users(db: Session):
         db_users = db.query(User).all()
     except Exception as error:
         logging.error(error)
+        raise HTTPException(status_code=500, detail="unexpected error during users fetch")
     else:
         logging.info(f"users: {len(db_users)}")
         return db_users
@@ -39,6 +40,7 @@ def create_user(db: Session, user: UserCreate):
         db.refresh(db_user)
     except Exception as error:
         logging.error(error)
+        raise HTTPException(status_code=500, detail="unexpected error during user create")
     else:
         logging.info(f"user is created: {db_user}")
         return db_user
@@ -53,6 +55,7 @@ def update_user(db: Session, user_id: UUID, updates: UserUpdate):
         db.refresh(db_user)
     except Exception as error:
         logging.error(error)
+        raise HTTPException(status_code=500, detail="unexpected error during user update")
     else:
         logging.info(f"user is updated: {db_user}")
         return db_user
@@ -66,6 +69,21 @@ def deactivate_user(db: Session, user_id: UUID):
         db.refresh(db_user)
     except Exception as error:
         logging.error(error)
+        raise HTTPException(status_code=500, detail="unexpected error during user deactivate")
     else:
         logging.info(f"user is deactivated: {db_user}")
+        return db_user
+
+def activate_user(db: Session, user_id: UUID):
+    logging.info(f"call method activate_user")
+    try:
+        db_user = db.query(User).filter(User.id == user_id).first()
+        db_user.deactivated = False
+        db.commit()
+        db.refresh(db_user)
+    except Exception as error:
+        logging.error(error)
+        raise HTTPException(status_code=500, detail="unexpected error during user activate")
+    else:
+        logging.info(f"user is activated: {db_user}")
         return db_user
