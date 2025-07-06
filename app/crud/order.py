@@ -1,13 +1,13 @@
 import logging
 from uuid import UUID
 from datetime import datetime, timezone
-from sqlalchemy import func, desc
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 
 from app.db.models import Order, ProductOrder, Shift
 from app.db.db_sessions import db_safe
-from app.schemas.order import OrderCreate, OrderUpdate, ShiftOrderOut, OrderStatusUpdate, OrderBase
+from app.schemas.order import OrderCreate, OrderUpdate, ShiftOrderOut, OrderStatusUpdate
 from app.schemas.product import ProductOrderOut
 from app.core.consts import OrderStatus
 
