@@ -35,7 +35,7 @@ class DataBase(BaseModel):
     DB_USER: str = os.getenv("DB_USER")
     DB_PASS: str = os.getenv("DB_PASS") # should be without special symbols
 
-    def get_db_url(self, db_name) -> str:
+    def get_db_url(self, db_name: str) -> str:
         if self.USE_CLOUD_SQL_PROXY:
             return (f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASS}@/{db_name}"
                    f"?host=/cloudsql/{self.INSTANCE_CONNECTION_NAME}")

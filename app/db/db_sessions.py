@@ -12,13 +12,13 @@ from app.crud import user as crud_user
 from app.core.configs import settings
 from app.services.authentication import get_user_id_from_token
 
+
 USERS_DB_ENGINES = TTLCache(maxsize=10, ttl=3600)
 POINT_DB_ENGINES = TTLCache(maxsize=100, ttl=3600)
 POINT_URLS = TTLCache(maxsize=100, ttl=3600)
 
 point_engine_lock = Lock()
 user_engine_lock = Lock()
-
 
 def _create_db_engine(url: str, pool_size: int = 3, max_overflow: int = 1):
     logging.info(f"call method _create_db_engine")
@@ -34,17 +34,21 @@ def _create_db_engine(url: str, pool_size: int = 3, max_overflow: int = 1):
         )
     except Exception as error:
         logging.error(f"db engine error: {error}, db_url: {url}")
+        raise HTTPException(status_code=500, detail="DB engine is not created")
     else:
-        logging.error(f"db engine: {db_engine}, db_url: {url}")
+        logging.info(f"db engine: {db_engine}, db_url: {url}")
         return db_engine
 
 def _get_db_session(user_db_engine):
     try:
-        session = sessionmaker(autocommit=False, autoflush=False, bind=user_db_engine)
+        _session = sessionmaker(autocommit=False, autoflush=False, bind=user_db_engine)
+        session = _session()
+        session.connection()
     except Exception as error:
         logging.error(f"session engine error: {error}")
+        raise HTTPException(status_code=500, detail="database is temporarily unavailable")
     else:
-        return session()
+        return session
 
 def check_users_db_availability():
     logging.info(f"call method check_users_db_availability")
@@ -63,8 +67,6 @@ def _get_point_db_url(user_id: UUID):
         users_db_engine = _get_users_db_engine()
         db = _get_db_session(users_db_engine)
         db_user = crud_user.get_user(db=db, user_id=user_id)
-        if not db_user:
-            raise HTTPException(status_code=404, detail="User not found")
         user_db_name = db_user.db_name
         user_db_url = settings.data_base.get_db_url(user_db_name)
         POINT_URLS[user_id] = user_db_url
@@ -113,5 +115,5 @@ def db_safe(func):
         try:
             return func(*args, **kwargs)
         except OperationalError:
-            raise HTTPException(status_code=503, detail="Database is temporarily unavailable")
+            raise HTTPException(status_code=503, detail="database is temporarily unavailable")
     return wrapper

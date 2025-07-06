@@ -1,6 +1,7 @@
 import logging
 from uuid import UUID
 from sqlalchemy.orm import Session
+from fastapi import HTTPException
 
 from app.db.models import User
 from app.schemas.user import UserCreate, UserUpdate
@@ -12,6 +13,7 @@ def get_user(db: Session, user_id: UUID):
         db_user = db.query(User).filter(User.id == user_id).first()
     except Exception as error:
         logging.error(error)
+        raise HTTPException(status_code=404, detail="User not found")
     else:
         logging.info(f"users: {db_user}")
         return db_user
