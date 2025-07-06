@@ -1,5 +1,5 @@
 [project]
-name = "vladislav-background"
+name = "coffee_point_crm_backend"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -18,4 +18,6 @@ dependencies = [
     "google-cloud-storage>=3.1.1",
     "pillow>=11.2.1",
     "python-multipart>=0.0.20",
+    "cachetools>=5.5.2",
+    "pandas>=2.3.0",
 ]

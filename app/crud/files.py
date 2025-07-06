@@ -12,6 +12,7 @@ GCS_BUCKET_NAME = "coffee_point_storage"
 
 def get_google_client() -> Client:
     client = storage.Client.from_service_account_info(settings.google_account.model_dump())
+    print(client)
     return client
 
 

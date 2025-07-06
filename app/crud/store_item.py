@@ -6,8 +6,8 @@ from sqlalchemy import desc
 from sqlalchemy.orm import joinedload
 from decimal import Decimal
 
-from app.db.models import StoreItem, ReportingPeriod, Supply, Supplier, Shift
-from app.db.session import db_safe
+from app.db.models import StoreItem, Supply, Supplier, Shift
+from app.db.db_sessions import db_safe
 from app.schemas.store_item import StoreItemCreate, StoreItemUpdate, StoreItemOut, CalculationStoreItemOut
 
 

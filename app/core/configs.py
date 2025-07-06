@@ -1,9 +1,10 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 import logging
 import os
-from dotenv import load_dotenv
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings
-
 
 class Run(BaseModel):
     host: str = "0.0.0.0"
@@ -25,37 +26,34 @@ class Logging(BaseModel):
 
 class DataBase(BaseModel):
     DB_AVAILABLE: bool = True
-    # proxy db connection
+    # google proxy connection
     USE_CLOUD_SQL_PROXY: bool = os.getenv("USE_CLOUD_SQL_PROXY", "false").lower() == "true"
     INSTANCE_CONNECTION_NAME: str = os.getenv("INSTANCE_CONNECTION_NAME")
-    # IP connection
+    # local connection
     DB_HOST: str = os.getenv("DB_HOST", "localhost")
     DB_PORT: str = os.getenv("DB_PORT", "5432")
+    DB_USER: str = os.getenv("DB_USER")
+    DB_PASS: str = os.getenv("DB_PASS") # should be without special symbols
 
-    DB_USER: str = os.getenv("DB_USER", "myuser")
-    DB_PASS: str = os.getenv("DB_PASS", "mypassword") # should be without special symbols
-    DB_NAME: str = os.getenv("DB_NAME", "mydb")
-
-    @property
-    def sqlalchemy_url(self) -> str:
+    def get_db_url(self, db_name: str) -> str:
         if self.USE_CLOUD_SQL_PROXY:
-            return (f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASS}@/{self.DB_NAME}"
+            return (f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASS}@/{db_name}"
                    f"?host=/cloudsql/{self.INSTANCE_CONNECTION_NAME}")
         else:
-            return f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+            return f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{db_name}"
 
 
 class JWTToken(BaseModel):
-    SECRET_KEY:str = "your-super-secret-key"
+    JWT_SECRET_KEY:str = os.getenv("JWT_SECRET_KEY")
     ALGORITHM:str = "HS256"
 
 class GoogleAccount(BaseModel):
     type: str = "service_account"
-    project_id: str = "cafemanager-458516"
-    private_key_id: str = os.getenv("PRIVATE_KEY_ID", "")
-    private_key: str = os.getenv("PRIVATE_KEY", "").replace('\\n', '\n')
-    client_email: str = "1011837808330-compute@developer.gserviceaccount.com"
-    client_id: str = "117076621690728653208"
+    project_id: str = "coffee-point-crm"
+    private_key_id: str = os.getenv("PRIVATE_KEY_ID")
+    private_key: str = os.getenv("PRIVATE_KEY").replace('\\n', '\n')
+    client_email: str = "sa-500@coffee-point-crm.iam.gserviceaccount.com"
+    client_id: str = "106356604246273884054"
     auth_uri: str = "https://accounts.google.com/o/oauth2/auth"
     token_uri: str = "https://oauth2.googleapis.com/token"
     auth_provider_x509_cert_url: str = "https://www.googleapis.com/oauth2/v1/certs"
@@ -63,7 +61,6 @@ class GoogleAccount(BaseModel):
     universe_domain: str = "googleapis.com"
 
 class Settings(BaseSettings):
-    load_dotenv()
     logging: Logging = Logging()
     run: Run = Run()
     app_data: AppData = AppData()
