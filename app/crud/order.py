@@ -16,31 +16,31 @@ from app.core.consts import OrderStatus
 def create_order_with_products(db: Session, order: OrderCreate):
     logging.info(f"call method create_order_with_products")
     try:
-        with db.begin():
-            db_shift = db.query(Shift).filter(Shift.active == True).first()
-            print(db_shift.id)
-            last_order_number = db.query(func.max(Order.order_number)).filter(Order.shift_id == db_shift.id).scalar()
-            order_number = (last_order_number or 0) + 1
+        db_shift = db.query(Shift).filter(Shift.active == True).first()
+        print(db_shift.id)
+        last_order_number = db.query(func.max(Order.order_number)).filter(Order.shift_id == db_shift.id).scalar()
+        order_number = (last_order_number or 0) + 1
 
-            db_order = Order(price=order.price,
-                             discount=order.discount,
-                             date=datetime.now(timezone.utc),
-                             client_id=order.client_id,
-                             payment_method=order.payment_method,
-                             type=order.type,
-                             status=order.status,
-                             shift_id=db_shift.id,
-                             order_number=order_number,
-                             debit=order.debit)
-            db.add(db_order)
-            db.flush()
+        db_order = Order(price=order.price,
+                         discount=order.discount,
+                         date=datetime.now(timezone.utc),
+                         client_id=order.client_id,
+                         payment_method=order.payment_method,
+                         type=order.type,
+                         status=order.status,
+                         shift_id=db_shift.id,
+                         order_number=order_number,
+                         debit=order.debit)
+        db.add(db_order)
+        db.flush()
 
-            if order.products:
-                for product in order.products:
-                    db_product_order = ProductOrder(product_id=product.product_id,
-                                                    order_id=db_order.id,
-                                                    count=product.count)
-                    db.add(db_product_order)
+        if order.products:
+            for product in order.products:
+                db_product_order = ProductOrder(product_id=product.product_id,
+                                                order_id=db_order.id,
+                                                count=product.count)
+                db.add(db_product_order)
+        db.commit()
         db.refresh(db_order)
     except Exception as error:
         logging.error(error)
@@ -181,26 +181,26 @@ def update_order_status(db: Session, order_id: UUID, updates: OrderStatusUpdate)
 def update_order(db: Session, order_id: UUID, updates: OrderUpdate):
     logging.info(f"call method update_order")
     try:
-        with db.begin():
-            db_order = db.query(Order).filter(Order.id == order_id).first()
-            for field, value in updates.model_dump().items():
-                setattr(db_order, field, value)
-            db.add(db_order)
-            db.flush()
+        db_order = db.query(Order).filter(Order.id == order_id).first()
+        for field, value in updates.model_dump().items():
+            setattr(db_order, field, value)
+        db.add(db_order)
+        db.flush()
 
-            if updates.products:
-                for product in updates.products:
-                    if product_order_id:= product.product_order_id:
-                        product_order = db.query(ProductOrder).filter(ProductOrder.id == product_order_id).first()
-                        if product_order and product.count < 1:
-                            db.delete(product_order)
-                        elif product_order:
-                            product_order.count = product.count
-                    else:
-                        db_product_order = ProductOrder(product_id=product.product_id,
-                                                        order_id=db_order.id,
-                                                        count=product.count)
-                        db.add(db_product_order)
+        if updates.products:
+            for product in updates.products:
+                if product_order_id:= product.product_order_id:
+                    product_order = db.query(ProductOrder).filter(ProductOrder.id == product_order_id).first()
+                    if product_order and product.count < 1:
+                        db.delete(product_order)
+                    elif product_order:
+                        product_order.count = product.count
+                else:
+                    db_product_order = ProductOrder(product_id=product.product_id,
+                                                    order_id=db_order.id,
+                                                    count=product.count)
+                    db.add(db_product_order)
+        db.commit()
         db.refresh(db_order)
     except Exception as error:
         logging.error(error)
