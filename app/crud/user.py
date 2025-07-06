@@ -13,9 +13,11 @@ def get_user(db: Session, user_id: UUID):
         db_user = db.query(User).filter(User.id == user_id).first()
     except Exception as error:
         logging.error(error)
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=500, detail="unexpected error during user fetch")
     else:
-        logging.info(f"users: {db_user}")
+        logging.info(f"user: {db_user}")
+        if not db_user:
+            raise HTTPException(status_code=404, detail="user not found")
         return db_user
 
 def get_users(db: Session):
