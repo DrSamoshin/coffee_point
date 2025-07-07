@@ -22,9 +22,6 @@ async def check_token(db: Session = Depends(get_users_db), user_id: UUID = Depen
     except HTTPException as http_exc:
         logging.error(f"{http_exc}")
         raise http_exc
-    except Exception as error:
-        logging.error(f"{error}")
-        raise HTTPException(status_code=500, detail="internal server error")
     else:
         msg = f"token is valid. user: {db_user.name}"
         logging.info(msg)

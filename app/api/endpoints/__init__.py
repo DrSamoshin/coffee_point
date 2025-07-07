@@ -1,10 +1,11 @@
 from app.api.endpoints.admin import admin_router
 from app.api.endpoints.admin import user_router
 
+from app.api.endpoints.analytics import analytics_router
+
 from app.api.endpoints.constants import router as constants_router
 from app.api.endpoints.health import router as health_router
 
-from app.api.endpoints.point import analytics_router
 from app.api.endpoints.point import category_router
 from app.api.endpoints.point import check_list_router
 from app.api.endpoints.point import client_router

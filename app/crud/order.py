@@ -81,14 +81,11 @@ def get_order(db: Session, order_id: UUID):
         logging.info(f"order: {order_data}")
         return order_data
 
-@db_safe
-def get_shift_orders(db: Session, skip: int = 0, limit: int = 10):
+def get_shift_orders(shift_id: UUID, db: Session, skip: int = 0, limit: int = 500):
     logging.info(f"call method get_shift_orders")
     try:
-        db_shift = db.query(Shift).filter(Shift.active == True).first()
-        print(db_shift.id)
         orders = (db.query(Order)
-                  .filter(Order.shift_id == db_shift.id)
+                  .filter(Order.shift_id == shift_id)
                   .options(joinedload(Order.product_orders).joinedload(ProductOrder.product))
                   .order_by(Order.date)
                   .offset(skip)
@@ -119,15 +116,27 @@ def get_shift_orders(db: Session, skip: int = 0, limit: int = 10):
     except Exception as error:
             logging.error(error)
     else:
-        logging.info(f"orders: {len(shift_orders)}")
+        logging.info(f"shift orders: {len(shift_orders)}")
+        return shift_orders
+
+
+@db_safe
+def get_active_shift_orders(db: Session, skip: int = 0, limit: int = 500):
+    logging.info(f"call method get_shift_orders")
+    try:
+        db_shift = db.query(Shift).filter(Shift.active == True).first()
+        shift_orders = get_shift_orders(db_shift.id, db, skip, limit)
+    except Exception as error:
+        logging.error(error)
+    else:
+        logging.info(f"active shift orders: {len(shift_orders)}")
         return shift_orders
 
 @db_safe
-def get_waiting_shift_orders(db: Session, skip: int = 0, limit: int = 10):
+def get_waiting_shift_orders(db: Session, skip: int = 0, limit: int = 500):
     logging.info(f"call method get_waiting_shift_orders")
     try:
         db_shift = db.query(Shift).filter(Shift.active == True).first()
-        print(db_shift.id)
         orders = (db.query(Order)
                   .filter(Order.shift_id == db_shift.id, Order.status == OrderStatus.waiting)
                   .options(joinedload(Order.product_orders).joinedload(ProductOrder.product))

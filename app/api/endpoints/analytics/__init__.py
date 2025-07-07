@@ -1,0 +1,1 @@
+from app.api.endpoints.analytics.analytics import router as analytics_router
