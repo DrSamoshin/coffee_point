@@ -1,5 +1,6 @@
 import os
 import logging
+from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
@@ -32,14 +33,17 @@ main_app = FastAPI(
     openapi_version=settings.app_data.openapi_version,
 )
 
-# Set up CORS middleware
-# main_app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=settings.ALLOWED_HOSTS,
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
+main_app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://coffee-point-crm.web.app",
+        "http://localhost:3000",  # для разработки
+        "http://localhost:5173"   # для Vite dev server
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def custom_openapi():
     if main_app.openapi_schema:
