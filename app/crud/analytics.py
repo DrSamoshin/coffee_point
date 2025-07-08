@@ -8,46 +8,7 @@ from app.db.models import Order, Shift
 from app.crud import order as crud_order
 
 
-def _get_total_sales(db: Session, shift_id: UUID):
-    total_sales = db.query(func.sum(Order.price)) \
-        .filter(Order.shift_id == shift_id, Order.debit == False) \
-        .scalar()
-    return total_sales
-
-def _get_total_returns(db: Session, shift_id: UUID):
-    total_returns = db.query(func.sum(Order.price)) \
-        .filter(Order.shift_id == shift_id, Order.debit) \
-        .scalar()
-    return total_returns
-
-def get_active_shift_income(db: Session):
-    logging.info(f"call method get_active_shift_income")
-    try:
-        db_shift = db.query(Shift).filter(Shift.active == True).first()
-        total_sales = _get_total_sales(db, db_shift.id)
-        total_returns = _get_total_returns(db, db_shift.id)
-        net_total = (total_sales or 0) - (total_returns or 0)
-    except Exception as error:
-        logging.error(error)
-        raise HTTPException(status_code=500, detail="unexpected error during income fetch")
-    else:
-        logging.info(f"active shift income: {net_total}")
-        return {"income": net_total}
-
-def get_shift_income(db: Session, shift_id: UUID):
-    logging.info(f"call method get_shift_income")
-    try:
-        total_sales = _get_total_sales(db, shift_id)
-        total_returns = _get_total_returns(db, shift_id)
-        net_total = (total_sales or 0) - (total_returns or 0)
-    except Exception as error:
-        logging.error(error)
-        raise HTTPException(status_code=500, detail="unexpected error during income fetch")
-    else:
-        logging.info(f"shift income: {net_total}")
-        return {"income": net_total}
-
-def get_shift_orders(db: Session, shift_id: UUID):
+def get_shift_report(db: Session, shift_id: UUID):
     logging.info(f"call method get_shift_orders")
     result = dict()
     try:
@@ -106,3 +67,14 @@ def get_shift_orders(db: Session, shift_id: UUID):
         return result
 
 
+def get_active_shift_report(db: Session):
+    logging.info(f"call method get_active_shift_income")
+    try:
+        db_shift = db.query(Shift).filter(Shift.active == True).first()
+        active_shift_report = get_shift_report(db, db_shift.id)
+    except Exception as error:
+        logging.error(error)
+        raise HTTPException(status_code=500, detail="unexpected error during shift orders fetch")
+    else:
+        logging.info(f"active shift report: {active_shift_report}")
+        return active_shift_report
