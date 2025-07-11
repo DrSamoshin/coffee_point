@@ -47,6 +47,7 @@ async def get_products_shift_orders_report(shift_id: UUID, db: Session = Depends
         total_income = income_debit_false_orders - income_debit_true_orders
         total_number_sold_products = debit_false_product_amount - debit_true_product_amount
         total_number_orders = debit_false_unique_order_amount - debit_true_unique_order_amount
+        average_bill = total_income/total_number_orders
         debit_true_unique_orders_json = df_debit_true_unique_orders.to_dict(orient="records")
         debit_false_products_sum_json = debit_false_products_sum.to_dict(orient="records")
         debit_false_categories_sum_json = debit_false_categories_sum.to_dict(orient="records")
@@ -56,6 +57,7 @@ async def get_products_shift_orders_report(shift_id: UUID, db: Session = Depends
             'total_income': total_income,
             'total_number_sold_products': total_number_sold_products,
             'total_number_orders': total_number_orders,
+            'average_bill': average_bill,
             'debit_true_unique_orders_json': debit_true_unique_orders_json,
             'debit_false_products_sum_json': debit_false_products_sum_json,
             'debit_false_categories_sum_json': debit_false_categories_sum_json,
