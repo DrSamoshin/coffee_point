@@ -7,7 +7,6 @@ from sqlalchemy.orm import Session
 
 from app.crud import order as crud_order
 from app.db.db_sessions import get_point_db
-from app.schemas.product import ProductShiftOrder
 from app.services.authentication import get_user_id_from_token
 
 router = APIRouter(prefix="/orders-report", tags=["orders_report"])

@@ -237,7 +237,7 @@ def get_products_for_shift_order(db: Session, shift_id: UUID):
                     "product_price": product.price,
                     "product_category": product.category.name,
                     "order_id": order.id,
-                    "order_date": order.date,
+                    "order_date": order.date.strftime('%Y-%m-%dT%H:%M:%S.{:03d}Z'.format(int(order.date.microsecond / 1000))),
                     "order_price": order.price,
                     "order_discount": order.discount,
                     "order_payment_method": order.payment_method,
