@@ -34,7 +34,7 @@ def create_item(db: Session, item: ItemCreate):
     try:
         db_item = db.query(Item).filter(Item.name == item.name).first()
         if not db_item:
-            db_item = Item(name=item.name,
+            db_item = Item(name=item.name.strip(),
                            measurement=item.measurement)
             db.add(db_item)
             db.commit()

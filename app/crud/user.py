@@ -34,7 +34,7 @@ def get_users(db: Session):
 def create_user(db: Session, user: UserCreate):
     logging.info(f"call method create_user")
     try:
-        db_user = User(name=user.name, db_name=user.db_name)
+        db_user = User(name=user.name.strip(), db_name=user.db_name.strip())
         db.add(db_user)
         db.commit()
         db.refresh(db_user)

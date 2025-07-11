@@ -18,6 +18,7 @@ from app.api.endpoints import (admin_router,
                                health_router,
                                item_router,
                                order_router,
+                               orders_report_router,
                                product_router,
                                product_order_router,
                                recipe_item_router,
@@ -37,7 +38,6 @@ main_app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://coffee-point-crm.web.app",
-        "http://localhost:3000",  # для разработки
         "http://localhost:5173"   # для Vite dev server
     ],
     allow_credentials=True,
@@ -94,6 +94,7 @@ main_app.include_router(files_router)
 main_app.include_router(health_router)
 main_app.include_router(item_router)
 main_app.include_router(order_router)
+main_app.include_router(orders_report_router)
 main_app.include_router(product_router)
 main_app.include_router(product_order_router)
 main_app.include_router(recipe_item_router)

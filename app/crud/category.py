@@ -24,7 +24,7 @@ def create_category(db: Session, category: CategoryCreate):
     try:
         db_category = db.query(Category).filter(Category.name == category.name).first()
         if not db_category:
-            db_category = Category(name=category.name)
+            db_category = Category(name=category.name.strip())
             db.add(db_category)
             db.commit()
             db.refresh(db_category)
@@ -43,7 +43,7 @@ def update_category(db: Session, category_id: UUID, updates: CategoryUpdate):
     logging.info(f"call method update_category")
     try:
         db_category = db.query(Category).filter(Category.id == category_id, Category.active == True).first()
-        db_category.name = updates.name
+        db_category.name = updates.name.strip()
         db.commit()
         db.refresh(db_category)
     except Exception as error:

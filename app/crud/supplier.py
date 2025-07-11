@@ -45,7 +45,7 @@ def create_supplier(db: Session, supplier: SupplierCreate):
     try:
         db_supplier = db.query(Supplier).filter(Supplier.name == supplier.name).first()
         if not db_supplier:
-            db_supplier = Supplier(name=supplier.name)
+            db_supplier = Supplier(name=supplier.name.strip())
             db.add(db_supplier)
             db.commit()
             db.refresh(db_supplier)

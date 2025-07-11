@@ -42,7 +42,7 @@ def create_product(db: Session, product: ProductCreate):
     try:
         db_product = db.query(Product).filter(Product.name == product.name).first()
         if not db_product:
-            db_product = Product(name=product.name,
+            db_product = Product(name=product.name.strip(),
                                  category_id=product.category_id,
                                  price=product.price,
                                  online_shop=product.online_shop,

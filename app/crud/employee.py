@@ -48,7 +48,7 @@ def get_available_employees(db: Session):
 def create_employee(db: Session, employee: EmployeeCreate):
     logging.info(f"call method create_employee")
     try:
-        db_employee = Employee(name=employee.name,
+        db_employee = Employee(name=employee.name.strip(),
                                position=employee.position)
         db.add(db_employee)
         db.commit()

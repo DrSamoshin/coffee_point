@@ -2,7 +2,7 @@
 from uuid import UUID
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict
-from typing import Optional, Union
+from typing import Optional
 from decimal import Decimal
 
 from app.core.consts import OrderType, OrderPaymentMethod, OrderStatus
