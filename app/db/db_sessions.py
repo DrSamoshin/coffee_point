@@ -33,8 +33,7 @@ def _create_db_engine(url: str, pool_size: int = 3, max_overflow: int = 1):
             connect_args={"connect_timeout": 3}
         )
     except Exception as error:
-        logging.error(f"db engine error: {error}, db_url: {url}")
-        raise HTTPException(status_code=500, detail="DB engine is not created")
+        raise HTTPException(status_code=500, detail="DB engine is not created. db_url: {url}")
     else:
         logging.info(f"db engine: {db_engine}, db_url: {url}")
         return db_engine
@@ -45,7 +44,6 @@ def _get_db_session(user_db_engine):
         session = _session()
         session.connection()
     except Exception as error:
-        logging.error(f"session engine error: {error}")
         raise HTTPException(status_code=500, detail="database is temporarily unavailable")
     else:
         return session
@@ -54,60 +52,87 @@ def check_users_db_availability():
     logging.info(f"call method check_users_db_availability")
     try:
         users_db_engine = _get_users_db_engine()
-        users_db_engine.connect()
-        logging.info(f"users DB is available")
+        db = _get_db_session(users_db_engine)
+        logging.info(f"users DB is available, db: {db}")
     except OperationalError as error:
         settings.data_base.DB_AVAILABLE = False
         logging.info(error)
-        logging.warning(f"users DB is not available")
+        logging.error(f"users DB is not available")
+    except Exception as error:
+        logging.error(f"{error}")
+        raise error
 
 def _get_point_db_url(user_id: UUID):
     logging.info(f"call method _get_point_db_url")
     if not POINT_URLS.get(user_id):
-        users_db_engine = _get_users_db_engine()
-        db = _get_db_session(users_db_engine)
-        db_user = crud_user.get_user(db=db, user_id=user_id)
-        user_db_name = db_user.db_name
-        user_db_url = settings.data_base.get_db_url(user_db_name)
-        POINT_URLS[user_id] = user_db_url
+        try:
+            users_db_engine = _get_users_db_engine()
+            db = _get_db_session(users_db_engine)
+            db_user = crud_user.get_user(db=db, user_id=user_id)
+            if not db_user.db_name:
+                raise HTTPException(status_code=400, detail="user does not have db link")
+            user_db_name = db_user.db_name
+            user_db_url = settings.data_base.get_db_url(user_db_name)
+        except Exception as error:
+            raise error
+        else:
+            POINT_URLS[user_id] = user_db_url
     return POINT_URLS.get(user_id)
 
 def _get_point_db_engine(user_id: UUID):
     logging.info(f"call method _get_point_db_engine")
     with point_engine_lock:
         if not POINT_DB_ENGINES.get(user_id):
-            user_db_url = _get_point_db_url(user_id)
-            user_engine = _create_db_engine(user_db_url)
-            POINT_DB_ENGINES[user_id] = user_engine
+            try:
+                point_db_url = _get_point_db_url(user_id)
+                point_engine = _create_db_engine(point_db_url)
+            except Exception as error:
+                raise error
+            else:
+                POINT_DB_ENGINES[user_id] = point_engine
         return POINT_DB_ENGINES.get(user_id)
 
 def _get_users_db_engine():
     logging.info(f"call method _get_users_db_engine")
     with user_engine_lock:
         if not USERS_DB_ENGINES.get('users'):
-            users_db_engine = _create_db_engine(settings.data_base.get_db_url('users'), 5, 10)
-            USERS_DB_ENGINES['users'] = users_db_engine
+            try:
+                users_db_engine = _create_db_engine(settings.data_base.get_db_url('users'), 5, 10)
+            except Exception as error:
+                raise error
+            else:
+                USERS_DB_ENGINES['users'] = users_db_engine
         return USERS_DB_ENGINES.get('users')
 
 def get_point_db(user_id: UUID = Depends(get_user_id_from_token)):
     logging.info(f"call method get_point_db")
-    user_engine = _get_point_db_engine(user_id)
-    logging.info(f"POINT_DB_ENGINES: {len(POINT_DB_ENGINES)}")
-    db = _get_db_session(user_engine)
     try:
-        yield db
-    finally:
-        db.close()
+        user_engine = _get_point_db_engine(user_id)
+        logging.info(f"POINT_DB_ENGINES: {len(POINT_DB_ENGINES)}")
+        db = _get_db_session(user_engine)
+    except Exception as error:
+        logging.error(f"{error}")
+        raise error
+    else:
+        try:
+            yield db
+        finally:
+            db.close()
 
 def get_users_db():
     logging.info(f"call method get_users_db")
-    users_db_engine = _get_users_db_engine()
-    logging.info(f"USERS_DB_ENGINES: {len(USERS_DB_ENGINES)}")
-    db = _get_db_session(users_db_engine)
     try:
-        yield db
-    finally:
-        db.close()
+        users_db_engine = _get_users_db_engine()
+        logging.info(f"USERS_DB_ENGINES: {len(USERS_DB_ENGINES)}")
+        db = _get_db_session(users_db_engine)
+    except Exception as error:
+        logging.error(f"{error}")
+        raise error
+    else:
+        try:
+            yield db
+        finally:
+            db.close()
 
 def db_safe(func):
     @wraps(func)

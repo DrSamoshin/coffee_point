@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime, timezone
 from uuid import UUID
-
+from sqlalchemy import desc
 from sqlalchemy.orm import Session
 from app.db.models import Shift
 from app.db.db_sessions import db_safe
@@ -11,7 +11,7 @@ from app.db.db_sessions import db_safe
 def get_shifts(db: Session):
     logging.info(f"call method get_shifts")
     try:
-        db_shifts = db.query(Shift).filter().all()
+        db_shifts = db.query(Shift).order_by(desc(Shift.start_time)).filter().all()
     except Exception as error:
         logging.error(error)
     else:

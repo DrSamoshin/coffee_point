@@ -11,7 +11,7 @@ router = APIRouter(prefix='/orders', tags=['orders'])
 
 @router.get("/shift-orders/", response_model=list[ShiftOrderOut])
 async def get_shift_orders(skip: int = 0, limit: int = 10, db: Session = Depends(get_point_db)):
-    db_orders = crud_order.get_shift_orders(db, skip, limit)
+    db_orders = crud_order.get_active_shift_orders(db, skip, limit)
     return db_orders
 
 @router.get("/waiting-shift-orders/", response_model=list[ShiftOrderOut])

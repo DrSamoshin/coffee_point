@@ -2,13 +2,14 @@ import logging
 from uuid import UUID
 from datetime import datetime, timezone
 from sqlalchemy import func
+from decimal import Decimal
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 
-from app.db.models import Order, ProductOrder, Shift
+from app.db.models import Order, ProductOrder, Shift, Product
 from app.db.db_sessions import db_safe
 from app.schemas.order import OrderCreate, OrderUpdate, ShiftOrderOut, OrderStatusUpdate
-from app.schemas.product import ProductOrderOut
+from app.schemas.product import ProductOrderOut, ProductShiftOrder
 from app.core.consts import OrderStatus
 
 
@@ -81,14 +82,11 @@ def get_order(db: Session, order_id: UUID):
         logging.info(f"order: {order_data}")
         return order_data
 
-@db_safe
-def get_shift_orders(db: Session, skip: int = 0, limit: int = 10):
+def get_shift_orders(shift_id: UUID, db: Session, skip: int = 0, limit: int = 500):
     logging.info(f"call method get_shift_orders")
     try:
-        db_shift = db.query(Shift).filter(Shift.active == True).first()
-        print(db_shift.id)
         orders = (db.query(Order)
-                  .filter(Order.shift_id == db_shift.id)
+                  .filter(Order.shift_id == shift_id)
                   .options(joinedload(Order.product_orders).joinedload(ProductOrder.product))
                   .order_by(Order.date)
                   .offset(skip)
@@ -119,15 +117,26 @@ def get_shift_orders(db: Session, skip: int = 0, limit: int = 10):
     except Exception as error:
             logging.error(error)
     else:
-        logging.info(f"orders: {len(shift_orders)}")
+        logging.info(f"shift orders: {len(shift_orders)}")
         return shift_orders
 
 @db_safe
-def get_waiting_shift_orders(db: Session, skip: int = 0, limit: int = 10):
+def get_active_shift_orders(db: Session, skip: int = 0, limit: int = 500):
+    logging.info(f"call method get_shift_orders")
+    try:
+        db_shift = db.query(Shift).filter(Shift.active == True).first()
+        shift_orders = get_shift_orders(db_shift.id, db, skip, limit)
+    except Exception as error:
+        logging.error(error)
+    else:
+        logging.info(f"active shift orders: {len(shift_orders)}")
+        return shift_orders
+
+@db_safe
+def get_waiting_shift_orders(db: Session, skip: int = 0, limit: int = 500):
     logging.info(f"call method get_waiting_shift_orders")
     try:
         db_shift = db.query(Shift).filter(Shift.active == True).first()
-        print(db_shift.id)
         orders = (db.query(Order)
                   .filter(Order.shift_id == db_shift.id, Order.status == OrderStatus.waiting)
                   .options(joinedload(Order.product_orders).joinedload(ProductOrder.product))
@@ -208,3 +217,37 @@ def update_order(db: Session, order_id: UUID, updates: OrderUpdate):
         logging.info(f"order is updated: {db_order}")
         return db_order
 
+# analytic
+def get_products_for_shift_order(db: Session, shift_id: UUID):
+    logging.info(f"call method get_products_for_shift_order")
+    try:
+        orders = (db.query(Order)
+                  .filter(Order.shift_id == shift_id)
+                  .options(joinedload(Order.product_orders).joinedload(ProductOrder.product).joinedload(Product.category))
+                  .order_by(Order.date)
+                  .all())
+
+        products_shift_order = []
+        for order in orders:
+            for product_order in order.product_orders:
+                product = product_order.product
+                product_shift_order = {
+                    "product_name": product.name,
+                    "count": product_order.count,
+                    "product_price": product.price,
+                    "product_category": product.category.name,
+                    "order_id": order.id,
+                    "order_date": order.date.strftime('%Y-%m-%dT%H:%M:%S.{:03d}Z'.format(int(order.date.microsecond / 1000))),
+                    "order_price": order.price,
+                    "order_discount": order.discount,
+                    "order_payment_method": order.payment_method,
+                    "order_type": order.type,
+                    "order_status": order.status,
+                    "debit": order.debit
+                }
+                products_shift_order.append(product_shift_order)
+    except Exception as error:
+            logging.error(error)
+    else:
+        logging.info(f"products shift order orders: {len(products_shift_order)}")
+        return products_shift_order
