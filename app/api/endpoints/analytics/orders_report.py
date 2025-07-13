@@ -21,6 +21,15 @@ async def get_products_shift_orders_report(shift_id: UUID, db: Session = Depends
         # debit True order products
         df_debit_true_products = df[df["debit"] == True]
         debit_true_product_amount = len(df_debit_true_products)
+        debit_true_products_sum = df_debit_true_products.groupby("product_name").agg(
+            {
+                "product_category": "first",
+                "count": "sum",
+                "total_product_price": "sum"
+            }).sort_values(
+            by=['product_category', 'total_product_price'],
+            ascending=[True, False]
+        ).reset_index()
 
         # unique orders
         df_debit_true_orders = df_debit_true_products[['order_id', 'order_date', 'order_price', 'order_discount', 'order_payment_method', 'order_type', 'order_status']]
@@ -41,12 +50,6 @@ async def get_products_shift_orders_report(shift_id: UUID, db: Session = Depends
                 ascending=[True, False]
             ).reset_index()
 
-        debit_false_categories_sum = df_debit_false_products.groupby("product_category").agg(
-            {
-                "count": "sum",
-                "total_product_price": "sum"
-            }).reset_index()
-
         # unique orders
         df_debit_false_orders = df_debit_false_products[['order_id', 'order_date', 'order_price', 'order_discount', 'order_payment_method', 'order_type', 'order_status']]
         df_debit_false_unique_orders = df_debit_false_orders.drop_duplicates(subset=['order_id'])
@@ -56,21 +59,21 @@ async def get_products_shift_orders_report(shift_id: UUID, db: Session = Depends
         # final result
         total_income = income_debit_false_orders - income_debit_true_orders
         total_number_sold_products = debit_false_product_amount - debit_true_product_amount
-        total_number_orders = debit_false_unique_order_amount - debit_true_unique_order_amount
-        average_bill = total_income/total_number_orders
+        average_bill = total_income/(debit_false_unique_order_amount - debit_true_unique_order_amount)
         debit_true_unique_orders_json = df_debit_true_unique_orders.to_dict(orient="records")
+        debit_true_products_sum_json = debit_true_products_sum.to_dict(orient="records")
         debit_false_products_sum_json = debit_false_products_sum.to_dict(orient="records")
-        debit_false_categories_sum_json = debit_false_categories_sum.to_dict(orient="records")
         debit_false_unique_orders_json = df_debit_false_unique_orders.to_dict(orient="records")
 
         final_result = {
             'total_income': total_income,
             'total_number_sold_products': total_number_sold_products,
-            'total_number_orders': total_number_orders,
+            'total_number_orders': debit_false_unique_order_amount,
+            'total_number_debited_orders': debit_true_unique_order_amount,
             'average_bill': average_bill,
             'debit_true_unique_orders_json': debit_true_unique_orders_json,
+            'debit_true_products_sum_json': debit_true_products_sum_json,
             'debit_false_products_sum_json': debit_false_products_sum_json,
-            'debit_false_categories_sum_json': debit_false_categories_sum_json,
             'debit_false_unique_orders_json': debit_false_unique_orders_json
         }
     except HTTPException as http_exc:
