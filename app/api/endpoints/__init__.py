@@ -22,4 +22,3 @@ from app.api.endpoints.point import shift_router
 from app.api.endpoints.point import store_item_router
 from app.api.endpoints.point import supplier_router
 from app.api.endpoints.point import supply_router
-

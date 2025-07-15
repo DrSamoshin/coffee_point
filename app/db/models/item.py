@@ -5,6 +5,7 @@ from sqlalchemy import Enum as SQLAlchemyEnum
 from app.core.consts import ItemMeasurements
 from app.db.base_classes import Base
 
+
 class Item(Base):
     __tablename__ = "items"
 

@@ -3,6 +3,7 @@ from sqlalchemy import Column, UUID, ForeignKey, Numeric, Boolean, DateTime
 from sqlalchemy.orm import relationship
 from app.db.base_classes import Base
 
+
 class StoreItem(Base):
     __tablename__ = "store_items"
 
@@ -20,5 +21,7 @@ class StoreItem(Base):
     shift = relationship("Shift", backref="store_items", lazy="joined")
 
     def __repr__(self):
-        return (f"id={self.id} item_id={self.item_id} supply_id={self.supply_id} amount={self.amount}"
-                f"price_per_item={self.price_per_item} debit={self.debit}")
+        return (
+            f"id={self.id} item_id={self.item_id} supply_id={self.supply_id} amount={self.amount}"
+            f"price_per_item={self.price_per_item} debit={self.debit}"
+        )

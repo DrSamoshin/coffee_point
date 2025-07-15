@@ -26,6 +26,8 @@ class Order(Base):
     shift = relationship("Shift", backref="orders", lazy="joined")
 
     def __repr__(self):
-        return (f"id={self.id} price={self.price} discount={self.discount} payment_method={self.payment_method}"
-                f" type={self.type} date={self.date} status={self.status} shift_id={self.shift_id}"
-                f" order_number={self.order_number} active={self.debit} client_id={self.client_id}")
+        return (
+            f"id={self.id} price={self.price} discount={self.discount} payment_method={self.payment_method}"
+            f" type={self.type} date={self.date} status={self.status} shift_id={self.shift_id}"
+            f" order_number={self.order_number} active={self.debit} client_id={self.client_id}"
+        )

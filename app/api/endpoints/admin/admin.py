@@ -10,9 +10,12 @@ from app.db.models import Product, Category
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
+
 @router.post("/import-products/")
-async def import_products(file: UploadFile = File(...), db: Session = Depends(get_point_db)):
-    logging.info(f"call method import_products")
+async def import_products(
+    file: UploadFile = File(...), db: Session = Depends(get_point_db)
+):
+    logging.info("call method import_products")
     try:
         print(file)
         content = await file.read()
@@ -33,7 +36,7 @@ async def import_products(file: UploadFile = File(...), db: Session = Depends(ge
                 price=row["price"],
                 active=row["active"],
                 online_shop=row["online_shop"],
-                image_url=row["image_url"]
+                image_url=row["image_url"],
             )
             db.add(product)
         db.commit()
@@ -47,8 +50,10 @@ async def import_products(file: UploadFile = File(...), db: Session = Depends(ge
 
 
 @router.post("/import-categories/")
-async def import_categories(file: UploadFile = File(...), db: Session = Depends(get_point_db)):
-    logging.info(f"call method import_categories")
+async def import_categories(
+    file: UploadFile = File(...), db: Session = Depends(get_point_db)
+):
+    logging.info("call method import_categories")
     try:
         content = await file.read()
         df = pd.read_csv(io.StringIO(content.decode("utf-8")))
@@ -57,11 +62,7 @@ async def import_categories(file: UploadFile = File(...), db: Session = Depends(
         df["active"] = df["active"].astype(str).str.lower() == "true"
 
         for _, row in df.iterrows():
-            category = Category(
-                id=row["id"],
-                name=row["name"],
-                active=row["active"]
-            )
+            category = Category(id=row["id"], name=row["name"], active=row["active"])
             db.add(category)
         db.commit()
         logging.info(f"categories are imported: {len(df)}")

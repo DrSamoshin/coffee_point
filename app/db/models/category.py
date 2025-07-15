@@ -2,6 +2,7 @@ import uuid
 from sqlalchemy import Column, String, UUID, Boolean
 from app.db.base_classes import Base
 
+
 class Category(Base):
     __tablename__ = "categories"
 
