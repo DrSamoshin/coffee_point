@@ -8,14 +8,16 @@ class RecipeItemBase(BaseModel):
     item_id: UUID
     amount: Decimal
 
+
 class RecipeItemCreate(RecipeItemBase):
     pass
 
+
 class RecipeItemUpdate(RecipeItemBase):
     pass
+
 
 class RecipeItemOut(RecipeItemBase):
     id: UUID
 
     model_config = {"from_attributes": True}
-

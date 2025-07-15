@@ -15,8 +15,10 @@ class ProductBase(BaseModel):
     online_shop: bool
     image_url: Optional[str] = None
 
+
 class ProductCreate(ProductBase):
     pass
+
 
 class ProductUpdate(ProductBase):
     pass
@@ -27,6 +29,7 @@ class ProductFullInfoOut(ProductBase):
     active: bool
     model_config = {"from_attributes": True}
 
+
 class ProductOut(BaseModel):
     id: UUID
     name: str
@@ -36,6 +39,7 @@ class ProductOut(BaseModel):
     image_url: Union[str, None] = None
     model_config = {"from_attributes": True}
 
+
 class ProductOrderOut(BaseModel):
     product_order_id: UUID
     count: int
@@ -43,6 +47,7 @@ class ProductOrderOut(BaseModel):
     product_name: str
     product_price: Decimal
     model_config = {"from_attributes": True}
+
 
 class ProductShiftOrder(BaseModel):
     product_name: str
@@ -53,7 +58,7 @@ class ProductShiftOrder(BaseModel):
     order_id: UUID
     order_date: datetime
     order_price: Decimal
-    order_discount:Decimal
+    order_discount: Decimal
     order_payment_method: OrderPaymentMethod
     order_type: OrderType
     order_status: OrderStatus
@@ -63,9 +68,9 @@ class ProductShiftOrder(BaseModel):
         ser_json_timedelta="iso8601",
         ser_json_bytes="utf8",
         json_encoders={
-            datetime: lambda dt: dt.strftime('%Y-%m-%dT%H:%M:%S.{:03d}Z'.format(int(dt.microsecond / 1000)))
+            datetime: lambda dt: dt.strftime(
+                "%Y-%m-%dT%H:%M:%S.{:03d}Z".format(int(dt.microsecond / 1000))
+            )
         },
-        from_attributes=True
+        from_attributes=True,
     )
-
-

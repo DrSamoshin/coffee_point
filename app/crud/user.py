@@ -8,31 +8,37 @@ from app.schemas.user import UserCreate, UserUpdate
 
 
 def get_user(db: Session, user_id: UUID):
-    logging.info(f"call method get_user")
+    logging.info("call method get_user")
     try:
         db_user = db.query(User).filter(User.id == user_id).first()
     except Exception as error:
         logging.error(error)
-        raise HTTPException(status_code=500, detail="unexpected error during user fetch")
+        raise HTTPException(
+            status_code=500, detail="unexpected error during user fetch"
+        )
     else:
         logging.info(f"user: {db_user}")
         if not db_user:
             raise HTTPException(status_code=404, detail="user not found")
         return db_user
 
+
 def get_users(db: Session):
-    logging.info(f"call method get_users")
+    logging.info("call method get_users")
     try:
         db_users = db.query(User).all()
     except Exception as error:
         logging.error(error)
-        raise HTTPException(status_code=500, detail="unexpected error during users fetch")
+        raise HTTPException(
+            status_code=500, detail="unexpected error during users fetch"
+        )
     else:
         logging.info(f"users: {len(db_users)}")
         return db_users
 
+
 def create_user(db: Session, user: UserCreate):
-    logging.info(f"call method create_user")
+    logging.info("call method create_user")
     try:
         db_user = User(name=user.name.strip(), db_name=user.db_name.strip())
         db.add(db_user)
@@ -40,13 +46,16 @@ def create_user(db: Session, user: UserCreate):
         db.refresh(db_user)
     except Exception as error:
         logging.error(error)
-        raise HTTPException(status_code=500, detail="unexpected error during user create")
+        raise HTTPException(
+            status_code=500, detail="unexpected error during user create"
+        )
     else:
         logging.info(f"user is created: {db_user}")
         return db_user
 
+
 def update_user(db: Session, user_id: UUID, updates: UserUpdate):
-    logging.info(f"call method update_user")
+    logging.info("call method update_user")
     try:
         db_user = db.query(User).filter(User.id == user_id).first()
         for field, value in updates.model_dump(exclude_unset=True).items():
@@ -55,13 +64,16 @@ def update_user(db: Session, user_id: UUID, updates: UserUpdate):
         db.refresh(db_user)
     except Exception as error:
         logging.error(error)
-        raise HTTPException(status_code=500, detail="unexpected error during user update")
+        raise HTTPException(
+            status_code=500, detail="unexpected error during user update"
+        )
     else:
         logging.info(f"user is updated: {db_user}")
         return db_user
 
+
 def deactivate_user(db: Session, user_id: UUID):
-    logging.info(f"call method deactivate_user")
+    logging.info("call method deactivate_user")
     try:
         db_user = db.query(User).filter(User.id == user_id).first()
         db_user.deactivated = True
@@ -69,13 +81,16 @@ def deactivate_user(db: Session, user_id: UUID):
         db.refresh(db_user)
     except Exception as error:
         logging.error(error)
-        raise HTTPException(status_code=500, detail="unexpected error during user deactivate")
+        raise HTTPException(
+            status_code=500, detail="unexpected error during user deactivate"
+        )
     else:
         logging.info(f"user is deactivated: {db_user}")
         return db_user
 
+
 def activate_user(db: Session, user_id: UUID):
-    logging.info(f"call method activate_user")
+    logging.info("call method activate_user")
     try:
         db_user = db.query(User).filter(User.id == user_id).first()
         db_user.deactivated = False
@@ -83,7 +98,9 @@ def activate_user(db: Session, user_id: UUID):
         db.refresh(db_user)
     except Exception as error:
         logging.error(error)
-        raise HTTPException(status_code=500, detail="unexpected error during user activate")
+        raise HTTPException(
+            status_code=500, detail="unexpected error during user activate"
+        )
     else:
         logging.info(f"user is activated: {db_user}")
         return db_user

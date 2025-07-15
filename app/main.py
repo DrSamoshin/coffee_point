@@ -5,28 +5,30 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 from app.core.configs import settings
-from app.api.endpoints import (admin_router,
-                               analytics_router,
-                               category_router,
-                               check_list_router,
-                               client_router,
-                               coffee_shop_router,
-                               constants_router,
-                               employee_router,
-                               employee_shift_router,
-                               files_router,
-                               health_router,
-                               item_router,
-                               order_router,
-                               orders_report_router,
-                               product_router,
-                               product_order_router,
-                               recipe_item_router,
-                               shift_router,
-                               store_item_router,
-                               supplier_router,
-                               supply_router,
-                               user_router)
+from app.api.endpoints import (
+    admin_router,
+    analytics_router,
+    category_router,
+    check_list_router,
+    client_router,
+    coffee_shop_router,
+    constants_router,
+    employee_router,
+    employee_shift_router,
+    files_router,
+    health_router,
+    item_router,
+    order_router,
+    orders_report_router,
+    product_router,
+    product_order_router,
+    recipe_item_router,
+    shift_router,
+    store_item_router,
+    supplier_router,
+    supply_router,
+    user_router,
+)
 
 BASE_DIR = Path(__file__).resolve().parent
 contents = os.listdir(BASE_DIR)
@@ -38,12 +40,13 @@ main_app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://coffee-point-crm.web.app",
-        "http://localhost:5173"   # для Vite dev server
+        "http://localhost:5173",  # для Vite dev server
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 def custom_openapi():
     if main_app.openapi_schema:
@@ -66,7 +69,9 @@ def custom_openapi():
             if isinstance(value, dict):
                 transform_anyof(value)
             elif key == "anyOf":
-                types = [t.get("type") for t in value if isinstance(t, dict) and "type" in t]
+                types = [
+                    t.get("type") for t in value if isinstance(t, dict) and "type" in t
+                ]
                 if "null" in types:
                     actual_types = [t for t in types if t != "null"]
                     if len(actual_types) == 1:
@@ -78,6 +83,7 @@ def custom_openapi():
 
     main_app.openapi_schema = openapi_schema
     return main_app.openapi_schema
+
 
 main_app.openapi = custom_openapi
 
@@ -109,6 +115,4 @@ if settings.run.ADMIN_MODE:
 
 logging.info("admin mode: %s", settings.run.ADMIN_MODE)
 logging.info("starting FastAPI")
-logging.info(f"DB url: %s", settings.data_base.get_db_url('users'))
-
-
+logging.info("DB url: %s", settings.data_base.get_db_url("users"))

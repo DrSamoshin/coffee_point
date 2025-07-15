@@ -7,9 +7,10 @@ from app.db.models import Supply
 from app.db.db_sessions import db_safe
 from app.schemas.supply import SupplyCreate, SupplyUpdate
 
+
 @db_safe
 def get_supply(db: Session, supply_id: UUID):
-    logging.info(f"call method get_supply")
+    logging.info("call method get_supply")
     try:
         db_supply = db.query(Supply).filter(Supply.id == supply_id).first()
     except Exception as error:
@@ -18,23 +19,29 @@ def get_supply(db: Session, supply_id: UUID):
         logging.info(f"db_supply: {db_supply}")
         return db_supply
 
+
 @db_safe
 def get_supplies(db: Session):
-    logging.info(f"call method get_supplies")
+    logging.info("call method get_supplies")
     try:
-        db_supplies = db.query(Supply).filter(Supply.active == True).order_by(desc(Supply.date)).all()
+        db_supplies = (
+            db.query(Supply)
+            .filter(Supply.active is True)
+            .order_by(desc(Supply.date))
+            .all()
+        )
     except Exception as error:
         logging.error(error)
     else:
         logging.info(f"db_supplies: {len(db_supplies)}")
         return db_supplies
 
+
 @db_safe
 def create_supply(db: Session, supply: SupplyCreate):
-    logging.info(f"call method create_supply")
+    logging.info("call method create_supply")
     try:
-        db_supply = Supply(date=supply.date,
-                           supplier_id=supply.supplier_id)
+        db_supply = Supply(date=supply.date, supplier_id=supply.supplier_id)
         db.add(db_supply)
         db.commit()
         db.refresh(db_supply)
@@ -44,9 +51,10 @@ def create_supply(db: Session, supply: SupplyCreate):
         logging.info(f"supply is created: {db_supply}")
         return db_supply
 
+
 @db_safe
 def update_supply(db: Session, supply_id: UUID, updates: SupplyUpdate):
-    logging.info(f"call method update_supply")
+    logging.info("call method update_supply")
     try:
         db_supply = db.query(Supply).filter(Supply.id == supply_id).first()
         for field, value in updates.model_dump(exclude_unset=True).items():

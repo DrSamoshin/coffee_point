@@ -10,8 +10,13 @@ from app.services.authentication import get_user_id_from_token
 
 router = APIRouter(prefix="/analytics", tags=["analytics"])
 
+
 @router.get("/shift-report/{shift_id}/")
-async def get_shift_report(shift_id: UUID, db: Session = Depends(get_point_db), user_id: str = Depends(get_user_id_from_token)):
+async def get_shift_report(
+    shift_id: UUID,
+    db: Session = Depends(get_point_db),
+    user_id: str = Depends(get_user_id_from_token),
+):
     try:
         db_shift_report = crud_analytics.get_shift_report(db, shift_id)
     except HTTPException as http_exc:
@@ -23,7 +28,9 @@ async def get_shift_report(shift_id: UUID, db: Session = Depends(get_point_db), 
 
 
 @router.get("/active-shift-report/")
-async def get_active_shift_report(db: Session = Depends(get_point_db), user_id: str = Depends(get_user_id_from_token)):
+async def get_active_shift_report(
+    db: Session = Depends(get_point_db), user_id: str = Depends(get_user_id_from_token)
+):
     try:
         db_active_shift_report = crud_analytics.get_active_shift_report(db)
     except HTTPException as http_exc:

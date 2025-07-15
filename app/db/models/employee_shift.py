@@ -3,6 +3,7 @@ from sqlalchemy import Column, ForeignKey, DateTime, UUID, Boolean
 from sqlalchemy.orm import relationship
 from app.db.base_classes import Base
 
+
 class EmployeeShift(Base):
     __tablename__ = "employee_shifts"
 
@@ -17,5 +18,7 @@ class EmployeeShift(Base):
     shift = relationship("Shift", backref="employee_shifts", lazy="joined")
 
     def __repr__(self):
-        return (f"id={self.id} start_time={self.start_time} end_time={self.end_time} "
-                f"employee_id={self.employee_id} employee_name={self.employee.name} shift={self.shift}")
+        return (
+            f"id={self.id} start_time={self.start_time} end_time={self.end_time} "
+            f"employee_id={self.employee_id} employee_name={self.employee.name} shift={self.shift}"
+        )

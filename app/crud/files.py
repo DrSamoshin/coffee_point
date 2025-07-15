@@ -10,14 +10,17 @@ from app.core.configs import settings
 
 GCS_BUCKET_NAME = "coffee_point_storage"
 
+
 def get_google_client() -> Client:
-    client = storage.Client.from_service_account_info(settings.google_account.model_dump())
+    client = storage.Client.from_service_account_info(
+        settings.google_account.model_dump()
+    )
     print(client)
     return client
 
 
 async def get_image_urls():
-    logging.info(f"call method get_image_urls")
+    logging.info("call method get_image_urls")
     try:
         bucket = get_google_client().bucket(GCS_BUCKET_NAME)
         blobs = bucket.list_blobs()
@@ -30,8 +33,9 @@ async def get_image_urls():
         logging.info(f"urls: {len(urls)}")
         return urls
 
+
 async def upload_image(file: UploadFile):
-    logging.info(f"call method upload_image")
+    logging.info("call method upload_image")
     try:
         image_data = await file.read()
         image = Image.open(io.BytesIO(image_data))
@@ -54,11 +58,12 @@ async def upload_image(file: UploadFile):
         logging.info(f"image is uploaded: {url}")
         return url
 
+
 async def delete_image(image_url: str):
-    logging.info(f"call method delete_image")
+    logging.info("call method delete_image")
     try:
-        image_name = image_url.split('/')[-1]
-        bucket = GCS_CLIENT.bucket(GCS_BUCKET_NAME)
+        image_name = image_url.split("/")[-1]
+        bucket = get_google_client().bucket(GCS_BUCKET_NAME)
         blob = bucket.blob(image_name)
         blob.delete()
     except Exception as error:
