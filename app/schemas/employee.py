@@ -7,16 +7,20 @@ class EmployeeBase(BaseModel):
     name: str
     position: EmployeePosition
 
+
 class EmployeeCreate(EmployeeBase):
     pass
 
+
 class EmployeeUpdate(EmployeeBase):
     pass
+
 
 class EmployeeOut(EmployeeBase):
     id: UUID
 
     model_config = {"from_attributes": True}
+
 
 class BaristaOut(BaseModel):
     id: UUID

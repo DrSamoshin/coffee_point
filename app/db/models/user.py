@@ -2,6 +2,7 @@ import uuid
 from sqlalchemy import Column, String, Boolean, UUID
 from app.db.base_classes import BaseUser
 
+
 class User(BaseUser):
     __tablename__ = "users"
 

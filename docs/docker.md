@@ -15,8 +15,8 @@
 * `docker stop <container_id|name>`       # Остановить контейнер
 * `docker restart <container_id|name>`    # Перезапустить контейнер
 * `docker rm <container_id|name>`         # Удалить контейнер
-* `docker images`                          # Список всех образов 
-* `docker build -t <имя>:<тег> .`         # Собрать образ из Dockerfile 
+* `docker images`                          # Список всех образов
+* `docker build -t <имя>:<тег> .`         # Собрать образ из Dockerfile
 * `docker rmi <image_id|name>`            # Удалить образ
 * `docker volume ls`
 * `docker volume rm db-data`
