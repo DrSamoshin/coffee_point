@@ -119,10 +119,7 @@ async def get_products_shift_orders_report(
         total_number_sold_products = (
             debit_false_product_amount - debit_true_product_amount
         )
-        average_bill = total_income / (
-            debit_false_unique_order_amount - debit_true_unique_order_amount
-        )
-
+        average_bill = total_income / debit_false_unique_order_amount
         debit_true_products_sum_json = debit_true_products_sum.to_dict(orient="records")
         debit_false_products_sum_json = debit_false_products_sum.to_dict(
             orient="records"
