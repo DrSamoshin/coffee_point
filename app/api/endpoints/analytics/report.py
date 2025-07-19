@@ -7,12 +7,13 @@ from sqlalchemy.orm import Session
 
 from app.crud import order as crud_order
 from app.db.db_sessions import get_point_db
+from app.schemas.report import ShiftReportOut
 from app.services.authentication import get_user_id_from_token
 
 router = APIRouter(prefix="/orders-report", tags=["orders_report"])
 
 
-@router.get("/{shift_id}/")
+@router.get("/{shift_id}/", response_model=ShiftReportOut)
 async def get_products_shift_orders_report(
     shift_id: UUID,
     db: Session = Depends(get_point_db),
@@ -139,21 +140,21 @@ async def get_products_shift_orders_report(
             df_debit_false_category_product_for_order.to_dict(orient="records")
         )
 
-        final_result = {
-            "total_income": total_income,
-            "total_number_sold_products": total_number_sold_products,
-            "total_number_orders": debit_false_unique_order_amount,
-            "total_number_debited_orders": debit_true_unique_order_amount,
-            "average_bill": average_bill,
-            "debit_true_products_sum_json": debit_true_products_sum_json,
-            "debit_false_products_sum_json": debit_false_products_sum_json,
-            "debit_true_unique_orders_json": debit_true_unique_orders_json,
-            "debit_false_unique_orders_json": debit_false_unique_orders_json,
-            "df_debit_true_category_product_for_order_json": df_debit_true_category_product_for_order_json,
-            "df_debit_false_category_product_for_order_json": df_debit_false_category_product_for_order_json,
-        }
+        report = ShiftReportOut(
+            total_income=total_income,
+            total_number_sold_products=total_number_sold_products,
+            total_number_orders=debit_false_unique_order_amount,
+            total_number_debited_orders=debit_true_unique_order_amount,
+            average_bill=average_bill,
+            product_category=df_debit_false_category_product_for_order_json,
+            products=debit_false_products_sum_json,
+            orders=debit_false_unique_orders_json,
+            debited_product_category=df_debit_true_category_product_for_order_json,
+            debited_products=debit_true_products_sum_json,
+            debited_orders=debit_true_unique_orders_json,
+        )
     except HTTPException as http_exc:
         logging.error(f"{http_exc}")
         raise http_exc
     else:
-        return final_result
+        return report

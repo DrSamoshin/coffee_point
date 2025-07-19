@@ -3,7 +3,6 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict
 from typing import Optional
 from decimal import Decimal
-
 from app.core.consts import OrderType, OrderPaymentMethod, OrderStatus
 from app.schemas.product import ProductOrderOut
 from app.schemas.product_order import ProductOrderCreate, ProductOrderUpdate
