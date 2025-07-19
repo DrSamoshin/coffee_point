@@ -81,14 +81,6 @@ def custom_openapi():
         openapi_version="3.1.0",
     )
 
-    openapi_schema["servers"] = [
-        {
-            "url": "https://coffee-point-api-317780828805.europe-west3.run.app",
-            "description": "Production",
-        },
-        {"url": "http://127.0.0.1:8080", "description": "Local"},
-    ]
-
     fix_nullable(openapi_schema)
 
     main_app.openapi_schema = openapi_schema
