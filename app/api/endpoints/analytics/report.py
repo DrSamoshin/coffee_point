@@ -22,7 +22,7 @@ async def get_products_shift_orders_report(
     try:
         shift_orders_products = crud_order.get_products_for_shift_order(db, shift_id)
         df = pd.DataFrame(shift_orders_products)
-        df["total_product_price"] = df["product_price"] * df["count"]
+        df["products_price"] = df["product_price"] * df["count"]
 
         # debit True order products
         df_debit_true_products = df[df["debit"] == True]
@@ -31,13 +31,13 @@ async def get_products_shift_orders_report(
             df_debit_true_products.groupby("product_name")
             .agg(
                 {
-                    "product_category": "first",
+                    "category_name": "first",
                     "count": "sum",
-                    "total_product_price": "sum",
+                    "products_price": "sum",
                 }
             )
             .sort_values(
-                by=["product_category", "total_product_price"], ascending=[True, False]
+                by=["category_name", "products_price"], ascending=[True, False]
             )
             .reset_index()
         )
@@ -52,7 +52,7 @@ async def get_products_shift_orders_report(
                 "order_payment_method",
                 "order_type",
                 "order_status",
-                "product_category",
+                "category_name",
             ]
         ]
         df_debit_true_unique_orders = df_debit_true_orders.drop_duplicates(
@@ -60,9 +60,7 @@ async def get_products_shift_orders_report(
         )
 
         df_debit_true_category_product_for_order = (
-            df_debit_true_products.groupby(
-                ["order_id", "product_category", "order_date"]
-            )
+            df_debit_true_products.groupby(["order_id", "category_name", "order_date"])
             .size()
             .reset_index(name="count")
         )
@@ -77,13 +75,13 @@ async def get_products_shift_orders_report(
             df_debit_false_products.groupby("product_name")
             .agg(
                 {
-                    "product_category": "first",
+                    "category_name": "first",
                     "count": "sum",
-                    "total_product_price": "sum",
+                    "products_price": "sum",
                 }
             )
             .sort_values(
-                by=["product_category", "total_product_price"], ascending=[True, False]
+                by=["category_name", "products_price"], ascending=[True, False]
             )
             .reset_index()
         )
@@ -105,9 +103,7 @@ async def get_products_shift_orders_report(
         )
 
         df_debit_false_category_product_for_order = (
-            df_debit_false_products.groupby(
-                ["order_id", "product_category", "order_date"]
-            )
+            df_debit_false_products.groupby(["order_id", "category_name", "order_date"])
             .size()
             .reset_index(name="count")
         )
@@ -141,15 +137,15 @@ async def get_products_shift_orders_report(
         )
 
         report = ShiftReportOut(
-            total_income=total_income,
-            total_number_sold_products=total_number_sold_products,
-            total_number_orders=debit_false_unique_order_amount,
-            total_number_debited_orders=debit_true_unique_order_amount,
+            income=total_income,
+            sold_products_count=total_number_sold_products,
+            orders_count=debit_false_unique_order_amount,
+            debited_orders_count=debit_true_unique_order_amount,
             average_bill=average_bill,
-            product_category=df_debit_false_category_product_for_order_json,
+            product_categories=df_debit_false_category_product_for_order_json,
             products=debit_false_products_sum_json,
             orders=debit_false_unique_orders_json,
-            debited_product_category=df_debit_true_category_product_for_order_json,
+            debited_product_categories=df_debit_true_category_product_for_order_json,
             debited_products=debit_true_products_sum_json,
             debited_orders=debit_true_unique_orders_json,
         )

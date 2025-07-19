@@ -277,7 +277,7 @@ def get_products_for_shift_order(db: Session, shift_id: UUID):
                     "product_name": product.name,
                     "count": product_order.count,
                     "product_price": product.price,
-                    "product_category": product.category.name,
+                    "category_name": product.category.name,
                     "order_id": order.id,
                     "order_date": order.date.strftime(
                         "%Y-%m-%dT%H:%M:%S.{:03d}Z".format(

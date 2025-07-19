@@ -3503,16 +3503,12 @@
             "title": "Employee Id"
           },
           "shift_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
+            "title": "Shift Id",
+            "type": [
+              "string",
+              "null"
             ],
-            "title": "Shift Id"
+            "format": "uuid"
           }
         },
         "type": "object",
@@ -3529,16 +3525,12 @@
             "title": "Employee Id"
           },
           "shift_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
+            "title": "Shift Id",
+            "type": [
+              "string",
+              "null"
             ],
-            "title": "Shift Id"
+            "format": "uuid"
           },
           "id": {
             "type": "string",
@@ -3555,16 +3547,12 @@
             "title": "Start Time"
           },
           "end_time": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "null"
-              }
+            "title": "End Time",
+            "type": [
+              "string",
+              "null"
             ],
-            "title": "End Time"
+            "format": "date-time"
           }
         },
         "type": "object",
@@ -3757,16 +3745,12 @@
             "$ref": "#/components/schemas/OrderStatus"
           },
           "client_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
+            "title": "Client Id",
+            "type": [
+              "string",
+              "null"
             ],
-            "title": "Client Id"
+            "format": "uuid"
           },
           "debit": {
             "type": "boolean",
@@ -3812,16 +3796,12 @@
             "$ref": "#/components/schemas/OrderStatus"
           },
           "client_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
+            "title": "Client Id",
+            "type": [
+              "string",
+              "null"
             ],
-            "title": "Client Id"
+            "format": "uuid"
           },
           "id": {
             "type": "string",
@@ -3925,16 +3905,12 @@
             "$ref": "#/components/schemas/OrderType"
           },
           "client_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
+            "title": "Client Id",
+            "type": [
+              "string",
+              "null"
             ],
-            "title": "Client Id"
+            "format": "uuid"
           },
           "products": {
             "items": {
@@ -3981,15 +3957,11 @@
             "title": "Online Shop"
           },
           "image_url": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Image Url"
+            "title": "Image Url",
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "type": "object",
@@ -4021,15 +3993,11 @@
             "title": "Online Shop"
           },
           "image_url": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Image Url"
+            "title": "Image Url",
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "id": {
             "type": "string",
@@ -4083,16 +4051,12 @@
             "title": "Count"
           },
           "product_order_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
+            "title": "Product Order Id",
+            "type": [
+              "string",
+              "null"
             ],
-            "title": "Product Order Id"
+            "format": "uuid"
           }
         },
         "type": "object",
@@ -4125,15 +4089,11 @@
             "$ref": "#/components/schemas/CategoryOut"
           },
           "image_url": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Image Url"
+            "title": "Image Url",
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "type": "object",
@@ -4173,15 +4133,11 @@
             "title": "Online Shop"
           },
           "image_url": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Image Url"
+            "title": "Image Url",
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "type": "object",
@@ -4322,16 +4278,12 @@
             "$ref": "#/components/schemas/OrderStatus"
           },
           "client_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
+            "title": "Client Id",
+            "type": [
+              "string",
+              "null"
             ],
-            "title": "Client Id"
+            "format": "uuid"
           },
           "order_number": {
             "type": "integer",
@@ -4372,28 +4324,20 @@
             "title": "Active"
           },
           "start_time": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "null"
-              }
+            "title": "Start Time",
+            "type": [
+              "string",
+              "null"
             ],
-            "title": "Start Time"
+            "format": "date-time"
           },
           "end_time": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "type": "null"
-              }
+            "title": "End Time",
+            "type": [
+              "string",
+              "null"
             ],
-            "title": "End Time"
+            "format": "date-time"
           }
         },
         "type": "object",
@@ -4405,14 +4349,9 @@
       },
       "ShiftReportCategory": {
         "properties": {
-          "order_id": {
+          "category_name": {
             "type": "string",
-            "format": "uuid",
-            "title": "Order Id"
-          },
-          "product_category": {
-            "type": "string",
-            "title": "Product Category"
+            "title": "Category Name"
           },
           "order_date": {
             "type": "string",
@@ -4426,8 +4365,7 @@
         },
         "type": "object",
         "required": [
-          "order_id",
-          "product_category",
+          "category_name",
           "order_date",
           "count"
         ],
@@ -4477,32 +4415,32 @@
       },
       "ShiftReportOut": {
         "properties": {
-          "total_income": {
+          "income": {
             "type": "string",
-            "title": "Total Income"
+            "title": "Income"
           },
-          "total_number_sold_products": {
+          "sold_products_count": {
             "type": "integer",
-            "title": "Total Number Sold Products"
+            "title": "Sold Products Count"
           },
-          "total_number_orders": {
+          "orders_count": {
             "type": "integer",
-            "title": "Total Number Orders"
+            "title": "Orders Count"
           },
-          "total_number_debited_orders": {
+          "debited_orders_count": {
             "type": "integer",
-            "title": "Total Number Debited Orders"
+            "title": "Debited Orders Count"
           },
           "average_bill": {
             "type": "string",
             "title": "Average Bill"
           },
-          "product_category": {
+          "product_categories": {
             "items": {
               "$ref": "#/components/schemas/ShiftReportCategory"
             },
             "type": "array",
-            "title": "Product Category"
+            "title": "Product Categories"
           },
           "products": {
             "items": {
@@ -4518,12 +4456,12 @@
             "type": "array",
             "title": "Orders"
           },
-          "debited_product_category": {
+          "debited_product_categories": {
             "items": {
               "$ref": "#/components/schemas/ShiftReportCategory"
             },
             "type": "array",
-            "title": "Debited Product Category"
+            "title": "Debited Product Categories"
           },
           "debited_products": {
             "items": {
@@ -4542,15 +4480,15 @@
         },
         "type": "object",
         "required": [
-          "total_income",
-          "total_number_sold_products",
-          "total_number_orders",
-          "total_number_debited_orders",
+          "income",
+          "sold_products_count",
+          "orders_count",
+          "debited_orders_count",
           "average_bill",
-          "product_category",
+          "product_categories",
           "products",
           "orders",
-          "debited_product_category",
+          "debited_product_categories",
           "debited_products",
           "debited_orders"
         ],
@@ -4562,25 +4500,25 @@
             "type": "string",
             "title": "Product Name"
           },
-          "product_category": {
+          "category_name": {
             "type": "string",
-            "title": "Product Category"
+            "title": "Category Name"
           },
           "count": {
             "type": "integer",
             "title": "Count"
           },
-          "total_product_price": {
+          "products_price": {
             "type": "string",
-            "title": "Total Product Price"
+            "title": "Products Price"
           }
         },
         "type": "object",
         "required": [
           "product_name",
-          "product_category",
+          "category_name",
           "count",
-          "total_product_price"
+          "products_price"
         ],
         "title": "ShiftReportProduct"
       },
@@ -4617,16 +4555,12 @@
             "title": "Price Per Item"
           },
           "supply_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
+            "title": "Supply Id",
+            "type": [
+              "string",
+              "null"
             ],
-            "title": "Supply Id"
+            "format": "uuid"
           }
         },
         "type": "object",
@@ -4648,15 +4582,11 @@
             "title": "Amount"
           },
           "price_per_item": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Price Per Item"
+            "title": "Price Per Item",
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "id": {
             "type": "string",
@@ -4664,15 +4594,11 @@
             "title": "Id"
           },
           "item_name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Item Name"
+            "title": "Item Name",
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "shift_id": {
             "type": "string",
@@ -4689,27 +4615,19 @@
             "title": "Debit"
           },
           "supply_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
+            "title": "Supply Id",
+            "type": [
+              "string",
+              "null"
             ],
-            "title": "Supply Id"
+            "format": "uuid"
           },
           "supplier": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Supplier"
+            "title": "Supplier",
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "type": "object",
@@ -4756,16 +4674,12 @@
             "title": "Price Per Item"
           },
           "supply_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
+            "title": "Supply Id",
+            "type": [
+              "string",
+              "null"
             ],
-            "title": "Supply Id"
+            "format": "uuid"
           }
         },
         "type": "object",
@@ -4833,16 +4747,12 @@
             "title": "Date"
           },
           "supplier_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
+            "title": "Supplier Id",
+            "type": [
+              "string",
+              "null"
             ],
-            "title": "Supplier Id"
+            "format": "uuid"
           }
         },
         "type": "object",
@@ -4859,16 +4769,12 @@
             "title": "Date"
           },
           "supplier_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
+            "title": "Supplier Id",
+            "type": [
+              "string",
+              "null"
             ],
-            "title": "Supplier Id"
+            "format": "uuid"
           },
           "id": {
             "type": "string",
@@ -4896,16 +4802,12 @@
             "title": "Date"
           },
           "supplier_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
+            "title": "Supplier Id",
+            "type": [
+              "string",
+              "null"
             ],
-            "title": "Supplier Id"
+            "format": "uuid"
           }
         },
         "type": "object",
@@ -5020,5 +4922,15 @@
         "scheme": "bearer"
       }
     }
-  }
+  },
+  "servers": [
+    {
+      "url": "https://coffee-point-api-317780828805.europe-west3.run.app",
+      "description": "Production"
+    },
+    {
+      "url": "http://127.0.0.1:8080",
+      "description": "Local"
+    }
+  ]
 }

@@ -7,8 +7,7 @@ from app.core.consts import OrderType, OrderPaymentMethod, OrderStatus
 
 
 class ShiftReportCategory(BaseModel):
-    order_id: UUID
-    product_category: str
+    category_name: str
     order_date: datetime
     count: int
 
@@ -26,9 +25,9 @@ class ShiftReportCategory(BaseModel):
 
 class ShiftReportProduct(BaseModel):
     product_name: str
-    product_category: str
+    category_name: str
     count: int
-    total_product_price: Decimal
+    products_price: Decimal
 
 
 class ShiftReportOrder(BaseModel):
@@ -53,16 +52,16 @@ class ShiftReportOrder(BaseModel):
 
 
 class ShiftReportOut(BaseModel):
-    total_income: Decimal
-    total_number_sold_products: int
-    total_number_orders: int
-    total_number_debited_orders: int
+    income: Decimal
+    sold_products_count: int
+    orders_count: int
+    debited_orders_count: int
     average_bill: Decimal
 
-    product_category: list[ShiftReportCategory]
+    product_categories: list[ShiftReportCategory]
     products: list[ShiftReportProduct]
     orders: list[ShiftReportOrder]
-    debited_product_category: list[ShiftReportCategory]
+    debited_product_categories: list[ShiftReportCategory]
     debited_products: list[ShiftReportProduct]
     debited_orders: list[ShiftReportOrder]
 

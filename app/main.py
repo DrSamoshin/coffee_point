@@ -52,34 +52,44 @@ def custom_openapi():
     if main_app.openapi_schema:
         return main_app.openapi_schema
 
+    def fix_nullable(schema: dict):
+        if isinstance(schema, dict):
+            keys = list(schema.keys())
+            if "anyOf" in keys and len(schema["anyOf"]) == 2:
+                types = set(item.get("type") for item in schema["anyOf"])
+                if "null" in types:
+                    non_null = next(
+                        item for item in schema["anyOf"] if item.get("type") != "null"
+                    )
+                    nullable_type = [non_null["type"], "null"]
+                    schema.pop("anyOf")
+                    schema["type"] = nullable_type
+                    if "format" in non_null:
+                        schema["format"] = non_null["format"]
+            else:
+                for v in schema.values():
+                    fix_nullable(v)
+        elif isinstance(schema, list):
+            for item in schema:
+                fix_nullable(item)
+
     openapi_schema = get_openapi(
         title=settings.app_data.title,
         version=settings.app_data.version,
         description=settings.app_data.description,
         routes=main_app.routes,
+        openapi_version="3.1.0",
     )
 
-    def transform_anyof(schema: dict):
-        if not isinstance(schema, dict):
-            return
+    openapi_schema["servers"] = [
+        {
+            "url": "https://coffee-point-api-317780828805.europe-west3.run.app",
+            "description": "Production",
+        },
+        {"url": "http://127.0.0.1:8080", "description": "Local"},
+    ]
 
-        keys = list(schema.keys())
-        for key in keys:
-            value = schema.get(key)
-            if isinstance(value, dict):
-                transform_anyof(value)
-            elif key == "anyO":
-                types = [
-                    t.get("type") for t in value if isinstance(t, dict) and "type" in t
-                ]
-                if "null" in types:
-                    actual_types = [t for t in types if t != "null"]
-                    if len(actual_types) == 1:
-                        schema.pop("anyO")
-                        schema["type"] = [actual_types[0], "null"]
-
-    for schema in openapi_schema.get("components", {}).get("schemas", {}).values():
-        transform_anyof(schema)
+    fix_nullable(openapi_schema)
 
     main_app.openapi_schema = openapi_schema
     return main_app.openapi_schema
