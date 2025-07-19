@@ -11,8 +11,8 @@
 ---
 ENV
 
-prod db - подключение через Cloud SQL Proxy (github secret) 
-* DB_USER Имя пользователя базы данных 
+prod db - подключение через Cloud SQL Proxy (github secret)
+* DB_USER Имя пользователя базы данных
 * DB_PASS Пароль
 * USE_CLOUD_SQL_PROXY true / false — использовать ли Cloud SQL Proxy
 * INSTANCE_CONNECTION_NAME project:region:instance (для Cloud SQL Proxy)

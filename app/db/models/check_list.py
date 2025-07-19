@@ -4,6 +4,7 @@ from sqlalchemy import Enum as SQLAlchemyEnum
 from app.db.base_classes import Base
 from app.core.consts import CheckListTimePoint
 
+
 class CheckList(Base):
     __tablename__ = "check_lists"
 

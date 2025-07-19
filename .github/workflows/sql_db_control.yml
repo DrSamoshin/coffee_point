@@ -38,7 +38,7 @@ jobs:
             echo "Disable DB..."
             POLICY="NEVER"
           fi
-          
+
           gcloud sql instances patch "$INSTANCE" \
             --activation-policy="$POLICY" \
             --project="${{ secrets.GCLOUD_PROJECT_ID }}" \

@@ -6,13 +6,13 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/analytics/{shift_id}/": {
+    "/analytics/shift-report/{shift_id}/": {
       "get": {
         "tags": [
           "analytics"
         ],
-        "summary": "Get Shift Income",
-        "operationId": "get_shift_income_analytics__shift_id___get",
+        "summary": "Get Shift Report",
+        "operationId": "get_shift_report_analytics_shift_report__shift_id___get",
         "security": [
           {
             "HTTPBearer": []
@@ -35,9 +35,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ShiftIncomeOut"
-                }
+                "schema": {}
               }
             }
           },
@@ -52,6 +50,30 @@
             }
           }
         }
+      }
+    },
+    "/analytics/active-shift-report/": {
+      "get": {
+        "tags": [
+          "analytics"
+        ],
+        "summary": "Get Active Shift Report",
+        "operationId": "get_active_shift_report_analytics_active_shift_report__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
       }
     },
     "/categories/": {
@@ -1465,6 +1487,11 @@
         ],
         "summary": "Get Shift Orders",
         "operationId": "get_shift_orders_orders_shift_orders__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "skip",
@@ -1520,8 +1547,13 @@
         "tags": [
           "orders"
         ],
-        "summary": "Get Shift Orders",
-        "operationId": "get_shift_orders_orders_waiting_shift_orders__get",
+        "summary": "Get Waiting Shift Orders",
+        "operationId": "get_waiting_shift_orders_orders_waiting_shift_orders__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "skip",
@@ -1554,7 +1586,7 @@
                   "items": {
                     "$ref": "#/components/schemas/ShiftOrderOut"
                   },
-                  "title": "Response Get Shift Orders Orders Waiting Shift Orders  Get"
+                  "title": "Response Get Waiting Shift Orders Orders Waiting Shift Orders  Get"
                 }
               }
             }
@@ -1780,6 +1812,54 @@
         }
       }
     },
+    "/orders-report/{shift_id}/": {
+      "get": {
+        "tags": [
+          "orders_report"
+        ],
+        "summary": "Get Products Shift Orders Report",
+        "operationId": "get_products_shift_orders_report_orders_report__shift_id___get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "shift_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Shift Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShiftReportOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/products/": {
       "get": {
         "tags": [
@@ -1876,7 +1956,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
       }
     },
     "/products/{product_id}/": {
@@ -2337,62 +2422,6 @@
             }
           }
         }
-      }
-    },
-    "/reporting-periods/reporting-periods/": {
-      "get": {
-        "tags": [
-          "reporting_periods"
-        ],
-        "summary": "Get Reporting Periods",
-        "operationId": "get_reporting_periods_reporting_periods_reporting_periods__get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/ReportingPeriodOut"
-                  },
-                  "type": "array",
-                  "title": "Response Get Reporting Periods Reporting Periods Reporting Periods  Get"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ]
-      }
-    },
-    "/reporting-periods/": {
-      "post": {
-        "tags": [
-          "reporting_periods"
-        ],
-        "summary": "Create Reporting Period",
-        "operationId": "create_reporting_period_reporting_periods__post",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ReportingPeriodOut"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ]
       }
     },
     "/shifts/": {
@@ -3238,227 +3267,6 @@
           }
         }
       }
-    },
-    "/users/": {
-      "get": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Get Users",
-        "operationId": "get_users_users__get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/UserOut"
-                  },
-                  "type": "array",
-                  "title": "Response Get Users Users  Get"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Create User",
-        "operationId": "create_user_users__post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserCreate"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserOut"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ]
-      }
-    },
-    "/users/{user_id}/": {
-      "get": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Get User",
-        "operationId": "get_user_users__user_id___get",
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "User Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserOut"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Update User",
-        "operationId": "update_user_users__user_id___put",
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "title": "User Id"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserUpdate"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserOut"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Deactivate User",
-        "operationId": "deactivate_user_users__user_id___delete",
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "title": "User Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
@@ -3699,7 +3507,8 @@
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "format": "uuid"
           }
         },
         "type": "object",
@@ -3720,7 +3529,8 @@
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "format": "uuid"
           },
           "id": {
             "type": "string",
@@ -3741,7 +3551,8 @@
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "format": "date-time"
           }
         },
         "type": "object",
@@ -3938,7 +3749,8 @@
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "format": "uuid"
           },
           "debit": {
             "type": "boolean",
@@ -3988,7 +3800,8 @@
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "format": "uuid"
           },
           "id": {
             "type": "string",
@@ -4096,7 +3909,8 @@
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "format": "uuid"
           },
           "products": {
             "items": {
@@ -4241,7 +4055,8 @@
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "format": "uuid"
           }
         },
         "type": "object",
@@ -4429,52 +4244,6 @@
         ],
         "title": "RecipeItemUpdate"
       },
-      "ReportingPeriodOut": {
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          },
-          "active": {
-            "type": "boolean",
-            "title": "Active"
-          },
-          "start_time": {
-            "title": "Start Time",
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "end_time": {
-            "title": "End Time",
-            "type": [
-              "string",
-              "null"
-            ]
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "active"
-        ],
-        "title": "ReportingPeriodOut"
-      },
-      "ShiftIncomeOut": {
-        "properties": {
-          "income": {
-            "type": "string",
-            "title": "Income"
-          }
-        },
-        "type": "object",
-        "required": [
-          "income"
-        ],
-        "title": "ShiftIncomeOut"
-      },
       "ShiftOrderOut": {
         "properties": {
           "id": {
@@ -4513,7 +4282,8 @@
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "format": "uuid"
           },
           "order_number": {
             "type": "integer",
@@ -4558,14 +4328,16 @@
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "format": "date-time"
           },
           "end_time": {
             "title": "End Time",
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "format": "date-time"
           }
         },
         "type": "object",
@@ -4574,6 +4346,181 @@
           "active"
         ],
         "title": "ShiftOut"
+      },
+      "ShiftReportCategory": {
+        "properties": {
+          "category_name": {
+            "type": "string",
+            "title": "Category Name"
+          },
+          "order_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Order Date"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "category_name",
+          "order_date",
+          "count"
+        ],
+        "title": "ShiftReportCategory"
+      },
+      "ShiftReportOrder": {
+        "properties": {
+          "order_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Order Id"
+          },
+          "order_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Order Date"
+          },
+          "order_price": {
+            "type": "string",
+            "title": "Order Price"
+          },
+          "order_discount": {
+            "type": "string",
+            "title": "Order Discount"
+          },
+          "order_payment_method": {
+            "$ref": "#/components/schemas/OrderPaymentMethod"
+          },
+          "order_type": {
+            "$ref": "#/components/schemas/OrderType"
+          },
+          "order_status": {
+            "$ref": "#/components/schemas/OrderStatus"
+          }
+        },
+        "type": "object",
+        "required": [
+          "order_id",
+          "order_date",
+          "order_price",
+          "order_discount",
+          "order_payment_method",
+          "order_type",
+          "order_status"
+        ],
+        "title": "ShiftReportOrder"
+      },
+      "ShiftReportOut": {
+        "properties": {
+          "income": {
+            "type": "string",
+            "title": "Income"
+          },
+          "sold_products_count": {
+            "type": "integer",
+            "title": "Sold Products Count"
+          },
+          "orders_count": {
+            "type": "integer",
+            "title": "Orders Count"
+          },
+          "debited_orders_count": {
+            "type": "integer",
+            "title": "Debited Orders Count"
+          },
+          "average_bill": {
+            "type": "string",
+            "title": "Average Bill"
+          },
+          "product_categories": {
+            "items": {
+              "$ref": "#/components/schemas/ShiftReportCategory"
+            },
+            "type": "array",
+            "title": "Product Categories"
+          },
+          "products": {
+            "items": {
+              "$ref": "#/components/schemas/ShiftReportProduct"
+            },
+            "type": "array",
+            "title": "Products"
+          },
+          "orders": {
+            "items": {
+              "$ref": "#/components/schemas/ShiftReportOrder"
+            },
+            "type": "array",
+            "title": "Orders"
+          },
+          "debited_product_categories": {
+            "items": {
+              "$ref": "#/components/schemas/ShiftReportCategory"
+            },
+            "type": "array",
+            "title": "Debited Product Categories"
+          },
+          "debited_products": {
+            "items": {
+              "$ref": "#/components/schemas/ShiftReportProduct"
+            },
+            "type": "array",
+            "title": "Debited Products"
+          },
+          "debited_orders": {
+            "items": {
+              "$ref": "#/components/schemas/ShiftReportOrder"
+            },
+            "type": "array",
+            "title": "Debited Orders"
+          }
+        },
+        "type": "object",
+        "required": [
+          "income",
+          "sold_products_count",
+          "orders_count",
+          "debited_orders_count",
+          "average_bill",
+          "product_categories",
+          "products",
+          "orders",
+          "debited_product_categories",
+          "debited_products",
+          "debited_orders"
+        ],
+        "title": "ShiftReportOut"
+      },
+      "ShiftReportProduct": {
+        "properties": {
+          "product_name": {
+            "type": "string",
+            "title": "Product Name"
+          },
+          "category_name": {
+            "type": "string",
+            "title": "Category Name"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          },
+          "products_price": {
+            "type": "string",
+            "title": "Products Price"
+          }
+        },
+        "type": "object",
+        "required": [
+          "product_name",
+          "category_name",
+          "count",
+          "products_price"
+        ],
+        "title": "ShiftReportProduct"
       },
       "StoreItemCreate": {
         "properties": {
@@ -4612,7 +4559,8 @@
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "format": "uuid"
           }
         },
         "type": "object",
@@ -4671,7 +4619,8 @@
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "format": "uuid"
           },
           "supplier": {
             "title": "Supplier",
@@ -4729,7 +4678,8 @@
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "format": "uuid"
           }
         },
         "type": "object",
@@ -4801,7 +4751,8 @@
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "format": "uuid"
           }
         },
         "type": "object",
@@ -4822,7 +4773,8 @@
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "format": "uuid"
           },
           "id": {
             "type": "string",
@@ -4854,7 +4806,8 @@
             "type": [
               "string",
               "null"
-            ]
+            ],
+            "format": "uuid"
           }
         },
         "type": "object",
@@ -4862,58 +4815,6 @@
           "date"
         ],
         "title": "SupplyUpdate"
-      },
-      "UserCreate": {
-        "properties": {
-          "name": {
-            "title": "Name",
-            "type": [
-              "string",
-              "null"
-            ]
-          }
-        },
-        "type": "object",
-        "title": "UserCreate"
-      },
-      "UserOut": {
-        "properties": {
-          "name": {
-            "title": "Name",
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          },
-          "deactivated": {
-            "type": "boolean",
-            "title": "Deactivated"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "deactivated"
-        ],
-        "title": "UserOut"
-      },
-      "UserUpdate": {
-        "properties": {
-          "name": {
-            "title": "Name",
-            "type": [
-              "string",
-              "null"
-            ]
-          }
-        },
-        "type": "object",
-        "title": "UserUpdate"
       },
       "ValidationError": {
         "properties": {
@@ -5021,5 +4922,15 @@
         "scheme": "bearer"
       }
     }
-  }
+  },
+  "servers": [
+    {
+      "url": "https://coffee-point-api-317780828805.europe-west3.run.app",
+      "description": "Production"
+    },
+    {
+      "url": "http://127.0.0.1:8080",
+      "description": "Local"
+    }
+  ]
 }

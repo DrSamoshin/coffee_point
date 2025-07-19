@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship
 import uuid
 from app.db.base_classes import Base
 
+
 class ProductOrder(Base):
     __tablename__ = "product_orders"
 

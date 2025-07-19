@@ -1,4 +1,3 @@
-from app.api.endpoints.point.analytics import router as analytics_router
 from app.api.endpoints.point.category import router as category_router
 from app.api.endpoints.point.check_list import router as check_list_router
 from app.api.endpoints.point.client import router as client_router
@@ -15,5 +14,3 @@ from app.api.endpoints.point.shift import router as shift_router
 from app.api.endpoints.point.store_item import router as store_item_router
 from app.api.endpoints.point.supplier import router as supplier_router
 from app.api.endpoints.point.supply import router as supply_router
-
-

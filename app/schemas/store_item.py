@@ -10,16 +10,20 @@ class StoreItemBase(BaseModel):
     amount: Decimal
     price_per_item: Optional[Decimal] = None
 
+
 class StoreItemCreate(StoreItemBase):
     supply_id: Optional[UUID] = None
 
+
 class StoreItemUpdate(StoreItemBase):
     supply_id: Optional[UUID] = None
+
 
 class CalculationStoreItemOut(BaseModel):
     item_id: UUID
     amount: Decimal
     item_name: str
+
 
 class StoreItemOut(StoreItemBase):
     id: UUID
@@ -34,7 +38,9 @@ class StoreItemOut(StoreItemBase):
         ser_json_timedelta="iso8601",
         ser_json_bytes="utf8",
         json_encoders={
-            datetime: lambda dt: dt.strftime('%Y-%m-%dT%H:%M:%S.{:03d}Z'.format(int(dt.microsecond / 1000)))
+            datetime: lambda dt: dt.strftime(
+                "%Y-%m-%dT%H:%M:%S.{:03d}Z".format(int(dt.microsecond / 1000))
+            )
         },
-        from_attributes=True
+        from_attributes=True,
     )
